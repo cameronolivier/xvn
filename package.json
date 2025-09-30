@@ -1,0 +1,11 @@
+{
+  "name": "xvm",
+  "version": "1.0.0",
+  "description": "a auto-npm version switcher ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cameronolivier@gmail.com",
+  "license": "MIT"
+}
