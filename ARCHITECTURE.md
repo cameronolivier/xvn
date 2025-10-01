@@ -474,6 +474,64 @@ xvn/
 
 ---
 
+## Milestone Overview
+
+### Milestone 1: Core Infrastructure (Weeks 1-2)
+
+**Architectural Focus:** Foundation & Configuration
+
+- **Modules:** CLI parsing (clap), Config system (YAML), Version file detection
+- **Key Decisions:** Synchronous I/O, serde-based config, directory traversal in Rust
+- **Architecture:** Modular design with clear separation: cli → config/version_file
+- **Success:** Rust project compiles, CLI works, config merges correctly, version files discovered
+
+### Milestone 2: Plugin System (Weeks 3-4)
+
+**Architectural Focus:** Extensibility & Abstraction
+
+- **Modules:** VersionManagerPlugin trait, Built-in plugins (nvm/fnm), Plugin registry
+- **Key Decisions:** Trait-based plugins compiled into binary (not dynamic in MVP)
+- **Architecture:** Registry pattern for plugin discovery, priority ordering, availability caching
+- **Success:** Plugins detect version managers, return commands, handle errors gracefully
+
+### Milestone 3: Shell Integration (Weeks 5-6)
+
+**Architectural Focus:** Shell Hooks & IPC
+
+- **Modules:** xvn.sh shell script, FD:3 protocol, Setup command, Profile modification
+- **Key Decisions:** chpwd_functions for directory change hooks, FD:3 for command passing
+- **Architecture:** Shell (xvn.sh) ↔ Rust binary (fd:3) ↔ Version manager (eval)
+- **Success:** Shell hook triggers on cd, commands executed in parent shell, setup idempotent
+
+### Milestone 4: Version Activation & Auto-Install (Weeks 7-8)
+
+**Architectural Focus:** Orchestration & User Experience
+
+- **Modules:** Activation orchestrator, Auto-install prompts, Error formatting
+- **Key Decisions:** Prompt/always/never modes, stdin for user input, helpful error messages
+- **Architecture:** Activation flow: config → version file → plugins → auto-install → commands
+- **Success:** Versions activate, missing versions prompt for install, all error cases handled
+
+### Milestone 5: Testing & Polish (Weeks 9-10)
+
+**Architectural Focus:** Quality & Documentation
+
+- **Modules:** Unit tests, Integration tests, Shell tests, Benchmarks, Documentation
+- **Key Decisions:** >85% coverage target, criterion for benchmarks, comprehensive docs
+- **Architecture:** Test pyramid: unit (fast) → integration (medium) → shell (slow)
+- **Success:** All tests pass, benchmarks meet targets, docs complete, no critical bugs
+
+### Milestone 6: Release Preparation (Weeks 11-12)
+
+**Architectural Focus:** Distribution & Deployment
+
+- **Modules:** CI/CD pipeline, Binary builds, npm packaging, Release automation
+- **Key Decisions:** GitHub Actions for CI, GitHub Releases for binaries, npm for distribution
+- **Architecture:** CI builds → GitHub Release → npm postinstall → user system
+- **Success:** Binaries build on all platforms, npm package installs, beta testers succeed
+
+---
+
 ## Milestone-Specific Details
 
 For detailed implementation specifications for each milestone, see:

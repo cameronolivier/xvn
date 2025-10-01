@@ -343,6 +343,88 @@
 
 ---
 
+## Milestone Summary
+
+### Milestone 1: Core Infrastructure (Weeks 1-2, v0.1.0)
+
+**Goal:** Establish foundational Rust project with CLI, configuration, and version file detection.
+
+**Key Deliverables:**
+- Rust project structure with Cargo.toml configured
+- CLI framework with clap (setup, activate, status commands)
+- Configuration system (YAML parsing, precedence: project > user > defaults)
+- Version file detection (directory traversal, parse .nvmrc/.node-version)
+- Basic error handling with thiserror
+
+**Success Metrics:** CLI parses correctly, config loaded from multiple sources, version files discovered in parent directories, >80% test coverage
+
+### Milestone 2: Plugin System (Weeks 3-4, v0.2.0)
+
+**Goal:** Implement extensible plugin architecture with built-in nvm/fnm plugins.
+
+**Key Deliverables:**
+- VersionManagerPlugin trait definition
+- Built-in nvm plugin (check availability, has_version, activate/install commands)
+- Built-in fnm plugin (similar to nvm)
+- Plugin registry with priority ordering and caching
+- Mock plugin for testing
+
+**Success Metrics:** Plugins correctly detect version managers, return shell commands, handle errors, priority ordering works
+
+### Milestone 3: Shell Integration (Weeks 5-6, v0.3.0)
+
+**Goal:** Integrate with bash/zsh shells using hooks and fd:3 protocol.
+
+**Key Deliverables:**
+- xvn.sh shell script (bash/zsh compatible, chpwd_functions)
+- File descriptor #3 protocol (Rust writes commands, shell evaluates)
+- Setup command (detect shell, modify profile, install hooks)
+- Idempotency checks (XVN_ACTIVE_FILE tracking)
+
+**Success Metrics:** Setup completes without errors, shell hook triggers on cd, commands executed in parent shell environment
+
+### Milestone 4: Version Activation & Auto-Install (Weeks 7-8, v0.4.0-v0.5.0)
+
+**Goal:** Complete activation flow with auto-install prompts and user confirmations.
+
+**Key Deliverables:**
+- Activate command orchestration (load config → read version → match plugin)
+- Auto-install prompt UI (read stdin, show helpful messages)
+- Install command generation and execution
+- Three modes: prompt (default), always, never
+- Comprehensive error messages with actionable guidance
+
+**Success Metrics:** Versions activate correctly, missing versions prompt for install, user choice respected, all error cases handled
+
+### Milestone 5: Testing & Polish (Weeks 9-10, v0.6.0-v0.9.0)
+
+**Goal:** Achieve comprehensive test coverage, benchmark performance, complete documentation.
+
+**Key Deliverables:**
+- Unit test suite (>85% coverage with tarpaulin)
+- Integration tests with mock plugins and config scenarios
+- Shell integration tests (bash/zsh)
+- Performance benchmarks (criterion: <85ms P95 target)
+- Documentation (README, CONTRIBUTING, API rustdoc)
+
+**Success Metrics:** All tests pass on CI, benchmarks meet targets, documentation complete, zero critical bugs
+
+### Milestone 6: Release Preparation (Weeks 11-12, v0.7.0-v1.0.0)
+
+**Goal:** Establish CI/CD, build binaries for all platforms, package for npm, prepare for public release.
+
+**Key Deliverables:**
+- GitHub Actions CI/CD pipeline (test matrix, binary builds)
+- Pre-compiled binaries for Linux/macOS (x64/arm64)
+- npm package with postinstall binary download
+- Release automation (tag → build → GitHub Release → npm publish)
+- Beta testing with 10-20 users
+- Migration guide from avn
+
+**Success Metrics:** CI passes on all platforms, binaries install correctly, beta testers succeed, npm package works, v1.0.0 released
+
+---
+
 ## Milestone-Specific Plans
 
 For detailed plans for each milestone, see:

@@ -20,27 +20,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Phased project plan complete (PROJECT_PLAN.md)
 - No code implementation exists yet
 
-## Key Documentation
+## Documentation Structure
 
-All critical project information is captured in these planning documents:
+The project documentation is organized hierarchically for easy navigation:
 
-1. **PROJECT_SPEC.md** - Detailed specification based on the original avn project
-   - Complete system architecture and component breakdown
-   - Plugin system specification and interface contracts
-   - Shell integration details (bash/zsh)
-   - Technical implementation details (file descriptor #3 protocol)
+### High-Level Strategic Documents
 
-2. **ARCHITECTURE.md** - System design and technical architecture
-   - Module structure and responsibilities
-   - Performance considerations and optimization strategies
-   - Error handling patterns
-   - Plugin development guidelines
+1. **ARCHITECTURE.md** - High-level system design and architectural principles
+   - Architectural philosophy and key decisions
+   - System architecture overview and component responsibilities
+   - Core design principles (performance, modularity, error handling, testability)
+   - Security, performance, and testing architecture
+   - Technology stack and deployment strategy
+   - **Milestone Overview section** with architectural focus for each milestone
 
-3. **PROJECT_PLAN.md** - Development roadmap and milestones
-   - 3-phase development plan (MVP, Enhanced, Advanced)
-   - 6 milestones for Phase 1 (v0.1.0 - v1.0.0)
-   - Success criteria and metrics
+2. **PROJECT_PLAN.md** - Project strategy and roadmap
+   - Project vision, goals, and success criteria
+   - Technical strategy and distribution approach
+   - Phase overview (MVP, Enhanced, Advanced)
    - Risk analysis and mitigation strategies
+   - Release strategy and success metrics
+   - **Milestone Summary section** with goals and deliverables for each milestone
+
+3. **PROJECT_SPEC.md** - Original avn specification (reference)
+   - Detailed specification based on the original avn project
+   - Complete system architecture and component breakdown
+   - Historical context and design rationale
+
+### Milestone-Specific Implementation Documents
+
+Each milestone has a dedicated document in `docs/` containing detailed plan and architecture:
+
+1. **[docs/milestone-1-core-infrastructure.md](./docs/milestone-1-core-infrastructure.md)** (Weeks 1-2)
+   - CLI framework, configuration system, version file detection
+   - Module structure, code examples, dependencies
+   - Week-by-week implementation tasks
+
+2. **[docs/milestone-2-plugin-system.md](./docs/milestone-2-plugin-system.md)** (Weeks 3-4)
+   - Plugin trait, registry, built-in nvm/fnm plugins
+   - Plugin implementation examples and testing strategy
+
+3. **[docs/milestone-3-shell-integration.md](./docs/milestone-3-shell-integration.md)** (Weeks 5-6)
+   - Shell hooks (bash/zsh), FD:3 protocol, setup command
+   - Shell script implementation and profile modification
+
+4. **[docs/milestone-4-version-activation.md](./docs/milestone-4-version-activation.md)** (Weeks 7-8)
+   - Activation orchestration, auto-install prompts
+   - Error handling and user experience
+
+5. **[docs/milestone-5-testing-polish.md](./docs/milestone-5-testing-polish.md)** (Weeks 9-10)
+   - Test strategy (unit, integration, shell, benchmarks)
+   - Documentation requirements and quality metrics
+
+6. **[docs/milestone-6-release-preparation.md](./docs/milestone-6-release-preparation.md)** (Weeks 11-12)
+   - CI/CD pipeline, binary builds, npm packaging
+   - Release automation and beta testing
+
+### Configuration Files
 
 4. **package.json** - npm package metadata (minimal, pre-implementation)
 
