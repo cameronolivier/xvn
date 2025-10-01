@@ -18,10 +18,10 @@
 - [x] Zsh-specific integration (chpwd_functions)
 
 ### M3.2: Implement file descriptor #3 protocol in Rust
-- [ ] CommandWriter struct
-- [ ] Detect if FD:3 is open
-- [ ] Write commands to FD:3
-- [ ] Handle FD:3 unavailable gracefully
+- [x] CommandWriter struct
+- [x] Detect if FD:3 is open
+- [x] Write commands to FD:3
+- [x] Handle FD:3 unavailable gracefully
 
 ### M3.3: Implement `xvn setup` command
 - [ ] Detect shell (bash, zsh)

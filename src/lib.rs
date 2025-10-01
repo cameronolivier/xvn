@@ -6,10 +6,12 @@ pub mod cli;
 pub mod config;
 pub mod error;
 pub mod plugins;
+pub mod shell;
 pub mod version_file;
 
 // Re-export key types
 pub use config::Config;
 pub use error::XvnError;
 pub use plugins::{PluginRegistry, VersionManagerPlugin};
+pub use shell::CommandWriter;
 pub use version_file::VersionFile;
