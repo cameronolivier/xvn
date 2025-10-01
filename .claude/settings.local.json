@@ -14,7 +14,9 @@
       "Bash(done)",
       "Bash(cargo:*)",
       "Bash(RUST_LOG=debug cargo run -- status)",
-      "Read(//private/tmp/test-xvn-review/**)"
+      "Read(//private/tmp/test-xvn-review/**)",
+      "WebSearch",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
