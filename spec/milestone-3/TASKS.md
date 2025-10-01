@@ -9,13 +9,13 @@
 ## Tasks
 
 ### M3.1: Create xvn.sh shell hook script
-- [ ] Version file search function (__xvn_find_file)
-- [ ] Activation function (__xvn_activate)
-- [ ] chpwd hook function (__xvn_chpwd)
-- [ ] Debug function (__xvn_debug)
-- [ ] File descriptor #3 protocol
-- [ ] Bash-specific integration (wrap cd/pushd/popd)
-- [ ] Zsh-specific integration (chpwd_functions)
+- [x] Version file search function (__xvn_find_file)
+- [x] Activation function (__xvn_activate)
+- [x] chpwd hook function (__xvn_chpwd)
+- [x] Debug function (__xvn_debug)
+- [x] File descriptor #3 protocol
+- [x] Bash-specific integration (wrap cd/pushd/popd)
+- [x] Zsh-specific integration (chpwd_functions)
 
 ### M3.2: Implement file descriptor #3 protocol in Rust
 - [ ] CommandWriter struct
