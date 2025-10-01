@@ -33,11 +33,11 @@
 - [x] Print setup instructions
 
 ### M3.4: Shell integration tests
-- [ ] Validate xvn.sh syntax (shellcheck)
-- [ ] Test file descriptor protocol (mock FD:3)
-- [ ] Test setup idempotency (run twice)
-- [ ] Test profile detection (bash, zsh)
-- [ ] End-to-end shell test (bash script)
+- [x] Validate xvn.sh syntax (shellcheck)
+- [x] Test file descriptor protocol (mock FD:3)
+- [x] Test setup idempotency (run twice)
+- [x] Test profile detection (bash, zsh)
+- [x] End-to-end shell test (bash script)
 
 ---
 

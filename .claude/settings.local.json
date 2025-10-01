@@ -17,7 +17,9 @@
       "Read(//private/tmp/test-xvn-review/**)",
       "WebSearch",
       "Bash(chmod:*)",
-      "Bash(./scripts/bump-version.sh:*)"
+      "Bash(./scripts/bump-version.sh:*)",
+      "Bash(shellcheck:*)",
+      "Bash(brew install:*)"
     ],
     "deny": [],
     "ask": []

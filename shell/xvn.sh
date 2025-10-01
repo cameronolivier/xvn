@@ -107,7 +107,7 @@ if [[ -n "${BASH_VERSION:-}" ]]; then
     # Bash doesn't have native chpwd support, so we wrap cd, pushd, popd
     if ! declare -f __xvn_original_cd > /dev/null; then
         # Only wrap once - store original builtin as function
-        __xvn_original_cd() { builtin cd "$@"; }
+        __xvn_original_cd() { builtin cd "$@" || return; }
 
         cd() {
             __xvn_original_cd "$@" || return $?
@@ -116,7 +116,7 @@ if [[ -n "${BASH_VERSION:-}" ]]; then
 
         # Also wrap pushd and popd if they exist
         if declare -f pushd > /dev/null 2>&1 || command -v pushd > /dev/null 2>&1; then
-            __xvn_original_pushd() { builtin pushd "$@"; }
+            __xvn_original_pushd() { builtin pushd "$@" || return; }
             pushd() {
                 __xvn_original_pushd "$@" || return $?
                 __xvn_chpwd
@@ -124,7 +124,7 @@ if [[ -n "${BASH_VERSION:-}" ]]; then
         fi
 
         if declare -f popd > /dev/null 2>&1 || command -v popd > /dev/null 2>&1; then
-            __xvn_original_popd() { builtin popd "$@"; }
+            __xvn_original_popd() { builtin popd "$@" || return; }
             popd() {
                 __xvn_original_popd "$@" || return $?
                 __xvn_chpwd
