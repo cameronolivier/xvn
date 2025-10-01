@@ -15,11 +15,11 @@
 - [x] Set up Git repository
 
 ### M1.2: Implement CLI framework with clap
-- [ ] `xvn setup` command skeleton
-- [ ] `xvn activate` command skeleton
-- [ ] `xvn --version` command
-- [ ] `xvn --help` command
-- [ ] Global `--verbose` flag
+- [x] `xvn setup` command skeleton
+- [x] `xvn activate` command skeleton
+- [x] `xvn --version` command
+- [x] `xvn --help` command
+- [x] Global `--verbose` flag
 
 ### M1.3: Implement configuration system
 - [ ] Define Config struct with serde
