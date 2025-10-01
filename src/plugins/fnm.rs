@@ -221,7 +221,9 @@ mod tests {
     #[test]
     fn test_shell_escaping_install() {
         let plugin = FnmPlugin::new();
-        let cmd = plugin.install_command("18.20.0 && cat /etc/passwd").unwrap();
+        let cmd = plugin
+            .install_command("18.20.0 && cat /etc/passwd")
+            .unwrap();
         // Verify that the version is properly quoted/escaped
         assert!(
             cmd.contains("'") || cmd.contains("\\"),

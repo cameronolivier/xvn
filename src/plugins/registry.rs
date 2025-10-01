@@ -179,11 +179,8 @@ mod tests {
 
     #[test]
     fn test_registry_ignores_unknown_plugins() {
-        let registry = PluginRegistry::new(&[
-            "nvm".to_string(),
-            "unknown".to_string(),
-            "fnm".to_string(),
-        ]);
+        let registry =
+            PluginRegistry::new(&["nvm".to_string(), "unknown".to_string(), "fnm".to_string()]);
         // Should only load nvm and fnm, ignore unknown
         assert_eq!(registry.plugins().len(), 2);
     }

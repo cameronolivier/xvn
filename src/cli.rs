@@ -81,7 +81,8 @@ pub fn run() -> Result<()> {
             let mut fd3 = crate::shell::CommandWriter::new()?;
 
             // Create orchestrator
-            let mut orchestrator = crate::activation::Orchestrator::new(&config, &registry, &mut fd3);
+            let mut orchestrator =
+                crate::activation::Orchestrator::new(&config, &registry, &mut fd3);
 
             // Run activation
             match orchestrator.activate(&path) {

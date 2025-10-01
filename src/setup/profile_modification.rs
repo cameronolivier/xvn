@@ -1,7 +1,7 @@
-use std::fs;
-use std::path::Path;
 use anyhow::{Context, Result};
 use log::{debug, info};
+use std::fs;
+use std::path::Path;
 
 const XVN_MARKER_START: &str = "# >>> xvn initialize >>>";
 const XVN_MARKER_END: &str = "# <<< xvn initialize <<<";
@@ -84,11 +84,16 @@ pub fn remove_from_profile(profile: &Path) -> Result<()> {
 
     // Remove everything between markers (including markers)
     let start_idx = content.find(XVN_MARKER_START).unwrap();
-    let end_idx = content.find(XVN_MARKER_END)
+    let end_idx = content
+        .find(XVN_MARKER_END)
         .context("Found start marker but not end marker")?;
 
     // Find the end of the end marker line
-    let end_line_end = content[end_idx..].find('\n').unwrap_or(content.len() - end_idx) + end_idx + 1;
+    let end_line_end = content[end_idx..]
+        .find('\n')
+        .unwrap_or(content.len() - end_idx)
+        + end_idx
+        + 1;
 
     // Also remove preceding newline if present
     let actual_start = if start_idx > 0 && content.as_bytes()[start_idx - 1] == b'\n' {
@@ -109,9 +114,9 @@ pub fn remove_from_profile(profile: &Path) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::NamedTempFile;
     use std::io::Write;
     use std::path::PathBuf;
+    use tempfile::NamedTempFile;
 
     #[test]
     fn test_is_already_installed() {

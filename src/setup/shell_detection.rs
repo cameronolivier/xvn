@@ -1,7 +1,7 @@
+use anyhow::{Context, Result};
+use log::debug;
 use std::env;
 use std::path::{Path, PathBuf};
-use anyhow::{Result, Context};
-use log::debug;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Shell {
@@ -32,7 +32,10 @@ impl Shell {
         match shell_name {
             "bash" => Ok(Self::Bash),
             "zsh" => Ok(Self::Zsh),
-            _ => anyhow::bail!("Unsupported shell: {}. xvn currently supports bash and zsh.", shell_name),
+            _ => anyhow::bail!(
+                "Unsupported shell: {}. xvn currently supports bash and zsh.",
+                shell_name
+            ),
         }
     }
 
@@ -55,10 +58,7 @@ impl Shell {
                 home.join(".bash_profile"),
                 home.join(".profile"),
             ],
-            Self::Zsh => vec![
-                home.join(".zshrc"),
-                home.join(".zprofile"),
-            ],
+            Self::Zsh => vec![home.join(".zshrc"), home.join(".zprofile")],
         }
     }
 }

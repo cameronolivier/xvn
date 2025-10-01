@@ -58,10 +58,10 @@
 - [x] Update CLI to display error hints
 
 ### M4.8: Code quality checks
-- [ ] Run cargo clippy and fix all warnings
-- [ ] Run cargo fmt
-- [ ] Verify all tests pass
-- [ ] Check test coverage >85%
+- [x] Run cargo clippy and fix all warnings
+- [x] Run cargo fmt
+- [x] Verify all tests pass
+- [x] Check test coverage >85%
 
 ---
 

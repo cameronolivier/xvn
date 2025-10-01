@@ -1,11 +1,11 @@
+use anyhow::{Context, Result};
+use dirs::home_dir;
+use log::{debug, info, warn};
 use std::fs;
 use std::path::PathBuf;
-use anyhow::{Context, Result};
-use log::{debug, info, warn};
-use dirs::home_dir;
 
-use super::shell_detection::Shell;
 use super::profile_modification;
+use super::shell_detection::Shell;
 
 const XVN_SH_CONTENT: &str = include_str!("../../shell/xvn.sh");
 
@@ -59,11 +59,15 @@ impl SetupInstaller {
         }
 
         // No existing file, use first candidate
-        let default = candidates.first()
+        let default = candidates
+            .first()
             .context("No profile candidates found")?
             .clone();
 
-        warn!("No existing profile found, will create: {}", default.display());
+        warn!(
+            "No existing profile found, will create: {}",
+            default.display()
+        );
         Ok(default)
     }
 

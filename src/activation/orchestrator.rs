@@ -139,9 +139,11 @@ impl<'a> Orchestrator<'a> {
                     version: version.to_string(),
                     hint: format!(
                         "To install this version:\n  {}",
-                        plugin
-                            .install_command(version)
-                            .unwrap_or_else(|_| format!("{} install {}", plugin.name(), version))
+                        plugin.install_command(version).unwrap_or_else(|_| format!(
+                            "{} install {}",
+                            plugin.name(),
+                            version
+                        ))
                     ),
                 })
             }
@@ -183,20 +185,22 @@ impl<'a> Orchestrator<'a> {
         version: &str,
     ) -> ActivationResult<()> {
         // Generate install command
-        let install_cmd = plugin
-            .install_command(version)
-            .map_err(|e| ActivationError::PluginError {
-                plugin: plugin.name().to_string(),
-                source: e,
-            })?;
+        let install_cmd =
+            plugin
+                .install_command(version)
+                .map_err(|e| ActivationError::PluginError {
+                    plugin: plugin.name().to_string(),
+                    source: e,
+                })?;
 
         // Generate activate command
-        let activate_cmd = plugin
-            .activate_command(version)
-            .map_err(|e| ActivationError::PluginError {
-                plugin: plugin.name().to_string(),
-                source: e,
-            })?;
+        let activate_cmd =
+            plugin
+                .activate_command(version)
+                .map_err(|e| ActivationError::PluginError {
+                    plugin: plugin.name().to_string(),
+                    source: e,
+                })?;
 
         info!("Install command: {}", install_cmd);
         info!("Activate command: {}", activate_cmd);
@@ -249,9 +253,9 @@ impl<'a> Orchestrator<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::activation::MockUserPrompt;
     use crate::config::AutoInstallMode;
     use crate::plugins::MockPlugin;
-    use crate::activation::MockUserPrompt;
     use std::sync::Arc;
     use tempfile::TempDir;
 
@@ -431,10 +435,8 @@ mod tests {
             .with_availability(true)
             .with_version("18.20.0");
 
-        let registry = PluginRegistry::with_plugins(vec![
-            Arc::new(mock_plugin1),
-            Arc::new(mock_plugin2),
-        ]);
+        let registry =
+            PluginRegistry::with_plugins(vec![Arc::new(mock_plugin1), Arc::new(mock_plugin2)]);
         let mut writer = CommandWriter::new().unwrap();
 
         let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);

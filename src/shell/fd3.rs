@@ -1,6 +1,6 @@
+use log::{debug, trace};
 use std::io;
 use std::os::unix::io::RawFd;
-use log::{debug, trace};
 
 /// Writer for shell commands via file descriptor #3
 ///
@@ -48,9 +48,7 @@ impl CommandWriter {
     fn is_fd_open(fd: RawFd) -> bool {
         // Try to get file status flags
         // If fcntl succeeds, the FD is open
-        unsafe {
-            libc::fcntl(fd, libc::F_GETFD) != -1
-        }
+        unsafe { libc::fcntl(fd, libc::F_GETFD) != -1 }
     }
 
     /// Writes a shell command to FD:3
@@ -74,11 +72,8 @@ impl CommandWriter {
         if let Some(fd) = self.fd {
             let data = format!("{}\n", command);
             unsafe {
-                let bytes_written = libc::write(
-                    fd,
-                    data.as_ptr() as *const libc::c_void,
-                    data.len(),
-                );
+                let bytes_written =
+                    libc::write(fd, data.as_ptr() as *const libc::c_void, data.len());
                 if bytes_written == -1 {
                     return Err(io::Error::last_os_error());
                 }

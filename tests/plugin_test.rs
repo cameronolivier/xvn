@@ -64,9 +64,9 @@ fn test_plugin_priority_with_mocks() {
     ];
 
     // First available with version should be returned
-    let found = plugins.iter().find(|p| {
-        p.is_available().unwrap_or(false) && p.has_version("18.20.0").unwrap_or(false)
-    });
+    let found = plugins
+        .iter()
+        .find(|p| p.is_available().unwrap_or(false) && p.has_version("18.20.0").unwrap_or(false));
 
     assert!(found.is_some());
     assert_eq!(found.unwrap().name(), "first");
@@ -85,9 +85,9 @@ fn test_plugin_priority_unavailable_skipped() {
     ];
 
     // First plugin is unavailable, should find second
-    let found = plugins.iter().find(|p| {
-        p.is_available().unwrap_or(false) && p.has_version("18.20.0").unwrap_or(false)
-    });
+    let found = plugins
+        .iter()
+        .find(|p| p.is_available().unwrap_or(false) && p.has_version("18.20.0").unwrap_or(false));
 
     assert!(found.is_some());
     assert_eq!(found.unwrap().name(), "second");

@@ -1,6 +1,6 @@
-mod shell_detection;
-mod profile_modification;
 mod installer;
+mod profile_modification;
+mod shell_detection;
 
-pub use shell_detection::Shell;
 pub use installer::SetupInstaller;
+pub use shell_detection::Shell;

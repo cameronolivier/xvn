@@ -40,9 +40,9 @@ fn test_shell_script_execution() {
 
 #[test]
 fn test_profile_detection_bash() {
-    use xvn::setup::Shell;
-    use tempfile::TempDir;
     use std::fs;
+    use tempfile::TempDir;
+    use xvn::setup::Shell;
 
     let temp = TempDir::new().unwrap();
     let home = temp.path();
@@ -59,9 +59,9 @@ fn test_profile_detection_bash() {
 
 #[test]
 fn test_profile_detection_zsh() {
-    use xvn::setup::Shell;
-    use tempfile::TempDir;
     use std::fs;
+    use tempfile::TempDir;
+    use xvn::setup::Shell;
 
     let temp = TempDir::new().unwrap();
     let home = temp.path();
