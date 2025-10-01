@@ -44,10 +44,10 @@
 - [x] Add debug logging for key operations
 
 ### M1.7: Unit tests for core infrastructure
-- [ ] Config parsing tests (valid, invalid, defaults)
-- [ ] Version file discovery tests
-- [ ] Error handling tests
-- [ ] Achieve >80% coverage
+- [x] Config parsing tests (valid, invalid, defaults)
+- [x] Version file discovery tests
+- [x] Error handling tests
+- [x] Achieve >80% coverage
 
 ---
 
