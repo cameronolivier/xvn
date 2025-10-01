@@ -57,7 +57,11 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
      - Ensures all tests pass
      - Checks that success criteria from PLAN.md are met
    - If any issues found, fix them
+   - Update `spec/PROGRESS.md` to mark the milestone complete
    - Create a final commit for the milestone completion
+   - **Bump the version** by running: `./scripts/bump-version.sh {{N}}`
+     - This will update Cargo.toml to v0.{{N}}.0
+     - Create a commit and git tag automatically
 
 ## Important Rules
 
@@ -75,4 +79,6 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
 - All tests pass (cargo test)
 - Code follows the plan exactly
 - Review agents approve the work
+- PROGRESS.md updated to mark milestone complete
 - Final commit marks milestone as complete
+- Version bumped to v0.{{N}}.0 with git tag created

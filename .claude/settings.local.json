@@ -16,7 +16,8 @@
       "Bash(RUST_LOG=debug cargo run -- status)",
       "Read(//private/tmp/test-xvn-review/**)",
       "WebSearch",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(./scripts/bump-version.sh:*)"
     ],
     "deny": [],
     "ask": []
