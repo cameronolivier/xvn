@@ -9,13 +9,13 @@
 ## Tasks
 
 ### M2.1: Define plugin trait (VersionManagerPlugin)
-- [ ] name() method
-- [ ] version_files() method
-- [ ] is_available() method
-- [ ] has_version() method
-- [ ] activate_command() method
-- [ ] install_command() method
-- [ ] resolve_version() method
+- [x] name() method
+- [x] version_files() method
+- [x] is_available() method
+- [x] has_version() method
+- [x] activate_command() method
+- [x] install_command() method
+- [x] resolve_version() method
 
 ### M2.2: Implement nvm plugin
 - [ ] Check nvm availability (~/.nvm directory)
