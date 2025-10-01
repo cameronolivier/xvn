@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use anyhow::Result;
+use anyhow::{Result, Context};
 use std::path::PathBuf;
 use log::info;
 
@@ -59,8 +59,28 @@ pub fn run() -> Result<()> {
         }
         Some(Commands::Activate { path }) => {
             info!("Running activate command for path: {:?}", path);
-            println!("Activate command - not yet implemented");
-            println!("  Path: {}", path.display());
+
+            // Load config to get version file names
+            let config = crate::config::Config::load()
+                .context("failed to load configuration")?;
+
+            // Find version file
+            match crate::version_file::VersionFile::find(&path, &config.version_files) {
+                Ok(Some(version_file)) => {
+                    println!("Found version file: {}", version_file.path.display());
+                    println!("Node.js version: {}", version_file.version);
+                    println!("\nActivation not yet implemented (requires plugin system)");
+                }
+                Ok(None) => {
+                    println!("No version file found in {} or parent directories", path.display());
+                    std::process::exit(1);
+                }
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            }
+
             Ok(())
         }
         Some(Commands::Status) => {

@@ -1,1 +1,3 @@
-// Placeholder for version_file module
+mod finder;
+
+pub use finder::VersionFile;

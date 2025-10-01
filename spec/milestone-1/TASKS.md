@@ -29,10 +29,10 @@
 - [x] Validate configuration (plugin names, version files)
 
 ### M1.4: Implement version file detection
-- [ ] `find_version_file()` - walk up directory tree
-- [ ] Parse version file (first line, trim whitespace)
-- [ ] Stop at HOME directory
-- [ ] Handle errors (permissions, empty files)
+- [x] `find_version_file()` - walk up directory tree
+- [x] Parse version file (first line, trim whitespace)
+- [x] Stop at HOME directory
+- [x] Handle errors (permissions, empty files)
 
 ### M1.5: Set up error handling
 - [ ] Define XvnError enum with thiserror

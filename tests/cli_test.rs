@@ -30,12 +30,20 @@ fn test_setup_command() {
 
 #[test]
 fn test_activate_command() {
+    use tempfile::tempdir;
+    use std::fs;
+
+    let temp_dir = tempdir().unwrap();
+    let version_file = temp_dir.path().join(".nvmrc");
+    fs::write(&version_file, "18.20.0").unwrap();
+
     let mut cmd = Command::cargo_bin("xvn").unwrap();
     cmd.arg("activate")
-        .arg(".")
+        .arg(temp_dir.path())
         .assert()
         .success()
-        .stdout(predicate::str::contains("not yet implemented"));
+        .stdout(predicate::str::contains("Found version file"))
+        .stdout(predicate::str::contains("18.20.0"));
 }
 
 #[test]
