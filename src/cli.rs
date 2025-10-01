@@ -52,9 +52,20 @@ pub fn run() -> Result<()> {
     match cli.command {
         Some(Commands::Setup { shell, force }) => {
             info!("Running setup command (shell: {shell}, force: {force})");
-            println!("Setup command - not yet implemented");
-            println!("  Shell: {shell}");
-            println!("  Force: {force}");
+
+            let installer = crate::setup::SetupInstaller::new()?;
+
+            // Check if already installed (unless force flag is set)
+            if !force && installer.is_installed()? {
+                println!("xvn is already installed.");
+                println!("Run 'xvn status' to verify your installation.");
+                println!("Use --force to reinstall.");
+                return Ok(());
+            }
+
+            installer.install()?;
+            installer.print_instructions()?;
+
             Ok(())
         }
         Some(Commands::Activate { path }) => {

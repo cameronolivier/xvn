@@ -6,6 +6,7 @@ pub mod cli;
 pub mod config;
 pub mod error;
 pub mod plugins;
+pub mod setup;
 pub mod shell;
 pub mod version_file;
 

@@ -24,13 +24,13 @@
 - [x] Handle FD:3 unavailable gracefully
 
 ### M3.3: Implement `xvn setup` command
-- [ ] Detect shell (bash, zsh)
-- [ ] Find shell profile files
-- [ ] Check if already installed (idempotency)
-- [ ] Copy xvn.sh to ~/.xvn/bin/
-- [ ] Modify shell profile (append source line)
-- [ ] Create default ~/.xvnrc if missing
-- [ ] Print setup instructions
+- [x] Detect shell (bash, zsh)
+- [x] Find shell profile files
+- [x] Check if already installed (idempotency)
+- [x] Copy xvn.sh to ~/.xvn/bin/
+- [x] Modify shell profile (append source line)
+- [x] Create default ~/.xvnrc if missing
+- [x] Print setup instructions
 
 ### M3.4: Shell integration tests
 - [ ] Validate xvn.sh syntax (shellcheck)
