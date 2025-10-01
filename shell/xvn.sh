@@ -3,9 +3,10 @@
 # This script hooks into directory change events and activates Node.js versions
 
 # Error handling
-# NOTE: Do NOT use 'set -e' in sourced scripts as it will terminate the user's shell
-# on any error. Instead, handle errors explicitly in functions.
-set -u  # Treat unset variables as errors
+# NOTE: Do NOT use 'set -e' or 'set -u' in sourced scripts:
+# - 'set -e' will terminate the user's shell on any error
+# - 'set -u' causes warnings for unset shell initialization variables
+# Instead, handle errors explicitly in functions and use ${VAR:-default} for variables
 
 # Prevent multiple initialization
 if [[ -n "${XVN_SHELL_LOADED:-}" ]]; then
