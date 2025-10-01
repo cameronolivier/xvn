@@ -40,10 +40,10 @@
 - [x] Plugin caching
 
 ### M2.5: Unit tests for plugin system
-- [ ] Mock plugin implementation
-- [ ] Plugin priority ordering tests
-- [ ] Shell escaping tests (command injection prevention)
-- [ ] Error handling (version not found)
+- [x] Mock plugin implementation
+- [x] Plugin priority ordering tests
+- [x] Shell escaping tests (command injection prevention)
+- [x] Error handling (version not found)
 
 ---
 
