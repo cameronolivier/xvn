@@ -14,7 +14,7 @@ impl Shell {
     pub fn detect() -> Result<Self> {
         // Try $SHELL first
         if let Ok(shell_path) = env::var("SHELL") {
-            debug!("Detected shell from $SHELL: {}", shell_path);
+            debug!("Detected shell from $SHELL: {shell_path}");
             return Self::from_path(&shell_path);
         }
 
@@ -33,8 +33,7 @@ impl Shell {
             "bash" => Ok(Self::Bash),
             "zsh" => Ok(Self::Zsh),
             _ => anyhow::bail!(
-                "Unsupported shell: {}. xvn currently supports bash and zsh.",
-                shell_name
+                "Unsupported shell: {shell_name}. xvn currently supports bash and zsh."
             ),
         }
     }

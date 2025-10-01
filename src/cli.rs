@@ -89,12 +89,12 @@ pub fn run() -> Result<()> {
                 Ok(()) => Ok(()),
                 Err(e) => {
                     // Print main error message
-                    eprintln!("Error: {}", e);
+                    eprintln!("Error: {e}");
 
                     // Print hint if available
                     if let Some(hint) = e.hint() {
                         eprintln!();
-                        eprintln!("{}", hint);
+                        eprintln!("{hint}");
                     }
 
                     // Exit with error code

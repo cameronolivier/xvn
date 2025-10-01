@@ -31,7 +31,7 @@ impl Default for StdinUserPrompt {
 impl UserPrompt for StdinUserPrompt {
     fn confirm(&mut self, message: &str) -> io::Result<bool> {
         // Print prompt
-        write!(self.stdout, "{} [Y/n]: ", message)?;
+        write!(self.stdout, "{message} [Y/n]: ")?;
         self.stdout.flush()?;
 
         // Read response

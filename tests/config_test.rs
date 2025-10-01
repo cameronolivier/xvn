@@ -59,7 +59,7 @@ another_unknown: 123
 #[test]
 fn test_config_merge_precedence() {
     // Note: merge() is private, so this tests the merge logic via Config structure
-    let base = Config {
+    let _base = Config {
         plugins: vec!["nvm".to_string(), "fnm".to_string()],
         version_files: vec![".nvmrc".to_string()],
         auto_install: AutoInstallMode::Never,

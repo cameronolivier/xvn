@@ -72,7 +72,7 @@ impl NvmPlugin {
             Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
         } else {
             let stderr = String::from_utf8_lossy(&output.stderr);
-            anyhow::bail!("nvm command failed: {}", stderr)
+            anyhow::bail!("nvm command failed: {stderr}")
         }
     }
 
@@ -103,7 +103,7 @@ impl VersionManagerPlugin for NvmPlugin {
             let cache = self
                 .availability_cache
                 .lock()
-                .map_err(|e| anyhow::anyhow!("Lock poisoned: {}", e))?;
+                .map_err(|e| anyhow::anyhow!("Lock poisoned: {e}"))?;
             if let Some(cached) = *cache {
                 return Ok(cached);
             }
@@ -117,7 +117,7 @@ impl VersionManagerPlugin for NvmPlugin {
             let mut cache = self
                 .availability_cache
                 .lock()
-                .map_err(|e| anyhow::anyhow!("Lock poisoned: {}", e))?;
+                .map_err(|e| anyhow::anyhow!("Lock poisoned: {e}"))?;
             *cache = Some(available);
         }
 
@@ -135,12 +135,12 @@ impl VersionManagerPlugin for NvmPlugin {
 
     fn activate_command(&self, version: &str) -> Result<String> {
         let escaped = self.escape_version(version);
-        Ok(format!("nvm use {}", escaped))
+        Ok(format!("nvm use {escaped}"))
     }
 
     fn install_command(&self, version: &str) -> Result<String> {
         let escaped = self.escape_version(version);
-        Ok(format!("nvm install {}", escaped))
+        Ok(format!("nvm install {escaped}"))
     }
 
     fn resolve_version(&self, version: &str) -> Result<String> {
@@ -218,8 +218,7 @@ mod tests {
             // shell-escape wraps the string in single quotes
             assert!(
                 cmd.contains("'") || cmd.contains("\\"),
-                "Command should escape/quote special characters: {}",
-                cmd
+                "Command should escape/quote special characters: {cmd}"
             );
             // Verify the command starts with "nvm use"
             assert!(cmd.starts_with("nvm use "));
@@ -243,8 +242,7 @@ mod tests {
             // shell-escape wraps the string in single quotes
             assert!(
                 cmd.contains("'") || cmd.contains("\\"),
-                "Command should escape/quote special characters: {}",
-                cmd
+                "Command should escape/quote special characters: {cmd}"
             );
             // Verify the command starts with "nvm install"
             assert!(cmd.starts_with("nvm install "));

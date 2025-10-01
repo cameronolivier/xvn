@@ -16,8 +16,8 @@
 - [ ] Achieve >85% coverage (currently at 54.41%)
 
 ### M5.2: Integration test suite
-- [ ] End-to-end activation scenarios
-- [ ] Multi-plugin fallback logic
+- [x] End-to-end activation scenarios
+- [x] Multi-plugin fallback logic
 - [ ] Config override precedence
 - [ ] Auto-install flow variations
 

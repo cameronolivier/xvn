@@ -105,7 +105,7 @@ fn test_version_file_deeply_nested_search() {
     // Create deeply nested directory (10 levels)
     let mut nested = temp.path().to_path_buf();
     for i in 0..10 {
-        nested = nested.join(format!("level{}", i));
+        nested = nested.join(format!("level{i}"));
     }
     fs::create_dir_all(&nested).unwrap();
 
@@ -156,14 +156,13 @@ fn test_version_file_complex_version_string() {
     ];
 
     for version in versions {
-        fs::write(&file_path, format!("{}\n", version)).unwrap();
+        fs::write(&file_path, format!("{version}\n")).unwrap();
 
         let result = VersionFile::find(temp.path(), &[".nvmrc".to_string()]);
 
         assert!(
             result.is_ok(),
-            "Failed to parse version string: {}",
-            version
+            "Failed to parse version string: {version}"
         );
         let version_file = result.unwrap().unwrap();
         assert_eq!(version_file.version, version);

@@ -149,9 +149,7 @@ mod plugin_fallback {
 
         let plugins: Vec<Arc<dyn VersionManagerPlugin>> = vec![Arc::new(nvm), Arc::new(fnm)];
 
-        let found = plugins
-            .iter()
-            .find(|p| p.is_available().unwrap_or(false));
+        let found = plugins.iter().find(|p| p.is_available().unwrap_or(false));
 
         assert!(found.is_none());
     }
@@ -166,8 +164,7 @@ mod plugin_fallback {
             .with_availability(true)
             .with_version("18.20.0");
 
-        let plugins: Vec<Arc<dyn VersionManagerPlugin>> =
-            vec![Arc::new(first), Arc::new(second)];
+        let plugins: Vec<Arc<dyn VersionManagerPlugin>> = vec![Arc::new(first), Arc::new(second)];
 
         let found = plugins.iter().find(|p| {
             p.is_available().unwrap_or(false) && p.has_version("18.20.0").unwrap_or(false)

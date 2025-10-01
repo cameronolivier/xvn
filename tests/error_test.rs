@@ -136,7 +136,7 @@ fn test_error_debug_format() {
         message: "execution failed".to_string(),
     };
 
-    let debug_str = format!("{:?}", error);
+    let debug_str = format!("{error:?}");
     // Debug format should contain struct details
     assert!(debug_str.contains("PluginError"));
 }

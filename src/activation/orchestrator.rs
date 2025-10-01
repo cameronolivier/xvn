@@ -102,7 +102,7 @@ impl<'a> Orchestrator<'a> {
                 source: e,
             })?;
 
-        info!("Activation command: {}", cmd);
+        info!("Activation command: {cmd}");
 
         // Write command to FD:3
         self.command_writer.write_command(&cmd)?;
@@ -117,7 +117,7 @@ impl<'a> Orchestrator<'a> {
     ///
     /// This will be implemented in M4.2
     fn handle_missing_version(&mut self, version: &str) -> ActivationResult<()> {
-        info!("Version {} not installed", version);
+        info!("Version {version} not installed");
 
         // Find first available plugin to use for installation
         let plugin = self
@@ -202,11 +202,11 @@ impl<'a> Orchestrator<'a> {
                     source: e,
                 })?;
 
-        info!("Install command: {}", install_cmd);
-        info!("Activate command: {}", activate_cmd);
+        info!("Install command: {install_cmd}");
+        info!("Activate command: {activate_cmd}");
 
         // Write both commands to FD:3 (chained with &&)
-        let combined_cmd = format!("{} && {}", install_cmd, activate_cmd);
+        let combined_cmd = format!("{install_cmd} && {activate_cmd}");
         self.command_writer.write_command(&combined_cmd)?;
 
         // Print message to stdout
@@ -233,15 +233,15 @@ impl<'a> Orchestrator<'a> {
 
                 println!();
                 println!("⚠ Version mismatch:");
-                println!("  Required: {}", required_version);
-                println!("  Current:  {}", current_version);
+                println!("  Required: {required_version}");
+                println!("  Current:  {current_version}");
                 println!();
                 println!("This may cause compatibility issues.");
             }
             _ => {
                 // Node.js not found or command failed
                 println!();
-                println!("⚠ Node.js {} is required but not active.", required_version);
+                println!("⚠ Node.js {required_version} is required but not active.");
                 println!("This may cause compatibility issues.");
             }
         }

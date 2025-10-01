@@ -122,9 +122,9 @@ mod tests {
     fn test_is_already_installed() {
         let mut temp = NamedTempFile::new().unwrap();
         writeln!(temp, "some content").unwrap();
-        writeln!(temp, "{}", XVN_MARKER_START).unwrap();
+        writeln!(temp, "{XVN_MARKER_START}").unwrap();
         writeln!(temp, "source ~/.xvn/bin/xvn.sh").unwrap();
-        writeln!(temp, "{}", XVN_MARKER_END).unwrap();
+        writeln!(temp, "{XVN_MARKER_END}").unwrap();
         temp.flush().unwrap();
 
         assert!(is_already_installed(temp.path()).unwrap());

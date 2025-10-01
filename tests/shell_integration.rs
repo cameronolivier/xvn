@@ -4,7 +4,7 @@ use std::process::Command;
 fn test_xvn_sh_passes_shellcheck() {
     // Validate xvn.sh with shellcheck
     let output = Command::new("shellcheck")
-        .args(&["--shell=bash", "shell/xvn.sh"])
+        .args(["--shell=bash", "shell/xvn.sh"])
         .output();
 
     match output {
@@ -16,7 +16,7 @@ fn test_xvn_sh_passes_shellcheck() {
             );
         }
         Err(e) => {
-            eprintln!("Warning: shellcheck not available: {}", e);
+            eprintln!("Warning: shellcheck not available: {e}");
             eprintln!("Install shellcheck for full test coverage");
         }
     }

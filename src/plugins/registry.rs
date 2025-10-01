@@ -22,7 +22,7 @@ impl PluginRegistry {
     /// # Arguments
     /// * `plugin_names` - List of plugin names in priority order (from config)
     pub fn new(plugin_names: &[String]) -> Self {
-        info!("Initializing plugin registry with: {:?}", plugin_names);
+        info!("Initializing plugin registry with: {plugin_names:?}");
 
         let mut plugins: Vec<Arc<dyn VersionManagerPlugin>> = Vec::new();
 
@@ -37,7 +37,7 @@ impl PluginRegistry {
                     plugins.push(Arc::new(FnmPlugin::new()));
                 }
                 _ => {
-                    log::warn!("Unknown plugin '{}' in config (ignoring)", name);
+                    log::warn!("Unknown plugin '{name}' in config (ignoring)");
                 }
             }
         }
@@ -101,7 +101,7 @@ impl PluginRegistry {
         &self,
         version: &str,
     ) -> Result<Option<Arc<dyn VersionManagerPlugin>>> {
-        debug!("Searching for plugin with version {}...", version);
+        debug!("Searching for plugin with version {version}...");
 
         for plugin in &self.plugins {
             // Skip if plugin not available
@@ -128,7 +128,7 @@ impl PluginRegistry {
             }
         }
 
-        debug!("No plugin has version {}", version);
+        debug!("No plugin has version {version}");
         Ok(None)
     }
 

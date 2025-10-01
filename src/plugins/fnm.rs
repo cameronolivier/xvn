@@ -33,7 +33,7 @@ impl FnmPlugin {
             Ok(stdout)
         } else {
             let stderr = String::from_utf8_lossy(&output.stderr);
-            anyhow::bail!("fnm command failed: {}", stderr)
+            anyhow::bail!("fnm command failed: {stderr}")
         }
     }
 
@@ -51,7 +51,7 @@ impl FnmPlugin {
         let version_with_v = if version.starts_with('v') {
             version.to_string()
         } else {
-            format!("v{}", version)
+            format!("v{version}")
         };
 
         for line in output.lines() {
@@ -65,7 +65,6 @@ impl FnmPlugin {
             // Remove markers (* for active, default label, etc.)
             let version_part = line
                 .trim_start_matches('*')
-                .trim()
                 .split_whitespace()
                 .next()
                 .unwrap_or("");
@@ -108,7 +107,7 @@ impl VersionManagerPlugin for FnmPlugin {
             let cache = self
                 .available
                 .lock()
-                .map_err(|e| anyhow::anyhow!("Lock poisoned: {}", e))?;
+                .map_err(|e| anyhow::anyhow!("Lock poisoned: {e}"))?;
             if let Some(available) = *cache {
                 return Ok(available);
             }
@@ -125,7 +124,7 @@ impl VersionManagerPlugin for FnmPlugin {
             let mut cache = self
                 .available
                 .lock()
-                .map_err(|e| anyhow::anyhow!("Lock poisoned: {}", e))?;
+                .map_err(|e| anyhow::anyhow!("Lock poisoned: {e}"))?;
             *cache = Some(available);
         }
 
@@ -148,12 +147,12 @@ impl VersionManagerPlugin for FnmPlugin {
 
     fn activate_command(&self, version: &str) -> Result<String> {
         let escaped = Self::escape_version(version);
-        Ok(format!("fnm use {}", escaped))
+        Ok(format!("fnm use {escaped}"))
     }
 
     fn install_command(&self, version: &str) -> Result<String> {
         let escaped = Self::escape_version(version);
-        Ok(format!("fnm install {}", escaped))
+        Ok(format!("fnm install {escaped}"))
     }
 
     fn resolve_version(&self, version: &str) -> Result<String> {
@@ -212,8 +211,7 @@ mod tests {
         // Verify that the version is properly quoted/escaped
         assert!(
             cmd.contains("'") || cmd.contains("\\"),
-            "Command should escape/quote special characters: {}",
-            cmd
+            "Command should escape/quote special characters: {cmd}"
         );
         assert!(cmd.starts_with("fnm use "));
     }
@@ -227,8 +225,7 @@ mod tests {
         // Verify that the version is properly quoted/escaped
         assert!(
             cmd.contains("'") || cmd.contains("\\"),
-            "Command should escape/quote special characters: {}",
-            cmd
+            "Command should escape/quote special characters: {cmd}"
         );
         assert!(cmd.starts_with("fnm install "));
     }

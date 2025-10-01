@@ -67,10 +67,10 @@ impl CommandWriter {
     /// - Ok(()) if write successful or FD:3 not available
     /// - Err(io::Error) if write failed
     pub fn write_command(&mut self, command: &str) -> io::Result<()> {
-        trace!("Writing command to FD:3: {}", command);
+        trace!("Writing command to FD:3: {command}");
 
         if let Some(fd) = self.fd {
-            let data = format!("{}\n", command);
+            let data = format!("{command}\n");
             unsafe {
                 let bytes_written =
                     libc::write(fd, data.as_ptr() as *const libc::c_void, data.len());
@@ -100,6 +100,37 @@ impl Default for CommandWriter {
     }
 }
 
+/// Mock command writer for testing
+#[cfg(test)]
+pub struct MockCommandWriter {
+    pub commands: Vec<String>,
+}
+
+#[cfg(test)]
+impl Default for MockCommandWriter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[cfg(test)]
+impl MockCommandWriter {
+    pub fn new() -> Self {
+        Self {
+            commands: Vec::new(),
+        }
+    }
+
+    pub fn write_command(&mut self, cmd: &str) -> std::io::Result<()> {
+        self.commands.push(cmd.to_string());
+        Ok(())
+    }
+
+    pub fn is_available(&self) -> bool {
+        true
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -114,7 +145,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg_attr(coverage, ignore)] // Skip this test during coverage (conflicts with tarpaulin FD handling)
+    #[ignore] // Skip this test (conflicts with tarpaulin FD handling during coverage)
     fn test_command_writer_with_fd3() {
         // Save FD:3 state if it's open
         let fd3_saved = unsafe {
@@ -171,29 +202,5 @@ mod tests {
         // We can't assert success/failure because FD:3 state depends on test order
         // Just verify it returns a Result and doesn't panic
         let _ = result;
-    }
-}
-
-/// Mock command writer for testing
-#[cfg(test)]
-pub struct MockCommandWriter {
-    pub commands: Vec<String>,
-}
-
-#[cfg(test)]
-impl MockCommandWriter {
-    pub fn new() -> Self {
-        Self {
-            commands: Vec::new(),
-        }
-    }
-
-    pub fn write_command(&mut self, cmd: &str) -> std::io::Result<()> {
-        self.commands.push(cmd.to_string());
-        Ok(())
-    }
-
-    pub fn is_available(&self) -> bool {
-        true
     }
 }

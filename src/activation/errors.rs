@@ -61,14 +61,12 @@ impl ActivationError {
             ),
             Self::VersionNotInstalled { hint, .. } => Some(hint.clone()),
             Self::EmptyVersionFile { path } => Some(format!(
-                "The version file '{}' is empty.\n\
-                 Add a Node.js version (e.g., '18.20.0') to the file.",
-                path
+                "The version file '{path}' is empty.\n\
+                 Add a Node.js version (e.g., '18.20.0') to the file."
             )),
             Self::InvalidVersionFile { path, .. } => Some(format!(
-                "The version file '{}' could not be read.\n\
-                 Check file permissions and format.",
-                path
+                "The version file '{path}' could not be read.\n\
+                 Check file permissions and format."
             )),
             Self::ConfigError(_) => Some(
                 "Run 'xvn setup' to create a default configuration, or check ~/.xvnrc syntax."
@@ -99,7 +97,7 @@ mod tests {
             hint: "Run: nvm install 18.20.0".to_string(),
         };
 
-        let msg = format!("{}", err);
+        let msg = format!("{err}");
         assert!(msg.contains("18.20.0"));
         assert!(msg.contains("not installed"));
 
@@ -113,7 +111,7 @@ mod tests {
             path: "/tmp/test/.nvmrc".to_string(),
         };
 
-        let msg = format!("{}", err);
+        let msg = format!("{err}");
         assert!(msg.contains("/tmp/test/.nvmrc"));
         assert!(msg.contains("empty"));
 
@@ -129,7 +127,7 @@ mod tests {
             hint: "Install it".to_string(),
         };
 
-        let msg = format!("{}", err);
+        let msg = format!("{err}");
         assert!(msg.contains("18.20.0"));
         assert!(msg.contains("not installed"));
     }

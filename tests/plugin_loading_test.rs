@@ -95,14 +95,7 @@ fn test_plugin_version_with_special_characters() {
     let plugin = MockPlugin::new("testvm");
 
     // Test various version string formats
-    let versions = vec![
-        "18.20.0",
-        "v18.20.0",
-        "lts/hydrogen",
-        "lts/*",
-        "node",
-        "18",
-    ];
+    let versions = vec!["18.20.0", "v18.20.0", "lts/hydrogen", "lts/*", "node", "18"];
 
     for version in versions {
         let activate_cmd = plugin.activate_command(version).unwrap();
