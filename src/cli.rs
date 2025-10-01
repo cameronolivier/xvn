@@ -60,7 +60,7 @@ pub fn run() -> Result<()> {
         Some(Commands::Activate { path }) => {
             info!("Running activate command for path: {path:?}");
 
-            // Load config to get version file names
+            // Load config to get version file names and plugin order
             let config = crate::config::Config::load().context("failed to load configuration")?;
 
             // Find version file
@@ -68,7 +68,42 @@ pub fn run() -> Result<()> {
                 Ok(Some(version_file)) => {
                     println!("Found version file: {}", version_file.path.display());
                     println!("Node.js version: {}", version_file.version);
-                    println!("\nActivation not yet implemented (requires plugin system)");
+
+                    // Create plugin registry
+                    let registry = crate::plugins::PluginRegistry::new(&config.plugins);
+
+                    // Find a plugin that has this version
+                    match registry.find_plugin_with_version(&version_file.version) {
+                        Ok(Some(plugin)) => {
+                            println!("Using plugin: {}", plugin.name());
+
+                            // Generate activation command
+                            match plugin.activate_command(&version_file.version) {
+                                Ok(cmd) => {
+                                    println!("Activation command: {}", cmd);
+                                    println!("\n(Actual activation requires shell integration - Milestone 3)");
+                                }
+                                Err(e) => {
+                                    eprintln!("Failed to generate activation command: {}", e);
+                                    std::process::exit(1);
+                                }
+                            }
+                        }
+                        Ok(None) => {
+                            println!("\nVersion {} not installed.", version_file.version);
+
+                            // Find first available plugin for install suggestion
+                            if let Ok(Some(plugin)) = registry.find_available_plugin() {
+                                if let Ok(install_cmd) = plugin.install_command(&version_file.version) {
+                                    println!("To install: {}", install_cmd);
+                                }
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Error checking plugins: {}", e);
+                            std::process::exit(1);
+                        }
+                    }
                 }
                 Ok(None) => {
                     println!(

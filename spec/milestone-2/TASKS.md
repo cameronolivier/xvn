@@ -33,11 +33,11 @@
 - [x] Parse fnm list output
 
 ### M2.4: Implement plugin registry
-- [ ] Load built-in plugins (nvm, fnm)
-- [ ] Respect priority ordering from config
-- [ ] find_plugin() - first match wins
-- [ ] available_plugins() - filter by is_available()
-- [ ] Plugin caching
+- [x] Load built-in plugins (nvm, fnm)
+- [x] Respect priority ordering from config
+- [x] find_plugin() - first match wins
+- [x] available_plugins() - filter by is_available()
+- [x] Plugin caching
 
 ### M2.5: Unit tests for plugin system
 - [ ] Mock plugin implementation

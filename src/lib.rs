@@ -11,5 +11,5 @@ pub mod version_file;
 // Re-export key types
 pub use config::Config;
 pub use error::XvnError;
-pub use plugins::VersionManagerPlugin;
+pub use plugins::{PluginRegistry, VersionManagerPlugin};
 pub use version_file::VersionFile;
