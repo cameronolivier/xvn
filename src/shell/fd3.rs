@@ -140,6 +140,9 @@ mod tests {
         // Write a command
         writer.write_command("echo test").unwrap();
 
+        // Drop writer before restoring FD:3
+        drop(writer);
+
         // Restore FD:3 or close it
         unsafe {
             if let Some(saved_fd) = fd3_saved {
@@ -149,6 +152,9 @@ mod tests {
                 libc::close(3);
             }
         }
+
+        // Keep temp alive until after FD:3 is restored
+        drop(temp);
     }
 
     #[test]
