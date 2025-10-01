@@ -41,10 +41,10 @@
 - [ ] Inline code documentation (rustdoc)
 
 ### M5.6: Code quality
-- [ ] Run clippy (Rust linter)
-- [ ] Format with rustfmt
-- [ ] Address all warnings
-- [ ] Security audit (cargo audit)
+- [x] Run clippy (Rust linter)
+- [x] Format with rustfmt
+- [x] Address all warnings
+- [x] Security audit (cargo audit - 0 vulnerabilities)
 
 ---
 

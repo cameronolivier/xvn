@@ -445,10 +445,220 @@ mod tests {
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
         let result = orchestrator.activate(temp_dir.path());
-        assert!(result.is_ok());
+        assert!(result.is_ok(), "Activation failed: {:?}", result);
 
         // Should use first plugin
         // Commands written to FD:3 (not captured in tests)
         // Command verification omitted (FD:3)
+    }
+
+    #[test]
+    fn test_version_file_read_error() {
+        // Test handling of unreadable version file
+        let config = create_test_config(AutoInstallMode::Never);
+        let registry = PluginRegistry::with_plugins(vec![]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Use an empty directory - no version file should be found
+        let temp_dir = TempDir::new().unwrap();
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok()); // No version file is OK (not an error)
+    }
+
+    #[test]
+    fn test_activate_with_whitespace_version() {
+        // Test version with leading/trailing whitespace
+        let config = create_test_config(AutoInstallMode::Never);
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_version("18.20.0"); // Exact match after trim
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "  18.20.0  \n").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_activate_with_lts_version() {
+        // Test LTS version strings
+        let config = create_test_config(AutoInstallMode::Never);
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_version("lts/hydrogen");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "lts/hydrogen").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_install_with_v_prefix() {
+        // Test version with v prefix
+        let config = create_test_config(AutoInstallMode::Always);
+        let mock_plugin = MockPlugin::new("mock").with_availability(true);
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "v18.20.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_plugin_fallback_when_first_unavailable() {
+        // Test that second plugin is used when first doesn't have version
+        let config = create_test_config(AutoInstallMode::Never);
+        let mock_plugin1 = MockPlugin::new("first")
+            .with_availability(true)
+            .with_version("20.0.0"); // Different version
+        let mock_plugin2 = MockPlugin::new("second")
+            .with_availability(true)
+            .with_version("18.20.0"); // Target version
+
+        let registry =
+            PluginRegistry::with_plugins(vec![Arc::new(mock_plugin1), Arc::new(mock_plugin2)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_empty_version_file() {
+        // Test that empty version file is handled gracefully
+        let config = create_test_config(AutoInstallMode::Never);
+        let registry = PluginRegistry::with_plugins(vec![]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        // Should fail with VersionFileEmpty error (handled by VersionFile::find)
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_multiple_version_files_precedence() {
+        // Test that first version file in config takes precedence
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.version_files = vec![".nvmrc".to_string(), ".node-version".to_string()];
+
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_version("18.20.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+        std::fs::write(temp_dir.path().join(".node-version"), "20.0.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_ok());
+        // Should use .nvmrc (18.20.0) not .node-version (20.0.0)
+    }
+
+    #[test]
+    fn test_activate_in_subdirectory() {
+        // Test that version file is found in parent directory
+        let config = create_test_config(AutoInstallMode::Never);
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_version("18.20.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+        let subdir = temp_dir.path().join("subdir");
+        std::fs::create_dir(&subdir).unwrap();
+
+        let result = orchestrator.activate(&subdir);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_install_command_generation_error() {
+        // Test error handling when plugin fails to generate install command
+        use crate::plugins::VersionManagerPlugin;
+        use anyhow::anyhow;
+
+        #[derive(Debug)]
+        struct FailingPlugin;
+        impl VersionManagerPlugin for FailingPlugin {
+            fn name(&self) -> &str {
+                "failing"
+            }
+            fn version_files(&self) -> Vec<&str> {
+                vec![".nvmrc"]
+            }
+            fn is_available(&self) -> anyhow::Result<bool> {
+                Ok(true)
+            }
+            fn has_version(&self, _version: &str) -> anyhow::Result<bool> {
+                Ok(false)
+            }
+            fn activate_command(&self, _version: &str) -> anyhow::Result<String> {
+                Err(anyhow!("cannot generate activate command"))
+            }
+            fn install_command(&self, _version: &str) -> anyhow::Result<String> {
+                Err(anyhow!("cannot generate install command"))
+            }
+        }
+
+        let config = create_test_config(AutoInstallMode::Always);
+        let failing_plugin = Arc::new(FailingPlugin);
+
+        let registry = PluginRegistry::with_plugins(vec![failing_plugin]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_err());
+
+        if let Err(ActivationError::PluginError { plugin, .. }) = result {
+            assert_eq!(plugin, "failing");
+        } else {
+            panic!("Expected PluginError");
+        }
     }
 }

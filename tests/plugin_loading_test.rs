@@ -108,7 +108,7 @@ fn test_plugin_version_with_special_characters() {
 
 #[test]
 fn test_registry_find_available_plugin_for_version() {
-    let registry = PluginRegistry::new(&["nvm".to_string(), "fnm".to_string()]);
+    let _registry = PluginRegistry::new(&["nvm".to_string(), "fnm".to_string()]);
 
     // Create mock plugins with different available versions
     let plugins: Vec<Arc<dyn VersionManagerPlugin>> = vec![
