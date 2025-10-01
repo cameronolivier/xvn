@@ -158,6 +158,9 @@ pids
 build/
 dist/
 
+# Local files
+*.local.*
+
 # Added by cargo
 
 /target

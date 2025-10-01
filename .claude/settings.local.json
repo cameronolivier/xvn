@@ -19,7 +19,8 @@
       "Bash(chmod:*)",
       "Bash(./scripts/bump-version.sh:*)",
       "Bash(shellcheck:*)",
-      "Bash(brew install:*)"
+      "Bash(brew install:*)",
+      "Read(//Users/cam/**)"
     ],
     "deny": [],
     "ask": []
