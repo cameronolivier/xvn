@@ -77,7 +77,7 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
 - Activate command: Return `"fnm use <version>"`
 - Install command: Return `"fnm install <version>"`
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md#plugin-system-architecture) for high-level plugin system design.
+See [ARCHITECTURE.md](../docs/ARCHITECTURE.md#plugin-system-architecture) for high-level plugin system design.
 
 ---
 

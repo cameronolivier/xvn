@@ -68,7 +68,7 @@ Implement complete version activation flow with auto-install prompts and user co
 - InstallDeclined: Show version mismatch
 - NoPluginAvailable: Helpful error with install instructions
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md#component-architecture) for activation module details.
+See [ARCHITECTURE.md](../docs/ARCHITECTURE.md#component-architecture) for activation module details.
 
 ---
 

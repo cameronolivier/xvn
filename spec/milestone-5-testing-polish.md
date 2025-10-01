@@ -77,7 +77,7 @@ Using `criterion` crate for performance measurement:
 - Config loading
 - Plugin availability checks
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md#testing-architecture) for comprehensive testing strategy.
+See [ARCHITECTURE.md](../docs/ARCHITECTURE.md#testing-architecture) for comprehensive testing strategy.
 
 ---
 

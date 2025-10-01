@@ -69,7 +69,7 @@ eval "$commands"
 - Modify profile (idempotent, check existing)
 - Create default ~/.xvnrc
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md#shell-integration-architecture) for detailed shell integration design.
+See [ARCHITECTURE.md](../docs/ARCHITECTURE.md#shell-integration-architecture) for detailed shell integration design.
 
 ---
 

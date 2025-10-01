@@ -429,12 +429,12 @@
 
 For detailed plans for each milestone, see:
 
-- [Milestone 1: Core Infrastructure](./docs/milestone-1-core-infrastructure.md) (Weeks 1-2)
-- [Milestone 2: Plugin System](./docs/milestone-2-plugin-system.md) (Weeks 3-4)
-- [Milestone 3: Shell Integration](./docs/milestone-3-shell-integration.md) (Weeks 5-6)
-- [Milestone 4: Version Activation & Auto-Install](./docs/milestone-4-version-activation.md) (Weeks 7-8)
-- [Milestone 5: Testing & Polish](./docs/milestone-5-testing-polish.md) (Weeks 9-10)
-- [Milestone 6: Release Preparation](./docs/milestone-6-release-preparation.md) (Weeks 11-12)
+- [Milestone 1: Core Infrastructure](../spec/milestone-1-core-infrastructure.md) (Weeks 1-2)
+- [Milestone 2: Plugin System](../spec/milestone-2-plugin-system.md) (Weeks 3-4)
+- [Milestone 3: Shell Integration](../spec/milestone-3-shell-integration.md) (Weeks 5-6)
+- [Milestone 4: Version Activation & Auto-Install](../spec/milestone-4-version-activation.md) (Weeks 7-8)
+- [Milestone 5: Testing & Polish](../spec/milestone-5-testing-polish.md) (Weeks 9-10)
+- [Milestone 6: Release Preparation](../spec/milestone-6-release-preparation.md) (Weeks 11-12)
 
 ---
 

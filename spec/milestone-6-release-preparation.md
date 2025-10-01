@@ -93,7 +93,7 @@ jobs:
 - Checksum verification (SHA256)
 - Fallback to source compilation if platform unsupported
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md#deployment--distribution) for deployment details.
+See [ARCHITECTURE.md](../docs/ARCHITECTURE.md#deployment--distribution) for deployment details.
 
 ---
 
