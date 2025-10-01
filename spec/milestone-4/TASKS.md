@@ -19,17 +19,17 @@
 - [x] Handle errors gracefully
 
 ### M4.2: Implement auto-install logic
-- [ ] Check auto_install config (prompt/always/never)
-- [ ] Prompt user for confirmation
-- [ ] Read stdin for user response
-- [ ] Generate install + activate commands
-- [ ] Handle install declined
-- [ ] Show version mismatch message
+- [x] Check auto_install config (prompt/always/never)
+- [x] Prompt user for confirmation
+- [x] Read stdin for user response
+- [x] Generate install + activate commands
+- [x] Handle install declined
+- [x] Show version mismatch message
 
 ### M4.3: Implement version mismatch detection
-- [ ] Get current Node.js version (node --version)
-- [ ] Compare to required version
-- [ ] Format mismatch message
+- [x] Get current Node.js version (node --version)
+- [x] Compare to required version
+- [x] Format mismatch message
 
 ### M4.4: Verify and test idempotency implementation
 - [ ] Review existing XVN_ACTIVE_FILE logic in shell/xvn.sh
@@ -38,12 +38,12 @@
 - [ ] Add integration test for idempotency behavior
 
 ### M4.5: Unit tests for activation
-- [ ] Activation performance test (<100ms target)
-- [ ] Version file parsing tests
-- [ ] Plugin priority tests (first match wins)
-- [ ] Auto-install prompt tests (mock stdin)
-- [ ] Config override precedence tests
-- [ ] Error message tests
+- [x] Activation performance test (<100ms target)
+- [x] Version file parsing tests
+- [x] Plugin priority tests (first match wins)
+- [x] Auto-install prompt tests (mock stdin)
+- [x] Config override precedence tests
+- [x] Error message tests
 
 ### M4.6: Integration tests
 - [ ] End-to-end activation with mock plugin

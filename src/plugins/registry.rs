@@ -160,6 +160,14 @@ impl Default for PluginRegistry {
 }
 
 #[cfg(test)]
+impl PluginRegistry {
+    /// Create a registry with custom plugins (for testing)
+    pub fn with_plugins(plugins: Vec<Arc<dyn VersionManagerPlugin>>) -> Self {
+        Self { plugins }
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
 

@@ -171,3 +171,27 @@ mod tests {
         let _ = result;
     }
 }
+
+/// Mock command writer for testing
+#[cfg(test)]
+pub struct MockCommandWriter {
+    pub commands: Vec<String>,
+}
+
+#[cfg(test)]
+impl MockCommandWriter {
+    pub fn new() -> Self {
+        Self {
+            commands: Vec::new(),
+        }
+    }
+
+    pub fn write_command(&mut self, cmd: &str) -> std::io::Result<()> {
+        self.commands.push(cmd.to_string());
+        Ok(())
+    }
+
+    pub fn is_available(&self) -> bool {
+        true
+    }
+}
