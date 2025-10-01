@@ -51,9 +51,9 @@
 - [ ] Multiple version files (nested directories)
 
 ### M4.7: Implement structured error handling
-- [ ] Create src/activation/errors.rs with ActivationError enum
-- [ ] Define error types (NoPluginsAvailable, InvalidVersionFile, ConfigError)
-- [ ] Add actionable hints for each error type
+- [x] Create src/activation/errors.rs with ActivationError enum
+- [x] Define error types (NoPluginsAvailable, InvalidVersionFile, ConfigError)
+- [x] Add actionable hints for each error type
 - [ ] Update orchestrator to use structured errors
 - [ ] Update CLI to display error hints
 

@@ -2,6 +2,7 @@
 //!
 //! Fast, modular automatic Node.js version switching.
 
+pub mod activation;
 pub mod cli;
 pub mod config;
 pub mod error;
