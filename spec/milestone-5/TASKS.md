@@ -13,7 +13,7 @@
 - [x] Version file discovery edge cases
 - [x] Plugin loading edge cases
 - [x] Error handling for all error types
-- [ ] Achieve >85% coverage (currently at 54.41%)
+- [ ] Achieve >85% coverage (currently at 60.68%, target: 85%)
 
 ### M5.2: Integration test suite
 - [x] End-to-end activation scenarios

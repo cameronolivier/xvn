@@ -173,3 +173,67 @@ mod plugin_fallback {
         assert_eq!(found.unwrap().name(), "first");
     }
 }
+
+// Config file parsing tests
+mod config_file_parsing {
+    use std::fs;
+    use tempfile::TempDir;
+    use xvn::config::{AutoInstallMode, Config};
+
+    #[test]
+    fn test_config_file_validation() {
+        // Test that invalid config files are rejected
+        let temp = TempDir::new().unwrap();
+
+        // Create invalid config (empty plugins)
+        let config_path = temp.path().join("invalid.yaml");
+        fs::write(
+            &config_path,
+            r#"
+plugins: []
+version_files: []
+"#,
+        )
+        .unwrap();
+
+        // load_from_file is private, so we test via serde + validation
+        let content = fs::read_to_string(&config_path).unwrap();
+        let config: Config = serde_yaml::from_str(&content).unwrap();
+        let result = config.validate();
+
+        assert!(result.is_err(), "Should reject invalid config");
+        let err = result.unwrap_err().to_string();
+        assert!(
+            err.contains("at least one"),
+            "Error should mention validation requirement"
+        );
+    }
+
+    #[test]
+    fn test_config_file_parsing() {
+        // Test that valid config files parse correctly
+        let temp = TempDir::new().unwrap();
+        let config_path = temp.path().join("valid.yaml");
+        fs::write(
+            &config_path,
+            r#"
+plugins:
+  - fnm
+  - nvm
+auto_install: always
+version_files:
+  - .node-version
+  - .nvmrc
+"#,
+        )
+        .unwrap();
+
+        let content = fs::read_to_string(&config_path).unwrap();
+        let config: Config = serde_yaml::from_str(&content).unwrap();
+
+        assert_eq!(config.plugins, vec!["fnm", "nvm"]);
+        assert_eq!(config.auto_install, AutoInstallMode::Always);
+        assert_eq!(config.version_files, vec![".node-version", ".nvmrc"]);
+        assert!(config.validate().is_ok());
+    }
+}

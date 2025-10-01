@@ -25,7 +25,9 @@
       "Bash(./scripts/coverage.sh:*)",
       "Bash(RUSTFLAGS=\"--cfg coverage\" cargo tarpaulin --out Html --output-dir coverage --exclude-files 'tests/*')",
       "Bash(RUST_BACKTRACE=1 cargo test --lib test_install_with_v_prefix -- --show-output)",
-      "Bash(do echo \"Run $i:\")"
+      "Bash(do echo \"Run $i:\")",
+      "Bash(find:*)",
+      "Bash(sort:*)"
     ],
     "deny": [],
     "ask": []

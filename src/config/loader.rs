@@ -105,7 +105,7 @@ impl Config {
     }
 
     /// Merge another config into self (other takes precedence)
-    fn merge(mut self, other: Self) -> Self {
+    pub(crate) fn merge(mut self, other: Self) -> Self {
         // Only override if other has non-default values
         if !other.plugins.is_empty() {
             self.plugins = other.plugins;

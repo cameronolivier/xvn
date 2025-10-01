@@ -661,4 +661,98 @@ mod tests {
             panic!("Expected PluginError");
         }
     }
+
+    #[test]
+    fn test_activate_command_generation_error() {
+        // Test error handling when plugin fails to generate activate command for installed version
+        use crate::plugins::VersionManagerPlugin;
+        use anyhow::anyhow;
+
+        #[derive(Debug)]
+        struct FailingActivatePlugin;
+        impl VersionManagerPlugin for FailingActivatePlugin {
+            fn name(&self) -> &str {
+                "failing"
+            }
+            fn version_files(&self) -> Vec<&str> {
+                vec![".nvmrc"]
+            }
+            fn is_available(&self) -> anyhow::Result<bool> {
+                Ok(true)
+            }
+            fn has_version(&self, _version: &str) -> anyhow::Result<bool> {
+                Ok(true) // Version is installed
+            }
+            fn activate_command(&self, _version: &str) -> anyhow::Result<String> {
+                Err(anyhow!("cannot generate activate command"))
+            }
+            fn install_command(&self, _version: &str) -> anyhow::Result<String> {
+                Ok("install".to_string())
+            }
+        }
+
+        let config = create_test_config(AutoInstallMode::Never);
+        let failing_plugin = Arc::new(FailingActivatePlugin);
+
+        let registry = PluginRegistry::with_plugins(vec![failing_plugin]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_err());
+
+        if let Err(ActivationError::PluginError { plugin, .. }) = result {
+            assert_eq!(plugin, "failing");
+        } else {
+            panic!("Expected PluginError");
+        }
+    }
+
+    #[test]
+    fn test_registry_error_propagation() {
+        // Test that errors from registry are properly wrapped
+        use crate::plugins::VersionManagerPlugin;
+        use anyhow::anyhow;
+
+        #[derive(Debug)]
+        struct ErrorPlugin;
+        impl VersionManagerPlugin for ErrorPlugin {
+            fn name(&self) -> &str {
+                "error"
+            }
+            fn version_files(&self) -> Vec<&str> {
+                vec![".nvmrc"]
+            }
+            fn is_available(&self) -> anyhow::Result<bool> {
+                Err(anyhow!("availability check failed"))
+            }
+            fn has_version(&self, _version: &str) -> anyhow::Result<bool> {
+                Err(anyhow!("version check failed"))
+            }
+            fn activate_command(&self, _version: &str) -> anyhow::Result<String> {
+                Ok("activate".to_string())
+            }
+            fn install_command(&self, _version: &str) -> anyhow::Result<String> {
+                Ok("install".to_string())
+            }
+        }
+
+        let config = create_test_config(AutoInstallMode::Always);
+        let error_plugin = Arc::new(ErrorPlugin);
+
+        let registry = PluginRegistry::with_plugins(vec![error_plugin]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+
+        let result = orchestrator.activate(temp_dir.path());
+        assert!(result.is_err(), "Should propagate registry errors");
+    }
 }
