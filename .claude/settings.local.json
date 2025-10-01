@@ -5,7 +5,14 @@
       "Bash(git commit:*)",
       "Bash(while read file)",
       "Bash(do sed -i '' 's|\\.\\./ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" sed -i '' 's|ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" echo \"Updated links in $file\" done)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(for:*)",
+      "Bash(do if [ -f \"$dir/PLAN.md\" ])",
+      "Bash(then git mv \"$dir/PLAN.md\" \"$dir/SPEC.md\")",
+      "Bash(echo \"Renamed $dir/PLAN.md -> $dir/SPEC.md\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(cargo:*)"
     ],
     "deny": [],
     "ask": []

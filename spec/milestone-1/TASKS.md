@@ -9,10 +9,10 @@
 ## Tasks
 
 ### M1.1: Set up Rust project structure with Cargo.toml
-- [ ] Initialize Rust project with `cargo init`
-- [ ] Configure Cargo.toml dependencies
-- [ ] Create module structure (cli, config, version_file, error)
-- [ ] Set up Git repository
+- [x] Initialize Rust project with `cargo init`
+- [x] Configure Cargo.toml dependencies
+- [x] Create module structure (cli, config, version_file, error)
+- [x] Set up Git repository
 
 ### M1.2: Implement CLI framework with clap
 - [ ] `xvn setup` command skeleton
