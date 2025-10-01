@@ -1,7 +1,7 @@
+use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
-use anyhow::{Result, Context};
-use std::path::PathBuf;
 use log::info;
+use std::path::PathBuf;
 
 /// Extreme Version Switcher for Node.js
 #[derive(Parser, Debug)]
@@ -51,18 +51,17 @@ pub fn run() -> Result<()> {
 
     match cli.command {
         Some(Commands::Setup { shell, force }) => {
-            info!("Running setup command (shell: {}, force: {})", shell, force);
+            info!("Running setup command (shell: {shell}, force: {force})");
             println!("Setup command - not yet implemented");
-            println!("  Shell: {}", shell);
-            println!("  Force: {}", force);
+            println!("  Shell: {shell}");
+            println!("  Force: {force}");
             Ok(())
         }
         Some(Commands::Activate { path }) => {
-            info!("Running activate command for path: {:?}", path);
+            info!("Running activate command for path: {path:?}");
 
             // Load config to get version file names
-            let config = crate::config::Config::load()
-                .context("failed to load configuration")?;
+            let config = crate::config::Config::load().context("failed to load configuration")?;
 
             // Find version file
             match crate::version_file::VersionFile::find(&path, &config.version_files) {
@@ -72,11 +71,14 @@ pub fn run() -> Result<()> {
                     println!("\nActivation not yet implemented (requires plugin system)");
                 }
                 Ok(None) => {
-                    println!("No version file found in {} or parent directories", path.display());
+                    println!(
+                        "No version file found in {} or parent directories",
+                        path.display()
+                    );
                     std::process::exit(1);
                 }
                 Err(e) => {
-                    eprintln!("Error: {}", e);
+                    eprintln!("Error: {e}");
                     std::process::exit(1);
                 }
             }
@@ -94,7 +96,7 @@ pub fn run() -> Result<()> {
                     println!("  Version files: {}", config.version_files.join(", "));
                 }
                 Err(e) => {
-                    eprintln!("Error loading config: {}", e);
+                    eprintln!("Error loading config: {e}");
                     std::process::exit(1);
                 }
             }
@@ -102,7 +104,7 @@ pub fn run() -> Result<()> {
         }
         None => {
             // No subcommand provided - show help
-            Cli::parse_from(&["xvn", "--help"]);
+            Cli::parse_from(["xvn", "--help"]);
             Ok(())
         }
     }

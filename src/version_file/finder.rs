@@ -28,8 +28,8 @@ impl VersionFile {
     /// * `Ok(None)` - No version file found
     /// * `Err(_)` - IO error or parse error
     pub fn find(start_dir: &Path, filenames: &[String]) -> Result<Option<Self>> {
-        debug!("Searching for version file in {:?}", start_dir);
-        debug!("Looking for: {:?}", filenames);
+        debug!("Searching for version file in {start_dir:?}");
+        debug!("Looking for: {filenames:?}");
 
         let home = dirs::home_dir().unwrap_or_default();
         let mut dir = start_dir.to_path_buf();
@@ -38,21 +38,23 @@ impl VersionFile {
         if dir.is_relative() {
             dir = std::env::current_dir()?.join(&dir);
         }
-        dir = dir.canonicalize()
+        dir = dir
+            .canonicalize()
             .context("failed to canonicalize start directory")?;
 
         loop {
-            trace!("Checking directory: {:?}", dir);
+            trace!("Checking directory: {dir:?}");
 
             // Try each filename in priority order
             for filename in filenames {
                 let file_path = dir.join(filename);
 
                 if file_path.exists() && file_path.is_file() {
-                    debug!("Found version file: {:?}", file_path);
+                    debug!("Found version file: {file_path:?}");
 
-                    let version = Self::parse(&file_path)
-                        .with_context(|| format!("failed to parse version file: {}", file_path.display()))?;
+                    let version = Self::parse(&file_path).with_context(|| {
+                        format!("failed to parse version file: {}", file_path.display())
+                    })?;
 
                     return Ok(Some(Self {
                         path: file_path,
@@ -98,15 +100,18 @@ impl VersionFile {
             return Ok(trimmed.to_string());
         }
 
-        anyhow::bail!("version file is empty or contains only comments: {}", path.display())
+        anyhow::bail!(
+            "version file is empty or contains only comments: {}",
+            path.display()
+        )
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::tempdir;
     use std::fs;
+    use tempfile::tempdir;
 
     #[test]
     fn test_parse_simple_version() {
@@ -165,10 +170,7 @@ mod tests {
         let version_file = temp_dir.path().join(".nvmrc");
         fs::write(&version_file, "18.20.0").unwrap();
 
-        let result = VersionFile::find(
-            temp_dir.path(),
-            &[".nvmrc".to_string()]
-        ).unwrap();
+        let result = VersionFile::find(temp_dir.path(), &[".nvmrc".to_string()]).unwrap();
 
         assert!(result.is_some());
         let vf = result.unwrap();
@@ -190,10 +192,7 @@ mod tests {
         fs::create_dir(&subdir).unwrap();
 
         // Search from subdirectory
-        let result = VersionFile::find(
-            &subdir,
-            &[".nvmrc".to_string()]
-        ).unwrap();
+        let result = VersionFile::find(&subdir, &[".nvmrc".to_string()]).unwrap();
 
         assert!(result.is_some());
         let vf = result.unwrap();
@@ -204,10 +203,7 @@ mod tests {
     fn test_find_no_version_file() {
         let temp_dir = tempdir().unwrap();
 
-        let result = VersionFile::find(
-            temp_dir.path(),
-            &[".nvmrc".to_string()]
-        ).unwrap();
+        let result = VersionFile::find(temp_dir.path(), &[".nvmrc".to_string()]).unwrap();
 
         assert!(result.is_none());
     }
@@ -223,8 +219,9 @@ mod tests {
         // .nvmrc should be found first
         let result = VersionFile::find(
             temp_dir.path(),
-            &[".nvmrc".to_string(), ".node-version".to_string()]
-        ).unwrap();
+            &[".nvmrc".to_string(), ".node-version".to_string()],
+        )
+        .unwrap();
 
         assert!(result.is_some());
         assert_eq!(result.unwrap().version, "18.20.0");

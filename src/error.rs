@@ -1,5 +1,5 @@
-use thiserror::Error;
 use std::path::PathBuf;
+use thiserror::Error;
 
 /// Main error type for xvn
 #[derive(Debug, Error)]

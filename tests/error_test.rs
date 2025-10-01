@@ -1,5 +1,5 @@
-use xvn::error::XvnError;
 use std::path::PathBuf;
+use xvn::error::XvnError;
 
 #[test]
 fn test_no_version_file_error() {

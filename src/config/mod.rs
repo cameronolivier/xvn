@@ -1,4 +1,4 @@
-mod schema;
 mod loader;
+mod schema;
 
-pub use schema::{Config, AutoInstallMode};
+pub use schema::{AutoInstallMode, Config};

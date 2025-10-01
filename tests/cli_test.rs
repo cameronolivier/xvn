@@ -16,7 +16,9 @@ fn test_help_flag() {
     cmd.arg("--help")
         .assert()
         .success()
-        .stdout(predicate::str::contains("Automatic Node.js version switching"));
+        .stdout(predicate::str::contains(
+            "Automatic Node.js version switching",
+        ));
 }
 
 #[test]
@@ -30,8 +32,8 @@ fn test_setup_command() {
 
 #[test]
 fn test_activate_command() {
-    use tempfile::tempdir;
     use std::fs;
+    use tempfile::tempdir;
 
     let temp_dir = tempdir().unwrap();
     let version_file = temp_dir.path().join(".nvmrc");

@@ -12,7 +12,9 @@
       "Bash(echo \"Renamed $dir/PLAN.md -> $dir/SPEC.md\")",
       "Bash(fi)",
       "Bash(done)",
-      "Bash(cargo:*)"
+      "Bash(cargo:*)",
+      "Bash(RUST_LOG=debug cargo run -- status)",
+      "Read(//private/tmp/test-xvn-review/**)"
     ],
     "deny": [],
     "ask": []

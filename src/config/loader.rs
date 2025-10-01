@@ -11,53 +11,51 @@ impl Config {
         debug!("Loading configuration");
 
         let mut config = Self::default();
-        debug!("Using default config: {:?}", config);
+        debug!("Using default config: {config:?}");
 
         // 1. Load user config: ~/.xvnrc
         if let Some(user_config) = Self::load_user_config()? {
-            debug!("Merging user config: {:?}", user_config);
+            debug!("Merging user config: {user_config:?}");
             config = config.merge(user_config);
         }
 
         // 2. Load project config: walk up from cwd to find .xvn.yaml
         if let Some(project_config) = Self::load_project_config()? {
-            debug!("Merging project config: {:?}", project_config);
+            debug!("Merging project config: {project_config:?}");
             config = config.merge(project_config);
         }
 
         // 3. Validate final configuration
-        config.validate()
-            .context("invalid configuration")?;
+        config.validate().context("invalid configuration")?;
 
-        debug!("Final config: {:?}", config);
+        debug!("Final config: {config:?}");
         Ok(config)
     }
 
     /// Load user configuration from ~/.xvnrc
     fn load_user_config() -> Result<Option<Self>> {
-        let home = dirs::home_dir()
-            .ok_or_else(|| anyhow::anyhow!("cannot determine home directory"))?;
+        let home =
+            dirs::home_dir().ok_or_else(|| anyhow::anyhow!("cannot determine home directory"))?;
 
         let path = home.join(".xvnrc");
 
         if !path.exists() {
-            debug!("User config not found at {:?}", path);
+            debug!("User config not found at {path:?}");
             return Ok(None);
         }
 
-        debug!("Loading user config from {:?}", path);
+        debug!("Loading user config from {path:?}");
         Self::load_from_file(&path).map(Some)
     }
 
     /// Load project configuration from .xvn.yaml (walk up directory tree)
     fn load_project_config() -> Result<Option<Self>> {
-        let start_dir = std::env::current_dir()
-            .context("failed to get current directory")?;
+        let start_dir = std::env::current_dir().context("failed to get current directory")?;
 
         let config_path = Self::find_project_config(&start_dir)?;
 
         if let Some(path) = config_path {
-            debug!("Loading project config from {:?}", path);
+            debug!("Loading project config from {path:?}");
             Self::load_from_file(&path).map(Some)
         } else {
             debug!("No project config found");
@@ -99,7 +97,8 @@ impl Config {
         let config: Self = serde_yaml::from_str(&content)
             .with_context(|| format!("failed to parse config file: {}", path.display()))?;
 
-        config.validate()
+        config
+            .validate()
             .with_context(|| format!("invalid config in file: {}", path.display()))?;
 
         Ok(config)
