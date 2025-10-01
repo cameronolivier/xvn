@@ -51,7 +51,11 @@ __xvn_find_file() {
 __xvn_activate() {
     local version_file="$1"
 
-    # Check if already activated for this file
+    # Check if already activated for this file (idempotency)
+    # This prevents re-activation when:
+    # - User runs 'cd .' in same directory
+    # - User cd's into subdirectory of same project
+    # - Shell re-runs hook on prompt refresh
     if [[ "${XVN_ACTIVE_FILE:-}" == "$version_file" ]]; then
         __xvn_debug "Already activated for $version_file, skipping"
         return 0

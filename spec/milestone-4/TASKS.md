@@ -32,10 +32,10 @@
 - [x] Format mismatch message
 
 ### M4.4: Verify and test idempotency implementation
-- [ ] Review existing XVN_ACTIVE_FILE logic in shell/xvn.sh
-- [ ] Verify shell hook skips activation for same file (lines 54-57)
-- [ ] Verify XVN_ACTIVE_FILE cleared when leaving directory (lines 96-99)
-- [ ] Add integration test for idempotency behavior
+- [x] Review existing XVN_ACTIVE_FILE logic in shell/xvn.sh
+- [x] Verify shell hook skips activation for same file (lines 54-62)
+- [x] Verify XVN_ACTIVE_FILE cleared when leaving directory (lines 96-100)
+- [x] Add integration test for idempotency behavior
 
 ### M4.5: Unit tests for activation
 - [x] Activation performance test (<100ms target)
