@@ -10,3 +10,4 @@ pub mod version_file;
 // Re-export key types
 pub use config::Config;
 pub use version_file::VersionFile;
+pub use error::XvnError;

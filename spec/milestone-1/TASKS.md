@@ -35,13 +35,13 @@
 - [x] Handle errors (permissions, empty files)
 
 ### M1.5: Set up error handling
-- [ ] Define XvnError enum with thiserror
-- [ ] Implement user-friendly error messages
-- [ ] Error context (file paths, versions)
+- [x] Define XvnError enum with thiserror
+- [x] Implement user-friendly error messages
+- [x] Error context (file paths, versions)
 
 ### M1.6: Set up logging
-- [ ] Configure env_logger
-- [ ] Add debug logging for key operations
+- [x] Configure env_logger
+- [x] Add debug logging for key operations
 
 ### M1.7: Unit tests for core infrastructure
 - [ ] Config parsing tests (valid, invalid, defaults)
