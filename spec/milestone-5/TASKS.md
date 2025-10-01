@@ -9,11 +9,11 @@
 ## Tasks
 
 ### M5.1: Comprehensive unit test suite
-- [ ] Config parsing edge cases
-- [ ] Version file discovery edge cases
-- [ ] Plugin loading edge cases
-- [ ] Error handling for all error types
-- [ ] Achieve >85% coverage
+- [x] Config parsing edge cases
+- [x] Version file discovery edge cases
+- [x] Plugin loading edge cases
+- [x] Error handling for all error types
+- [ ] Achieve >85% coverage (currently at 54.41%)
 
 ### M5.2: Integration test suite
 - [ ] End-to-end activation scenarios
