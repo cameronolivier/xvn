@@ -31,12 +31,14 @@
 - [ ] Compare to required version
 - [ ] Format mismatch message
 
-### M4.4: Implement idempotency check
-- [ ] Shell hook tracks XVN_ACTIVE_FILE
-- [ ] Skip activation if same file
-- [ ] Update XVN_ACTIVE_FILE after activation
+### M4.4: Verify and test idempotency implementation
+- [ ] Review existing XVN_ACTIVE_FILE logic in shell/xvn.sh
+- [ ] Verify shell hook skips activation for same file (lines 54-57)
+- [ ] Verify XVN_ACTIVE_FILE cleared when leaving directory (lines 96-99)
+- [ ] Add integration test for idempotency behavior
 
 ### M4.5: Unit tests for activation
+- [ ] Activation performance test (<100ms target)
 - [ ] Version file parsing tests
 - [ ] Plugin priority tests (first match wins)
 - [ ] Auto-install prompt tests (mock stdin)
@@ -47,6 +49,19 @@
 - [ ] End-to-end activation with mock plugin
 - [ ] Auto-install flow with mock stdin
 - [ ] Multiple version files (nested directories)
+
+### M4.7: Implement structured error handling
+- [ ] Create src/activation/errors.rs with ActivationError enum
+- [ ] Define error types (NoPluginsAvailable, InvalidVersionFile, ConfigError)
+- [ ] Add actionable hints for each error type
+- [ ] Update orchestrator to use structured errors
+- [ ] Update CLI to display error hints
+
+### M4.8: Code quality checks
+- [ ] Run cargo clippy and fix all warnings
+- [ ] Run cargo fmt
+- [ ] Verify all tests pass
+- [ ] Check test coverage >85%
 
 ---
 
