@@ -26,11 +26,11 @@
 - [x] Shell escaping for version strings
 
 ### M2.3: Implement fnm plugin
-- [ ] Check fnm availability (fnm --version)
-- [ ] Check version installed (fnm list)
-- [ ] Generate activate command (fnm use)
-- [ ] Generate install command (fnm install)
-- [ ] Parse fnm list output
+- [x] Check fnm availability (fnm --version)
+- [x] Check version installed (fnm list)
+- [x] Generate activate command (fnm use)
+- [x] Generate install command (fnm install)
+- [x] Parse fnm list output
 
 ### M2.4: Implement plugin registry
 - [ ] Load built-in plugins (nvm, fnm)
