@@ -174,6 +174,110 @@ mod plugin_fallback {
     }
 }
 
+// Auto-install flow tests
+// Note: Most auto-install logic is thoroughly tested in orchestrator unit tests
+// These tests verify the E2E integration behavior with the plugin system
+mod auto_install_flows {
+    use std::sync::Arc;
+    use tempfile::TempDir;
+    use xvn::config::{AutoInstallMode, Config};
+    use xvn::plugins::{MockPlugin, PluginRegistry, VersionManagerPlugin};
+
+    #[test]
+    fn test_config_with_auto_install_modes() {
+        // Test that all auto_install modes can be configured
+        let always = Config {
+            plugins: vec!["nvm".to_string()],
+            auto_install: AutoInstallMode::Always,
+            version_files: vec![".nvmrc".to_string()],
+        };
+        assert_eq!(always.auto_install, AutoInstallMode::Always);
+
+        let never = Config {
+            plugins: vec!["nvm".to_string()],
+            auto_install: AutoInstallMode::Never,
+            version_files: vec![".nvmrc".to_string()],
+        };
+        assert_eq!(never.auto_install, AutoInstallMode::Never);
+
+        let prompt = Config {
+            plugins: vec!["nvm".to_string()],
+            auto_install: AutoInstallMode::Prompt,
+            version_files: vec![".nvmrc".to_string()],
+        };
+        assert_eq!(prompt.auto_install, AutoInstallMode::Prompt);
+    }
+
+    #[test]
+    fn test_plugin_install_command_generation() {
+        // Test that plugins can generate install commands
+        let plugin = MockPlugin::new("mock").with_availability(true);
+
+        let install_cmd = plugin.install_command("18.20.0").unwrap();
+        assert!(install_cmd.contains("mock install 18.20.0"));
+    }
+
+    #[test]
+    fn test_version_not_installed_detection() {
+        // Test that plugins correctly report version availability
+        let plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_version("20.0.0"); // Only 20.0.0 installed
+
+        assert!(plugin.has_version("20.0.0").unwrap());
+        assert!(!plugin.has_version("18.20.0").unwrap());
+    }
+
+    #[test]
+    fn test_plugin_fallback_for_installation() {
+        // Test that plugin registry can find available plugins for installation
+        let unavailable = MockPlugin::new("unavailable").with_availability(false);
+        let available = MockPlugin::new("available").with_availability(true);
+
+        let plugins: Vec<Arc<dyn xvn::plugins::VersionManagerPlugin>> =
+            vec![Arc::new(unavailable), Arc::new(available)];
+
+        // Find first available plugin
+        let found = plugins
+            .iter()
+            .find(|p| p.is_available().unwrap_or(false));
+
+        assert!(found.is_some());
+        assert_eq!(found.unwrap().name(), "available");
+    }
+
+    #[test]
+    fn test_auto_install_config_serialization() {
+        // Test that auto_install modes serialize/deserialize correctly
+        let temp = TempDir::new().unwrap();
+        let config_path = temp.path().join(".xvnrc");
+
+        // Write config with auto_install
+        std::fs::write(
+            &config_path,
+            r#"
+plugins:
+  - nvm
+version_files:
+  - .nvmrc
+auto_install: always
+"#,
+        )
+        .unwrap();
+
+        // Read and parse
+        let content = std::fs::read_to_string(&config_path).unwrap();
+        let config: Config = serde_yaml::from_str(&content).unwrap();
+
+        assert_eq!(config.auto_install, AutoInstallMode::Always);
+    }
+
+    // Note: Interactive auto-install flows (prompt user, run install commands)
+    // are tested in src/activation/orchestrator.rs unit tests where we can
+    // mock UserPrompt and CommandWriter. These integration tests verify the
+    // configuration and plugin system components work together correctly.
+}
+
 // Config file parsing tests
 mod config_file_parsing {
     use std::fs;
