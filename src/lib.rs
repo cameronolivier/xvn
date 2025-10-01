@@ -7,4 +7,5 @@ pub mod config;
 pub mod error;
 pub mod version_file;
 
-// Re-export key types (will be added as types are implemented)
+// Re-export key types
+pub use config::Config;

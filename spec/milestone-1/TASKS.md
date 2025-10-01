@@ -22,11 +22,11 @@
 - [x] Global `--verbose` flag
 
 ### M1.3: Implement configuration system
-- [ ] Define Config struct with serde
-- [ ] Parse YAML from ~/.xvnrc
-- [ ] Parse YAML from .xvn.yaml (project config)
-- [ ] Merge configs with precedence (project > user > default)
-- [ ] Validate configuration (plugin names, version files)
+- [x] Define Config struct with serde
+- [x] Parse YAML from ~/.xvnrc
+- [x] Parse YAML from .xvn.yaml (project config)
+- [x] Merge configs with precedence (project > user > default)
+- [x] Validate configuration (plugin names, version files)
 
 ### M1.4: Implement version file detection
 - [ ] `find_version_file()` - walk up directory tree

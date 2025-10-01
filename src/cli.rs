@@ -65,7 +65,19 @@ pub fn run() -> Result<()> {
         }
         Some(Commands::Status) => {
             info!("Running status command");
-            println!("Status command - not yet implemented");
+
+            match crate::config::Config::load() {
+                Ok(config) => {
+                    println!("xvn status:");
+                    println!("  Plugins: {}", config.plugins.join(", "));
+                    println!("  Auto-install: {:?}", config.auto_install);
+                    println!("  Version files: {}", config.version_files.join(", "));
+                }
+                Err(e) => {
+                    eprintln!("Error loading config: {}", e);
+                    std::process::exit(1);
+                }
+            }
             Ok(())
         }
         None => {

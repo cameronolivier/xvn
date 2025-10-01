@@ -44,7 +44,8 @@ fn test_status_command() {
     cmd.arg("status")
         .assert()
         .success()
-        .stdout(predicate::str::contains("not yet implemented"));
+        .stdout(predicate::str::contains("Plugins:"))
+        .stdout(predicate::str::contains("nvm"));
 }
 
 #[test]
