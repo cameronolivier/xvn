@@ -71,71 +71,35 @@ pub fn run() -> Result<()> {
         Some(Commands::Activate { path }) => {
             info!("Running activate command for path: {path:?}");
 
+            // Load config
+            let config = crate::config::Config::load().context("failed to load configuration")?;
+
+            // Create plugin registry
+            let registry = crate::plugins::PluginRegistry::new(&config.plugins);
+
             // Open FD:3 for writing commands
             let mut fd3 = crate::shell::CommandWriter::new()?;
 
-            // Load config to get version file names and plugin order
-            let config = crate::config::Config::load().context("failed to load configuration")?;
+            // Create orchestrator
+            let mut orchestrator = crate::activation::Orchestrator::new(&config, &registry, &mut fd3);
 
-            // Find version file
-            match crate::version_file::VersionFile::find(&path, &config.version_files) {
-                Ok(Some(version_file)) => {
-                    info!("Found version file: {}", version_file.path.display());
-                    info!("Node.js version: {}", version_file.version);
-
-                    // Create plugin registry
-                    let registry = crate::plugins::PluginRegistry::new(&config.plugins);
-
-                    // Find a plugin that has this version
-                    match registry.find_plugin_with_version(&version_file.version) {
-                        Ok(Some(plugin)) => {
-                            info!("Using plugin: {}", plugin.name());
-
-                            // Generate activation command
-                            match plugin.activate_command(&version_file.version) {
-                                Ok(cmd) => {
-                                    info!("Activation command: {}", cmd);
-
-                                    // Write command to FD:3
-                                    fd3.write_command(&cmd)?;
-                                }
-                                Err(e) => {
-                                    eprintln!("Failed to generate activation command: {}", e);
-                                    std::process::exit(1);
-                                }
-                            }
-                        }
-                        Ok(None) => {
-                            eprintln!("Version {} not installed.", version_file.version);
-
-                            // Find first available plugin for install suggestion
-                            if let Ok(Some(plugin)) = registry.find_available_plugin() {
-                                if let Ok(install_cmd) = plugin.install_command(&version_file.version) {
-                                    eprintln!("To install: {}", install_cmd);
-                                }
-                            }
-                            std::process::exit(1);
-                        }
-                        Err(e) => {
-                            eprintln!("Error checking plugins: {}", e);
-                            std::process::exit(1);
-                        }
-                    }
-                }
-                Ok(None) => {
-                    info!(
-                        "No version file found in {} or parent directories",
-                        path.display()
-                    );
-                    // Don't exit with error if no version file - just do nothing
-                }
+            // Run activation
+            match orchestrator.activate(&path) {
+                Ok(()) => Ok(()),
                 Err(e) => {
-                    eprintln!("Error: {e}");
+                    // Print main error message
+                    eprintln!("Error: {}", e);
+
+                    // Print hint if available
+                    if let Some(hint) = e.hint() {
+                        eprintln!();
+                        eprintln!("{}", hint);
+                    }
+
+                    // Exit with error code
                     std::process::exit(1);
                 }
             }
-
-            Ok(())
         }
         Some(Commands::Status) => {
             info!("Running status command");

@@ -9,14 +9,14 @@
 ## Tasks
 
 ### M4.1: Implement `xvn activate` command
-- [ ] Load configuration
-- [ ] Parse version file
-- [ ] Load plugin registry
-- [ ] Find plugin with version installed
-- [ ] Generate activation commands
-- [ ] Write commands to FD:3
-- [ ] Write user messages to stdout
-- [ ] Handle errors gracefully
+- [x] Load configuration
+- [x] Parse version file
+- [x] Load plugin registry
+- [x] Find plugin with version installed
+- [x] Generate activation commands
+- [x] Write commands to FD:3
+- [x] Write user messages to stdout
+- [x] Handle errors gracefully
 
 ### M4.2: Implement auto-install logic
 - [ ] Check auto_install config (prompt/always/never)
@@ -54,8 +54,8 @@
 - [x] Create src/activation/errors.rs with ActivationError enum
 - [x] Define error types (NoPluginsAvailable, InvalidVersionFile, ConfigError)
 - [x] Add actionable hints for each error type
-- [ ] Update orchestrator to use structured errors
-- [ ] Update CLI to display error hints
+- [x] Update orchestrator to use structured errors
+- [x] Update CLI to display error hints
 
 ### M4.8: Code quality checks
 - [ ] Run cargo clippy and fix all warnings
