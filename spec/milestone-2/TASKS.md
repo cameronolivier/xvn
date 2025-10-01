@@ -18,12 +18,12 @@
 - [x] resolve_version() method
 
 ### M2.2: Implement nvm plugin
-- [ ] Check nvm availability (~/.nvm directory)
-- [ ] Check version installed (nvm which)
-- [ ] Generate activate command (nvm use)
-- [ ] Generate install command (nvm install)
-- [ ] Resolve version (nvm version)
-- [ ] Shell escaping for version strings
+- [x] Check nvm availability (~/.nvm directory)
+- [x] Check version installed (nvm which)
+- [x] Generate activate command (nvm use)
+- [x] Generate install command (nvm install)
+- [x] Resolve version (nvm version)
+- [x] Shell escaping for version strings
 
 ### M2.3: Implement fnm plugin
 - [ ] Check fnm availability (fnm --version)
