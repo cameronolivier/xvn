@@ -34,7 +34,14 @@ The project documentation is organized hierarchically for easy navigation:
    - Technology stack and deployment strategy
    - **Milestone Overview section** with architectural focus for each milestone
 
-2. **[docs/PROJECT_PLAN.md](./docs/PROJECT_PLAN.md)** - Project strategy and roadmap
+### Project Specifications (in `spec/`)
+
+1. **[spec/PROJECT_SPEC.md](./spec/PROJECT_SPEC.md)** - Original avn specification (reference)
+   - Detailed specification based on the original avn project
+   - Complete system architecture and component breakdown
+   - Historical context and design rationale
+
+2. **[spec/PROJECT_PLAN.md](./spec/PROJECT_PLAN.md)** - Project strategy and roadmap
    - Project vision, goals, and success criteria
    - Technical strategy and distribution approach
    - Phase overview (MVP, Enhanced, Advanced)
@@ -42,43 +49,38 @@ The project documentation is organized hierarchically for easy navigation:
    - Release strategy and success metrics
    - **Milestone Summary section** with goals and deliverables for each milestone
 
-3. **[docs/PROJECT_SPEC.md](./docs/PROJECT_SPEC.md)** - Original avn specification (reference)
-   - Detailed specification based on the original avn project
-   - Complete system architecture and component breakdown
-   - Historical context and design rationale
+3. **[spec/PROGRESS.md](./spec/PROGRESS.md)** - High-level milestone progress tracking
+   - Phase 1, 2, 3 milestone checkboxes
+   - Links to detailed tasks for each milestone
+   - Current status and next actions
 
-### Milestone Specifications (in `spec/`)
+### Milestone Specifications (in `spec/milestone-N/`)
 
-Each milestone has a dedicated document in `spec/` containing detailed plan and architecture:
+Each milestone has a dedicated directory containing:
 
-1. **[spec/milestone-1-core-infrastructure.md](./spec/milestone-1-core-infrastructure.md)** (Weeks 1-2)
-   - CLI framework, configuration system, version file detection
-   - Module structure, code examples, dependencies
-   - Week-by-week implementation tasks
+1. **[spec/milestone-1/](./spec/milestone-1/)** Core Infrastructure (Weeks 1-2)
+   - [PLAN.md](./spec/milestone-1/PLAN.md) - Architecture and implementation plan
+   - [TASKS.md](./spec/milestone-1/TASKS.md) - Detailed task checklist
 
-2. **[spec/milestone-2-plugin-system.md](./spec/milestone-2-plugin-system.md)** (Weeks 3-4)
-   - Plugin trait, registry, built-in nvm/fnm plugins
-   - Plugin implementation examples and testing strategy
+2. **[spec/milestone-2/](./spec/milestone-2/)** Plugin System (Weeks 3-4)
+   - [PLAN.md](./spec/milestone-2/PLAN.md) - Plugin trait, nvm/fnm implementation
+   - [TASKS.md](./spec/milestone-2/TASKS.md) - Plugin development tasks
 
-3. **[spec/milestone-3-shell-integration.md](./spec/milestone-3-shell-integration.md)** (Weeks 5-6)
-   - Shell hooks (bash/zsh), FD:3 protocol, setup command
-   - Shell script implementation and profile modification
+3. **[spec/milestone-3/](./spec/milestone-3/)** Shell Integration (Weeks 5-6)
+   - [PLAN.md](./spec/milestone-3/PLAN.md) - Shell hooks, FD:3 protocol
+   - [TASKS.md](./spec/milestone-3/TASKS.md) - Shell integration tasks
 
-4. **[spec/milestone-4-version-activation.md](./spec/milestone-4-version-activation.md)** (Weeks 7-8)
-   - Activation orchestration, auto-install prompts
-   - Error handling and user experience
+4. **[spec/milestone-4/](./spec/milestone-4/)** Version Activation (Weeks 7-8)
+   - [PLAN.md](./spec/milestone-4/PLAN.md) - Activation orchestration
+   - [TASKS.md](./spec/milestone-4/TASKS.md) - Activation and auto-install tasks
 
-5. **[spec/milestone-5-testing-polish.md](./spec/milestone-5-testing-polish.md)** (Weeks 9-10)
-   - Test strategy (unit, integration, shell, benchmarks)
-   - Documentation requirements and quality metrics
+5. **[spec/milestone-5/](./spec/milestone-5/)** Testing & Polish (Weeks 9-10)
+   - [PLAN.md](./spec/milestone-5/PLAN.md) - Test strategy and documentation
+   - [TASKS.md](./spec/milestone-5/TASKS.md) - Testing and quality tasks
 
-6. **[spec/milestone-6-release-preparation.md](./spec/milestone-6-release-preparation.md)** (Weeks 11-12)
-   - CI/CD pipeline, binary builds, npm packaging
-   - Release automation and beta testing
-
-### Task Tracking (in `spec/tasks/`)
-
-- **[spec/tasks/main.md](./spec/tasks/main.md)** - Active task tracking for current branch
+6. **[spec/milestone-6/](./spec/milestone-6/)** Release Preparation (Weeks 11-12)
+   - [PLAN.md](./spec/milestone-6/PLAN.md) - CI/CD and distribution
+   - [TASKS.md](./spec/milestone-6/TASKS.md) - Release and beta testing tasks
 
 ### Configuration Files
 

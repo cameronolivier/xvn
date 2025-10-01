@@ -4,7 +4,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(while read file)",
-      "Bash(do sed -i '' 's|\\.\\./ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" sed -i '' 's|ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" echo \"Updated links in $file\" done)"
+      "Bash(do sed -i '' 's|\\.\\./ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" sed -i '' 's|ARCHITECTURE\\.md|../docs/ARCHITECTURE.md|g' \"$file\" echo \"Updated links in $file\" done)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []
