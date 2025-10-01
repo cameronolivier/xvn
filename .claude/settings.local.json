@@ -20,7 +20,10 @@
       "Bash(./scripts/bump-version.sh:*)",
       "Bash(shellcheck:*)",
       "Bash(brew install:*)",
-      "Read(//Users/cam/**)"
+      "Read(//Users/cam/**)",
+      "Bash(command -v:*)",
+      "Bash(./scripts/coverage.sh:*)",
+      "Bash(RUSTFLAGS=\"--cfg coverage\" cargo tarpaulin --out Html --output-dir coverage --exclude-files 'tests/*')"
     ],
     "deny": [],
     "ask": []

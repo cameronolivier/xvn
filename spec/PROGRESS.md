@@ -31,7 +31,7 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - Shell hooks (bash/zsh), FD:3 protocol, setup command
   - See [milestone-3/TASKS.md](./milestone-3/TASKS.md) for detailed tasks
 
-- [ ] **Milestone 4: Version Activation & Auto-Install** (Weeks 7-8, v0.4.0-v0.5.0)
+- [x] **Milestone 4: Version Activation & Auto-Install** (Weeks 7-8, v0.4.0) ✅ **COMPLETE**
   - Activation orchestration, auto-install prompts
   - See [milestone-4/TASKS.md](./milestone-4/TASKS.md) for detailed tasks
 
@@ -118,9 +118,9 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Current Status
 
 **Phase:** Phase 1 - MVP Development (In Progress)
-**Next Action:** Begin Milestone 4 (Version Activation & Auto-Install)
-**Active Milestone:** Milestone 3 Complete - Ready for Milestone 4
-**Completed Milestones:** Milestone 1 (Core Infrastructure), Milestone 2 (Plugin System), Milestone 3 (Shell Integration)
+**Next Action:** Begin Milestone 5 (Testing & Polish)
+**Active Milestone:** Milestone 4 Complete - Ready for Milestone 5
+**Completed Milestones:** Milestone 1 (Core Infrastructure), Milestone 2 (Plugin System), Milestone 3 (Shell Integration), Milestone 4 (Version Activation & Auto-Install)
 
 ---
 

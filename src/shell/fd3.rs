@@ -114,6 +114,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(coverage, ignore)] // Skip this test during coverage (conflicts with tarpaulin FD handling)
     fn test_command_writer_with_fd3() {
         // Save FD:3 state if it's open
         let fd3_saved = unsafe {
