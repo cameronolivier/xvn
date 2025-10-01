@@ -1,7 +1,7 @@
 {
-  "name": "xvm",
+  "name": "xvn",
   "version": "1.0.0",
-  "description": "a auto-npm version switcher ",
+  "description": "A shell automation layer that sits above version managers like nvm/n/nodebrew and automatically switches to the specified Node.js version when detected",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
