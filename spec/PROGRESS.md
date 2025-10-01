@@ -27,7 +27,7 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - Plugin trait, nvm/fnm plugins, plugin registry
   - See [milestone-2/TASKS.md](./milestone-2/TASKS.md) for detailed tasks
 
-- [ ] **Milestone 3: Shell Integration** (Weeks 5-6, v0.3.0)
+- [x] **Milestone 3: Shell Integration** (Weeks 5-6, v0.3.0) ✅ **COMPLETE**
   - Shell hooks (bash/zsh), FD:3 protocol, setup command
   - See [milestone-3/TASKS.md](./milestone-3/TASKS.md) for detailed tasks
 
@@ -118,9 +118,9 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Current Status
 
 **Phase:** Phase 1 - MVP Development (In Progress)
-**Next Action:** Begin Milestone 3 (Shell Integration)
-**Active Milestone:** Milestone 2 Complete - Ready for Milestone 3
-**Completed Milestones:** Milestone 1 (Core Infrastructure), Milestone 2 (Plugin System)
+**Next Action:** Begin Milestone 4 (Version Activation & Auto-Install)
+**Active Milestone:** Milestone 3 Complete - Ready for Milestone 4
+**Completed Milestones:** Milestone 1 (Core Infrastructure), Milestone 2 (Plugin System), Milestone 3 (Shell Integration)
 
 ---
 
