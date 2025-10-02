@@ -244,8 +244,6 @@ pub fn prompt_confirm_config(summary: &ConfigSummary) -> Result<bool> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     // Note: Can't easily unit test interactive prompts
     // These will be tested manually with: cargo run -- init
 }

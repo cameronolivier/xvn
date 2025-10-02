@@ -91,106 +91,106 @@
 ## Phase 4: Wizard Orchestration (Week 2)
 
 ### Task 4.1: Implement wizard state management
-- [ ] Define `WizardState` struct in `init/wizard.rs`
-- [ ] Fields: shell, plugins, auto_install, version_files
-- [ ] Implement `Default` for sensible defaults
-- [ ] Implement conversion to `Config` struct
-- [ ] Add tests for state transitions
+- [x] Define `WizardState` struct in `init/wizard.rs`
+- [x] Fields: shell, plugins, auto_install, version_files
+- [x] Implement `Default` for sensible defaults
+- [x] Implement conversion to `Config` struct
+- [x] Add tests for state transitions
 
 ### Task 4.2: Implement interactive wizard flow
-- [ ] Implement `run_wizard()` in `init/wizard.rs`
-- [ ] Step 1: Call `prompt_shell()`, update state
-- [ ] Step 2: Call `prompt_plugins()`, update state
-- [ ] Step 3: Call `prompt_auto_install()`, update state
-- [ ] Step 4: Call `prompt_version_files()`, update state
-- [ ] Step 5: Call `prompt_confirm_config()`, confirm state
-- [ ] Return WizardState or error
-- [ ] Add progress indicators (Step X/5)
-- [ ] Add tests for full flow
+- [x] Implement `run_wizard()` in `init/wizard.rs`
+- [x] Step 1: Call `prompt_shell()`, update state
+- [x] Step 2: Call `prompt_plugins()`, update state
+- [x] Step 3: Call `prompt_auto_install()`, update state
+- [x] Step 4: Call `prompt_version_files()`, update state
+- [x] Step 5: Call `prompt_confirm_config()`, confirm state
+- [x] Return WizardState or error
+- [x] Add progress indicators (Step X/5)
+- [x] Add tests for full flow
 
 ### Task 4.3: Implement quick mode
-- [ ] Implement `run_quick_setup()` in `init/wizard.rs`
-- [ ] Auto-detect shell
-- [ ] Auto-detect version managers
-- [ ] Use defaults: auto_install=prompt, version_files=[.nvmrc, .node-version]
-- [ ] Skip all prompts
-- [ ] Log decisions to stdout
-- [ ] Return WizardState
-- [ ] Add tests for quick mode
+- [x] Implement `run_quick_setup()` in `init/wizard.rs`
+- [x] Auto-detect shell
+- [x] Auto-detect version managers
+- [x] Use defaults: auto_install=prompt, version_files=[.nvmrc, .node-version]
+- [x] Skip all prompts
+- [x] Log decisions to stdout
+- [x] Return WizardState
+- [x] Add tests for quick mode
 
 ### Task 4.4: Implement non-interactive mode
-- [ ] Implement `run_non_interactive()` in `init/wizard.rs`
-- [ ] Similar to quick mode but with logging
-- [ ] Use CLI flags if provided (--shell, etc.)
-- [ ] Fall back to detection and defaults
-- [ ] Return WizardState or error
-- [ ] Add tests for non-interactive mode
+- [x] Implement `run_non_interactive()` in `init/wizard.rs`
+- [x] Similar to quick mode but with logging
+- [x] Use CLI flags if provided (--shell, etc.)
+- [x] Fall back to detection and defaults
+- [x] Return WizardState or error
+- [x] Add tests for non-interactive mode
 
 ## Phase 5: Configuration & Installation (Week 2)
 
 ### Task 5.1: Implement configuration validation
-- [ ] Implement `validate_config()` in `init/validation.rs`
-- [ ] Validate shell is supported (bash or zsh)
-- [ ] Validate at least one plugin selected
-- [ ] Validate auto_install mode is valid
-- [ ] Validate version_files not empty
-- [ ] Return Result with validation errors
-- [ ] Add tests for valid and invalid configs
+- [x] Implement `validate_config()` in `init/validation.rs`
+- [x] Validate shell is supported (bash or zsh)
+- [x] Validate at least one plugin selected
+- [x] Validate auto_install mode is valid
+- [x] Validate version_files not empty
+- [x] Return Result with validation errors
+- [x] Add tests for valid and invalid configs
 
 ### Task 5.2: Implement config file generation
-- [ ] Implement `generate_config()` in `init/wizard.rs`
-- [ ] Convert WizardState to Config struct
-- [ ] Add header comments with timestamp and instructions
-- [ ] Serialize to YAML format
-- [ ] Return formatted config string
-- [ ] Add tests for various configurations
+- [x] Implement `generate_config()` in `init/wizard.rs`
+- [x] Convert WizardState to Config struct
+- [x] Add header comments with timestamp and instructions
+- [x] Serialize to YAML format
+- [x] Return formatted config string
+- [x] Add tests for various configurations
 
 ### Task 5.3: Implement config file writing
-- [ ] Implement `write_config()` in `init/wizard.rs`
-- [ ] Check if config exists, handle --force flag
-- [ ] If exists and not force, ask to overwrite
-- [ ] Preserve custom comments if modifying existing config
-- [ ] Write to ~/.xvnrc with proper permissions
-- [ ] Return path to written config
-- [ ] Add tests for new and existing configs
+- [x] Implement `write_config()` in `init/wizard.rs`
+- [x] Check if config exists, handle --force flag
+- [x] If exists and not force, ask to overwrite
+- [x] Preserve custom comments if modifying existing config
+- [x] Write to ~/.xvnrc with proper permissions
+- [x] Return path to written config
+- [x] Add tests for new and existing configs
 
 ### Task 5.4: Integrate with existing SetupInstaller
-- [ ] Reuse `setup::SetupInstaller` for shell integration
-- [ ] Call `installer.install()` after config written
-- [ ] Pass shell type from wizard state
-- [ ] Capture installation result
-- [ ] Add tests for integration
+- [x] Reuse `setup::SetupInstaller` for shell integration
+- [x] Call `installer.install()` after config written
+- [x] Pass shell type from wizard state
+- [x] Capture installation result
+- [x] Add tests for integration
 
 ## Phase 6: User Feedback & Output (Week 2)
 
 ### Task 6.1: Implement wizard header and branding
-- [ ] Implement `print_wizard_header()` in `init/wizard.rs`
-- [ ] Use `output::print_header()` for branding
-- [ ] Add welcome message
-- [ ] Explain what wizard will do
-- [ ] Add visual separator
+- [x] Implement `print_wizard_header()` in `init/wizard.rs`
+- [x] Use `output::print_header()` for branding
+- [x] Add welcome message
+- [x] Explain what wizard will do
+- [x] Add visual separator
 
 ### Task 6.2: Implement success message
-- [ ] Implement `print_success_message()` in `init/wizard.rs`
-- [ ] Use colored output module
-- [ ] Show config file location
-- [ ] Show shell profile modified
-- [ ] Show next steps (restart shell, test)
-- [ ] Mention re-running wizard to modify
+- [x] Implement `print_success_message()` in `init/wizard.rs`
+- [x] Use colored output module
+- [x] Show config file location
+- [x] Show shell profile modified
+- [x] Show next steps (restart shell, test)
+- [x] Mention re-running wizard to modify
 
 ### Task 6.3: Implement educational help text
-- [ ] Add help text for each wizard step
-- [ ] Explain what each option does
-- [ ] Provide examples where helpful
-- [ ] Add links to documentation
-- [ ] Keep text concise but informative
+- [x] Add help text for each wizard step
+- [x] Explain what each option does
+- [x] Provide examples where helpful
+- [x] Add links to documentation
+- [x] Keep text concise but informative
 
 ### Task 6.4: Implement error messages
-- [ ] Implement error handling for each step
-- [ ] Use `output::error()` for errors
-- [ ] Provide actionable next steps
-- [ ] Handle user cancellation gracefully (Ctrl+C)
-- [ ] Log errors appropriately
+- [x] Implement error handling for each step
+- [x] Use `output::error()` for errors
+- [x] Provide actionable next steps
+- [x] Handle user cancellation gracefully (Ctrl+C)
+- [x] Log errors appropriately
 
 ## Phase 7: Testing & Documentation (Week 3)
 
