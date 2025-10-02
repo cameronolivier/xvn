@@ -3,10 +3,23 @@ use clap::{Parser, Subcommand};
 use log::info;
 use std::path::PathBuf;
 
-/// Extreme Version Switcher for Node.js
+/// Automatic Node.js version switching for cd
 #[derive(Parser, Debug)]
 #[command(name = "xvn")]
-#[command(about = "Automatic Node.js version switching", long_about = None)]
+#[command(about = "Automatic Node.js version switching", long_about = r#"
+xvn automatically switches your Node.js version when you cd into a directory
+with a .nvmrc or .node-version file.
+
+After installation, run 'xvn setup' to configure your shell, then xvn will
+automatically activate the correct Node.js version whenever you cd.
+
+Examples:
+  xvn setup              Set up shell integration (one-time)
+  xvn activate           Manually activate for current directory
+  xvn status             Show configuration and test activation
+
+For more information, visit: https://github.com/cameronolivier/xvn
+"#)]
 #[command(version)]
 pub struct Cli {
     /// Enable verbose output
@@ -19,7 +32,13 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Install xvn shell hooks and create default config
+    /// Set up shell integration (one-time setup)
+    ///
+    /// This command adds a hook to your shell (.bashrc or .zshrc) that
+    /// automatically activates the correct Node.js version when you cd
+    /// into a directory with a .nvmrc or .node-version file.
+    ///
+    /// Run this once after installation, then restart your shell.
     Setup {
         /// Shell to configure (bash, zsh, or auto-detect)
         #[arg(short, long, default_value = "auto")]
@@ -30,14 +49,24 @@ pub enum Commands {
         force: bool,
     },
 
-    /// Activate Node.js version for current directory
+    /// Manually activate Node.js version for a directory
+    ///
+    /// Normally xvn activates automatically on cd (after running setup).
+    /// Use this command to manually activate for the current directory,
+    /// or to test activation before setting up the shell hook.
     Activate {
         /// Directory to activate for (defaults to current directory)
         #[arg(default_value = ".")]
         path: PathBuf,
     },
 
-    /// Show current xvn status and configuration
+    /// Show configuration, installed plugins, and test activation
+    ///
+    /// Displays:
+    /// - Active configuration settings
+    /// - Available version managers (nvm, fnm, etc.)
+    /// - Current directory's Node.js version (if any)
+    /// - Activation timing for performance testing
     Status,
 }
 

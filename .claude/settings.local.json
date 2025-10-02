@@ -32,7 +32,9 @@
       "Read(//private/tmp/**)",
       "Bash(env RUST_LOG=info /Users/cam/mo/dev/tools/xvn/target/release/xvn activate)",
       "Bash(git tag:*)",
-      "Bash(./scripts/version.sh:*)"
+      "Bash(./scripts/version.sh:*)",
+      "Bash(./target/debug/xvn:*)",
+      "Bash(make:*)"
     ],
     "deny": [],
     "ask": []
