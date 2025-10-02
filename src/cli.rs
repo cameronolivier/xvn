@@ -86,9 +86,9 @@ pub fn run() -> Result<()> {
 
             // Check if already installed (unless force flag is set)
             if !force && installer.is_installed()? {
-                println!("xvn is already installed.");
-                println!("Run 'xvn status' to verify your installation.");
-                println!("Use --force to reinstall.");
+                crate::output::info("xvn is already installed.");
+                crate::output::info("Run 'xvn status' to verify your installation.");
+                crate::output::info("Use --force to reinstall.");
                 return Ok(());
             }
 
@@ -118,12 +118,12 @@ pub fn run() -> Result<()> {
                 Ok(()) => Ok(()),
                 Err(e) => {
                     // Print main error message
-                    eprintln!("Error: {e}");
+                    crate::output::error(&format!("{e}"));
 
                     // Print hint if available
                     if let Some(hint) = e.hint() {
                         eprintln!();
-                        eprintln!("{hint}");
+                        crate::output::info(&hint);
                     }
 
                     // Exit with error code
@@ -136,13 +136,12 @@ pub fn run() -> Result<()> {
 
             match crate::config::Config::load() {
                 Ok(config) => {
-                    println!("xvn status:");
-                    println!("  Plugins: {}", config.plugins.join(", "));
-                    println!("  Auto-install: {:?}", config.auto_install);
-                    println!("  Version files: {}", config.version_files.join(", "));
+                    crate::output::info(&format!("Plugins: {}", config.plugins.join(", ")));
+                    crate::output::info(&format!("Auto-install: {:?}", config.auto_install));
+                    crate::output::info(&format!("Version files: {}", config.version_files.join(", ")));
                 }
                 Err(e) => {
-                    eprintln!("Error loading config: {e}");
+                    crate::output::error(&format!("Error loading config: {e}"));
                     std::process::exit(1);
                 }
             }

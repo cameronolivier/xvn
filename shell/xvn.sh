@@ -31,7 +31,7 @@ __xvn_find_file() {
     __xvn_debug "Searching for version files: $search_files"
 
     while [[ "$current_dir" != "/" ]]; do
-        for filename in $search_files; do
+        for filename in ${=search_files}; do
             local filepath="$current_dir/$filename"
             if [[ -f "$filepath" ]]; then
                 __xvn_debug "Found version file: $filepath"

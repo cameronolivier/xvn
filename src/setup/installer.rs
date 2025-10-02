@@ -145,19 +145,25 @@ auto_install: prompt
     pub fn print_instructions(&self) -> Result<()> {
         let profile = self.find_profile()?;
 
-        println!("\n xvn installation complete!\n");
-        println!("Configuration:");
+        println!();
+        crate::output::print_header();
+        crate::output::success("installation complete!");
+        println!();
+        crate::output::info("Configuration:");
         println!("  Shell:   {}", self.shell.name());
         println!("  Profile: {}", profile.display());
         println!("  Config:  {}", self.config_path().display());
-        println!("\nTo start using xvn:");
+        println!();
+        crate::output::info("To start using xvn:");
         println!("  1. Restart your shell, or run:");
         println!("       source {}", profile.display());
         println!("  2. Navigate to a project with a .nvmrc file");
         println!("  3. xvn will automatically activate the correct Node.js version");
-        println!("\nDebug mode (if you encounter issues):");
+        println!();
+        crate::output::info("Debug mode (if you encounter issues):");
         println!("  export XVN_DEBUG=1");
-        println!("\nFor more information:");
+        println!();
+        crate::output::info("For more information:");
         println!("  xvn --help");
         println!();
 
