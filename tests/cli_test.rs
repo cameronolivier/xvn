@@ -43,14 +43,14 @@ fn test_activate_command() {
     fs::write(&version_file, "18.20.0").unwrap();
 
     // Note: In Milestone 4, activate prompts to install missing versions
-    // The command succeeds (exit 0) and prompts the user
+    // The command succeeds (exit 0) and shows installing message
     let mut cmd = Command::cargo_bin("xvn").unwrap();
     cmd.arg("activate")
         .arg(temp_dir.path())
         .assert()
-        .success() // Command succeeds and prompts user
+        .success() // Command succeeds and shows install message
         .stdout(predicate::str::contains("18.20.0"))
-        .stdout(predicate::str::contains("not installed"));
+        .stdout(predicate::str::contains("Installing"));
 }
 
 #[test]
