@@ -3,9 +3,9 @@
 ## Phase 1: Foundation (Week 1)
 
 ### Task 1.1: Add inquire dependency
-- [ ] Add `inquire` crate to Cargo.toml
-- [ ] Test basic prompts work (Confirm, Select, MultiSelect)
-- [ ] Document version pinning decision
+- [x] Add `inquire` crate to Cargo.toml
+- [x] Test basic prompts work (Confirm, Select, MultiSelect)
+- [x] Document version pinning decision
 
 ### Task 1.2: Create init module structure
 - [ ] Create `src/init/` directory
