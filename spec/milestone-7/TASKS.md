@@ -47,46 +47,46 @@
 ## Phase 3: Prompt Functions (Week 1-2)
 
 ### Task 3.1: Implement shell selection prompt
-- [ ] Implement `prompt_shell()` in `init/prompts.rs`
-- [ ] Show detected shell with confirmation (Confirm prompt)
-- [ ] If declined, show Select prompt with available shells
-- [ ] Display shell profile path
-- [ ] Return selected Shell type
-- [ ] Add tests with simulated input
+- [x] Implement `prompt_shell()` in `init/prompts.rs`
+- [x] Show detected shell with confirmation (Confirm prompt)
+- [x] If declined, show Select prompt with available shells
+- [x] Display shell profile path
+- [x] Return selected Shell type
+- [x] Add tests with simulated input
 
 ### Task 3.2: Implement plugin selection prompt
-- [ ] Implement `prompt_plugins()` in `init/prompts.rs`
-- [ ] Use MultiSelect with detected managers pre-selected
-- [ ] Show manager name and installation path
-- [ ] After selection, prompt for priority order
-- [ ] Return Vec<String> of plugin names in priority order
-- [ ] Handle case where no managers detected (show warning)
-- [ ] Add tests with various detection scenarios
+- [x] Implement `prompt_plugins()` in `init/prompts.rs`
+- [x] Use MultiSelect with detected managers pre-selected
+- [x] Show manager name and installation path
+- [x] After selection, prompt for priority order
+- [x] Return Vec<String> of plugin names in priority order
+- [x] Handle case where no managers detected (show warning)
+- [x] Add tests with various detection scenarios
 
 ### Task 3.3: Implement auto-install mode prompt
-- [ ] Implement `prompt_auto_install()` in `init/prompts.rs`
-- [ ] Use Select with 3 options: Prompt, Always, Never
-- [ ] Add educational descriptions for each option
-- [ ] Default to "Prompt" (safest option)
-- [ ] Return AutoInstallMode enum
-- [ ] Add tests for all options
+- [x] Implement `prompt_auto_install()` in `init/prompts.rs`
+- [x] Use Select with 3 options: Prompt, Always, Never
+- [x] Add educational descriptions for each option
+- [x] Default to "Prompt" (safest option)
+- [x] Return AutoInstallMode enum
+- [x] Add tests for all options
 
 ### Task 3.4: Implement version files prompt
-- [ ] Implement `prompt_version_files()` in `init/prompts.rs`
-- [ ] Use MultiSelect with .nvmrc, .node-version, .tool-versions
-- [ ] Pre-select .nvmrc and .node-version (defaults)
-- [ ] After selection, prompt for priority order
-- [ ] Return Vec<String> of filenames in priority order
-- [ ] Add tests for different selections
+- [x] Implement `prompt_version_files()` in `init/prompts.rs`
+- [x] Use MultiSelect with .nvmrc, .node-version, .tool-versions
+- [x] Pre-select .nvmrc and .node-version (defaults)
+- [x] After selection, prompt for priority order
+- [x] Return Vec<String> of filenames in priority order
+- [x] Add tests for different selections
 
 ### Task 3.5: Implement configuration review prompt
-- [ ] Implement `prompt_confirm_config()` in `init/prompts.rs`
-- [ ] Display formatted summary of all configuration
-- [ ] Use colored output for readability
-- [ ] Show config file path and shell profile path
-- [ ] Use Confirm prompt for final approval
-- [ ] Return bool (confirmed or not)
-- [ ] Add tests with various configs
+- [x] Implement `prompt_confirm_config()` in `init/prompts.rs`
+- [x] Display formatted summary of all configuration
+- [x] Use colored output for readability
+- [x] Show config file path and shell profile path
+- [x] Use Confirm prompt for final approval
+- [x] Return bool (confirmed or not)
+- [x] Add tests with various configs
 
 ## Phase 4: Wizard Orchestration (Week 2)
 
