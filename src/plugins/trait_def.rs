@@ -89,4 +89,17 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
         // Default implementation: return version as-is
         Ok(version.to_string())
     }
+
+    /// List all installed versions managed by this version manager
+    ///
+    /// Used for semver range resolution in package.json support.
+    ///
+    /// Default implementation returns empty list.
+    ///
+    /// # Returns
+    /// Vector of version strings (e.g., ["18.20.0", "20.11.0"])
+    fn list_versions(&self) -> Result<Vec<String>> {
+        // Default implementation: empty list
+        Ok(Vec::new())
+    }
 }

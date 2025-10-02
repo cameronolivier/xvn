@@ -6,11 +6,12 @@ use std::collections::HashSet;
 ///
 /// Allows tests to control availability and installed versions without
 /// requiring actual version managers.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct MockPlugin {
-    name: String,
-    available: bool,
-    installed_versions: HashSet<String>,
+    pub name: String,
+    pub available: bool,
+    pub installed_versions: HashSet<String>,
+    pub available_versions: Vec<String>,
 }
 
 impl MockPlugin {
@@ -20,6 +21,7 @@ impl MockPlugin {
             name: name.into(),
             available: true,
             installed_versions: HashSet::new(),
+            available_versions: Vec::new(),
         }
     }
 
@@ -67,5 +69,9 @@ impl VersionManagerPlugin for MockPlugin {
 
     fn install_command(&self, version: &str) -> Result<String> {
         Ok(format!("{} install {}", self.name, version))
+    }
+
+    fn list_versions(&self) -> Result<Vec<String>> {
+        Ok(self.available_versions.clone())
     }
 }

@@ -1,5 +1,5 @@
 mod fnm;
-mod mock;
+pub mod mock;
 mod nvm;
 mod registry;
 mod trait_def;
