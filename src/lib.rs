@@ -6,6 +6,7 @@ pub mod activation;
 pub mod cli;
 pub mod config;
 pub mod error;
+pub mod init;
 pub mod output;
 pub mod plugins;
 pub mod setup;

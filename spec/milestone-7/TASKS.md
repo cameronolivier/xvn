@@ -8,11 +8,11 @@
 - [x] Document version pinning decision
 
 ### Task 1.2: Create init module structure
-- [ ] Create `src/init/` directory
-- [ ] Create `src/init/mod.rs` with public API
-- [ ] Create placeholder files: wizard.rs, prompts.rs, detection.rs, validation.rs
-- [ ] Add module to `src/lib.rs`
-- [ ] Add basic module documentation
+- [x] Create `src/init/` directory
+- [x] Create `src/init/mod.rs` with public API
+- [x] Create placeholder files: wizard.rs, prompts.rs, detection.rs, validation.rs
+- [x] Add module to `src/lib.rs`
+- [x] Add basic module documentation
 
 ### Task 1.3: Add Init command to CLI
 - [ ] Add `Init` variant to `Commands` enum in `src/cli.rs`
