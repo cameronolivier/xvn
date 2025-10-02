@@ -80,7 +80,7 @@ impl CommandWriter {
                     // Treat write failures as warnings rather than errors
                     #[cfg(test)]
                     {
-                        debug!("FD:3 write failed (likely test environment): {}", err);
+                        debug!("FD:3 write failed (likely test environment): {err}");
                         return Ok(());
                     }
                     #[cfg(not(test))]
@@ -183,8 +183,7 @@ mod tests {
         // Write a command
         writer.write_command("echo test").unwrap();
 
-        // Drop writer before restoring FD:3
-        drop(writer);
+        // Writer will be dropped automatically at end of scope
 
         // Restore FD:3 or close it
         unsafe {

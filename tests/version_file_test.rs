@@ -160,10 +160,7 @@ fn test_version_file_complex_version_string() {
 
         let result = VersionFile::find(temp.path(), &[".nvmrc".to_string()]);
 
-        assert!(
-            result.is_ok(),
-            "Failed to parse version string: {version}"
-        );
+        assert!(result.is_ok(), "Failed to parse version string: {version}");
         let version_file = result.unwrap().unwrap();
         assert_eq!(version_file.version, version);
     }

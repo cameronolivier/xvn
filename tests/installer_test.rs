@@ -37,9 +37,15 @@ auto_install: prompt
     let config = result.unwrap();
 
     // Verify all required fields are present
-    assert!(config.get("version_files").is_some(), "Should have version_files");
+    assert!(
+        config.get("version_files").is_some(),
+        "Should have version_files"
+    );
     assert!(config.get("plugins").is_some(), "Should have plugins");
-    assert!(config.get("auto_install").is_some(), "Should have auto_install");
+    assert!(
+        config.get("auto_install").is_some(),
+        "Should have auto_install"
+    );
 
     // Verify field values
     let plugins = config.get("plugins").unwrap().as_sequence().unwrap();
@@ -48,7 +54,11 @@ auto_install: prompt
     assert_eq!(plugins[1].as_str().unwrap(), "fnm");
 
     let version_files = config.get("version_files").unwrap().as_sequence().unwrap();
-    assert_eq!(version_files.len(), 2, "Should have 2 default version files");
+    assert_eq!(
+        version_files.len(),
+        2,
+        "Should have 2 default version files"
+    );
     assert_eq!(version_files[0].as_str().unwrap(), ".nvmrc");
     assert_eq!(version_files[1].as_str().unwrap(), ".node-version");
 

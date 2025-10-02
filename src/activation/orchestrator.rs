@@ -445,7 +445,7 @@ mod tests {
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
         let result = orchestrator.activate(temp_dir.path());
-        assert!(result.is_ok(), "Activation failed: {:?}", result);
+        assert!(result.is_ok(), "Activation failed: {result:?}");
 
         // Should use first plugin
         // Commands written to FD:3 (not captured in tests)

@@ -9,10 +9,10 @@
 ## Tasks
 
 ### M6.1: Set up CI/CD pipeline
-- [ ] GitHub Actions workflow (test.yml)
-- [ ] Test matrix (Ubuntu, macOS) × (stable, beta Rust)
-- [ ] Coverage reporting (Coveralls)
-- [ ] Automated builds on push/PR
+- [x] GitHub Actions workflow (test.yml)
+- [x] Test matrix (Ubuntu, macOS) × (stable Rust)
+- [x] Coverage reporting (Codecov)
+- [x] Automated builds on push/PR
 
 ### M6.2: Set up binary builds
 - [ ] GitHub Actions workflow (build.yml)

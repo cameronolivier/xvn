@@ -181,7 +181,7 @@ mod auto_install_flows {
     use std::sync::Arc;
     use tempfile::TempDir;
     use xvn::config::{AutoInstallMode, Config};
-    use xvn::plugins::{MockPlugin, PluginRegistry, VersionManagerPlugin};
+    use xvn::plugins::{MockPlugin, VersionManagerPlugin};
 
     #[test]
     fn test_config_with_auto_install_modes() {
@@ -238,9 +238,7 @@ mod auto_install_flows {
             vec![Arc::new(unavailable), Arc::new(available)];
 
         // Find first available plugin
-        let found = plugins
-            .iter()
-            .find(|p| p.is_available().unwrap_or(false));
+        let found = plugins.iter().find(|p| p.is_available().unwrap_or(false));
 
         assert!(found.is_some());
         assert_eq!(found.unwrap().name(), "available");
