@@ -59,9 +59,11 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
    - If any issues found, fix them
    - Update `spec/PROGRESS.md` to mark the milestone complete
    - Create a final commit for the milestone completion
-   - **Bump the version** by running: `./scripts/bump-version.sh {{N}}`
-     - This will update Cargo.toml to v0.{{N}}.0
-     - Create a commit and git tag automatically
+   - **Bump the version** using the appropriate method:
+     - For milestone completions: `./scripts/version.sh minor` (bumps 0.X.0)
+     - For bug fixes within a milestone: `./scripts/version.sh patch` (bumps 0.X.Y)
+     - For major releases: `./scripts/version.sh major` or `./scripts/version.sh 1.0.0`
+     - This will update Cargo.toml, package.json, tests, and create a commit and git tag automatically
 
 ## Important Rules
 
@@ -81,4 +83,7 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
 - Review agents approve the work
 - PROGRESS.md updated to mark milestone complete
 - Final commit marks milestone as complete
-- Version bumped to v0.{{N}}.0 with git tag created
+- Version bumped appropriately with git tag created
+  - Milestone completion: minor version bump (e.g., 0.6.0 -> 0.7.0)
+  - Bug fixes: patch version bump (e.g., 0.6.0 -> 0.6.1)
+  - Major release: major version bump (e.g., 0.9.0 -> 1.0.0)
