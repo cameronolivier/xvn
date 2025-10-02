@@ -42,8 +42,8 @@
 - [ ] Iterate on UX issues
 
 ### M6.6: Release preparation
-- [ ] Write CHANGELOG.md
-- [ ] Finalize README.md
+- [x] Write CHANGELOG.md
+- [x] Finalize README.md
 - [ ] Create GitHub Release (v0.7.0-beta)
 - [ ] Publish to npm (beta tag)
 - [ ] Test end-to-end installation
