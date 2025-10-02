@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Final performance tuning
 - Final documentation polish
 
-## [0.6.0] - 2025-01-02
+## [0.6.0] - 2025-10-02
 
 ### Added
 
