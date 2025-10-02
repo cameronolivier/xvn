@@ -16,7 +16,7 @@
 ## Installation
 
 ```bash
-npm install -g xvn
+npm install -g @olvrcc/xvn
 xvn setup
 ```
 
@@ -128,7 +128,14 @@ xvn status
 
 ### Binary not found on install
 
-If the postinstall script fails, try installing from source:
+If the postinstall script fails, try reinstalling:
+
+```bash
+npm uninstall -g @olvrcc/xvn
+npm install -g @olvrcc/xvn
+```
+
+Or install from source:
 
 ```bash
 git clone https://github.com/cameronolivier/xvn.git

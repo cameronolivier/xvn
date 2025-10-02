@@ -8,7 +8,7 @@ NATIVE_BINARY="$SCRIPT_DIR/../native/xvn"
 
 if [ ! -f "$NATIVE_BINARY" ]; then
   echo "Error: xvn binary not found at $NATIVE_BINARY"
-  echo "Please try reinstalling: npm install -g xvn"
+  echo "Please try reinstalling: npm install -g @olvrcc/xvn"
   exit 1
 fi
 

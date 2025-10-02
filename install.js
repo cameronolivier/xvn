@@ -131,7 +131,10 @@ async function install() {
   } catch (error) {
     console.error('Failed to install xvn:', error.message);
     console.error('');
-    console.error('You can try installing from source:');
+    console.error('You can try reinstalling:');
+    console.error('  npm install -g @olvrcc/xvn');
+    console.error('');
+    console.error('Or install from source:');
     console.error('  git clone https://github.com/cameronolivier/xvn.git');
     console.error('  cd xvn');
     console.error('  cargo install --path .');
