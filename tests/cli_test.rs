@@ -7,7 +7,7 @@ fn test_version_flag() {
     cmd.arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("xvn 0.6.1"));
+        .stdout(predicate::str::contains("xvn 0.7.0"));
 }
 
 #[test]
@@ -17,7 +17,7 @@ fn test_help_flag() {
         .assert()
         .success()
         .stdout(predicate::str::contains(
-            "Automatic Node.js version switching",
+            "automatically switches your Node.js version",
         ));
 }
 
