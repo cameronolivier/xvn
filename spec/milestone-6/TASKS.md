@@ -15,10 +15,10 @@
 - [x] Automated builds on push/PR
 
 ### M6.2: Set up binary builds
-- [ ] GitHub Actions workflow (build.yml)
-- [ ] Build matrix (Linux x64/arm64, macOS x64/arm64)
-- [ ] Cross-compilation setup
-- [ ] Upload artifacts to GitHub Releases
+- [x] GitHub Actions workflow (build.yml)
+- [x] Build matrix (Linux x64/arm64, macOS x64/arm64)
+- [x] Cross-compilation setup
+- [x] Upload artifacts to GitHub Releases
 
 ### M6.3: Create npm package structure
 - [ ] package.json with metadata
