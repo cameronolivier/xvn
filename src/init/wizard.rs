@@ -50,50 +50,61 @@ impl Default for WizardState {
 
 /// Print wizard header
 fn print_wizard_header() {
+    use owo_colors::OwoColorize;
+
     println!();
+    println!("{}", "━".repeat(60).bright_cyan());
     crate::output::print_header();
+    println!("{}", "━".repeat(60).bright_cyan());
     println!();
-    println!("Welcome! Let's set up xvn for your environment.");
+    println!("  {} {}", "👋".bright_cyan(), "Welcome! Let's set up xvn for your environment.".bold());
     println!();
-    println!("This wizard will guide you through configuration:");
-    println!("  • Shell detection and integration");
-    println!("  • Version manager selection");
-    println!("  • Installation preferences");
-    println!("  • Version file configuration");
+    println!("  {}", "This wizard will guide you through:".dimmed());
+    println!("    {} {}", "•".bright_cyan(), "Shell detection and integration");
+    println!("    {} {}", "•".bright_cyan(), "Version manager selection");
+    println!("    {} {}", "•".bright_cyan(), "Installation preferences");
+    println!("    {} {}", "•".bright_cyan(), "Version file configuration");
     println!();
-    println!("Press Ctrl+C at any time to cancel.");
+    println!("  {} {}", "ℹ".blue(), "Press Ctrl+C at any time to cancel.".dimmed());
+    println!();
+    println!("{}", "━".repeat(60).bright_cyan());
     println!();
 }
 
 /// Print success message after setup
 fn print_success_message(summary: &ConfigSummary) -> Result<()> {
+    use owo_colors::OwoColorize;
+
     println!();
-    crate::output::success("Setup complete!");
+    println!("{}", "━".repeat(60).bright_cyan());
+    println!();
+    println!("  {} {}", "✨".bright_green(), "Setup complete!".bright_green().bold());
+    println!();
+    println!("{}", "━".repeat(60).bright_cyan());
     println!();
 
-    crate::output::info("Configuration:");
-    println!("  Shell:        {}", summary.shell.name());
-    println!("  Profile:      {}", summary.profile_path.display());
-    println!("  Config file:  {}", summary.config_path.display());
+    println!("  {}", "📋 Configuration Summary:".cyan().bold());
+    println!("    {} {}", "Shell:".dimmed(), summary.shell.name().bright_white());
+    println!("    {} {}", "Profile:".dimmed(), summary.profile_path.display().to_string().bright_white());
+    println!("    {} {}", "Config:".dimmed(), summary.config_path.display().to_string().bright_white());
     println!();
 
-    crate::output::info("To start using xvn:");
-    println!("  1. Restart your shell, or run:");
-    println!("       source {}", summary.profile_path.display());
-    println!("  2. Navigate to a project with a .nvmrc file");
-    println!("  3. xvn will automatically activate the correct Node.js version");
+    println!("  {}", "🚀 Next Steps:".cyan().bold());
+    println!();
+    println!("    {} {}", "1.".bright_cyan(), "Restart your shell, or run:".dimmed());
+    println!("       {}", format!("source {}", summary.profile_path.display()).bright_yellow());
+    println!();
+    println!("    {} {}", "2.".bright_cyan(), "Navigate to a project with a .nvmrc file".dimmed());
+    println!();
+    println!("    {} {}", "3.".bright_cyan(), "xvn will automatically activate the correct Node.js version!".dimmed());
     println!();
 
-    crate::output::info("Useful commands:");
-    println!("  xvn status              Show current configuration");
-    println!("  xvn activate            Manually activate for a directory");
-    println!("  xvn init                Re-run this wizard to modify config");
+    println!("  {}", "💡 Useful Commands:".cyan().bold());
+    println!("    {} {}", "xvn status".bright_yellow().bold(), "     Show current configuration".dimmed());
+    println!("    {} {}", "xvn activate".bright_yellow().bold(), "   Manually activate for a directory".dimmed());
+    println!("    {} {}", "xvn init".bright_yellow().bold(), "       Re-run this wizard to modify config".dimmed());
     println!();
-
-    crate::output::info(&format!(
-        "Your config file is at: {}",
-        summary.config_path.display()
-    ));
+    println!("{}", "━".repeat(60).bright_cyan());
     println!();
 
     Ok(())

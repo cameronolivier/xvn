@@ -8,15 +8,18 @@ use std::path::PathBuf;
 
 /// Prompt user to select shell
 pub fn prompt_shell() -> Result<Shell> {
-    output::info("Step 1/5: Shell Detection");
+    use owo_colors::OwoColorize;
+
+    println!();
+    println!("  {} {}", "🐚".bright_cyan(), "Step 1/5: Shell Detection".cyan().bold());
     println!();
 
     // Try to detect shell
     let detected = detect_shell()?;
     let profile_path = get_profile_path(&detected)?;
 
-    println!("  Detected shell: {}", detected.name());
-    println!("  Profile: {}", profile_path.display());
+    println!("    {} {}", "Detected:".dimmed(), detected.name().bright_green());
+    println!("    {} {}", "Profile:".dimmed(), profile_path.display().to_string().bright_white());
     println!();
 
     // Ask for confirmation
@@ -49,7 +52,10 @@ pub fn prompt_shell() -> Result<Shell> {
 
 /// Prompt user to select version managers
 pub fn prompt_plugins() -> Result<Vec<String>> {
-    output::info("Step 2/5: Version Managers");
+    use owo_colors::OwoColorize;
+
+    println!();
+    println!("  {} {}", "📦".bright_cyan(), "Step 2/5: Version Managers".cyan().bold());
     println!();
 
     // Detect installed managers
@@ -78,12 +84,12 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
     }
 
     // Display detected managers
-    println!("  Detected version managers:");
+    println!("    {} {}", "Detected:".dimmed(), format!("{} manager(s)", detected.len()).bright_green());
     for manager in &detected {
         let path_str = manager.path.as_ref()
             .map(|p| p.display().to_string())
-            .unwrap_or_else(|| "unknown path".to_string());
-        println!("  ✓ {} ({})", manager.name, path_str);
+            .unwrap_or_else(|| "system".to_string());
+        println!("      {} {} {}", "✓".bright_green(), manager.name.bright_white(), format!("({})", path_str).dimmed());
     }
     println!();
 
@@ -131,10 +137,13 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
 
 /// Prompt user for auto-install preference
 pub fn prompt_auto_install() -> Result<AutoInstallMode> {
-    output::info("Step 3/5: Auto-Install Behavior");
+    use owo_colors::OwoColorize;
+
+    println!();
+    println!("  {} {}", "⚙️".bright_cyan(), "Step 3/5: Auto-Install Behavior".cyan().bold());
     println!();
 
-    println!("  When a required Node.js version isn't installed:");
+    println!("    {} {}", "When a version isn't installed:".dimmed(), "");
     println!();
 
     let options = vec![
@@ -166,10 +175,13 @@ pub fn prompt_auto_install() -> Result<AutoInstallMode> {
 
 /// Prompt user for version file preferences
 pub fn prompt_version_files() -> Result<Vec<String>> {
-    output::info("Step 4/5: Version Files");
+    use owo_colors::OwoColorize;
+
+    println!();
+    println!("  {} {}", "📄".bright_cyan(), "Step 4/5: Version Files".cyan().bold());
     println!();
 
-    println!("  Which files should xvn check for version information?");
+    println!("    {} {}", "Configure:".dimmed(), "Which files should xvn check?");
     println!();
 
     let options = vec![
@@ -217,21 +229,32 @@ pub struct ConfigSummary {
 
 /// Prompt user to review and confirm configuration
 pub fn prompt_confirm_config(summary: &ConfigSummary) -> Result<bool> {
-    output::info("Step 5/5: Review Configuration");
-    println!();
+    use owo_colors::OwoColorize;
 
-    println!("  {:<16} {}", "Shell:", summary.shell.name());
-    println!("  {:<16} {}", "Profile:", summary.profile_path.display());
-    println!("  {:<16} {}", "Plugins:", summary.plugins.join(", "));
+    println!();
+    println!("  {} {}", "✓".bright_green(), "Step 5/5: Review Configuration".cyan().bold());
+    println!();
+    println!("{}", "  ┌─ Configuration Summary ─────────────────────────────┐".bright_cyan());
+
+    println!("  │  {} {:<48} │", "Shell:".dimmed(), summary.shell.name().bright_white());
+    println!("  │  {} {:<48} │", "Profile:".dimmed(), summary.profile_path.display().to_string().bright_white());
+
+    let plugins_str = if summary.plugins.is_empty() {
+        "none".to_string()
+    } else {
+        summary.plugins.join(", ")
+    };
+    println!("  │  {} {:<48} │", "Plugins:".dimmed(), plugins_str.bright_white());
 
     let auto_install_str = match summary.auto_install {
-        AutoInstallMode::Prompt => "prompt",
-        AutoInstallMode::Always => "always",
-        AutoInstallMode::Never => "never",
+        AutoInstallMode::Prompt => format!("{}", "prompt".bright_yellow()),
+        AutoInstallMode::Always => format!("{}", "always".bright_green()),
+        AutoInstallMode::Never => format!("{}", "never".bright_red()),
     };
-    println!("  {:<16} {}", "Auto-install:", auto_install_str);
-    println!("  {:<16} {}", "Version files:", summary.version_files.join(", "));
-    println!("  {:<16} {}", "Config file:", summary.config_path.display());
+    println!("  │  {} {:<48} │", "Auto-install:".dimmed(), auto_install_str);
+    println!("  │  {} {:<48} │", "Version files:".dimmed(), summary.version_files.join(", ").bright_white());
+    println!("  │  {} {:<48} │", "Config file:".dimmed(), summary.config_path.display().to_string().bright_white());
+    println!("{}", "  └──────────────────────────────────────────────────────┘".bright_cyan());
     println!();
 
     let confirmed = Confirm::new("Looks good?")
