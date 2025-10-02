@@ -11,7 +11,7 @@
 ### M6.1: Set up CI/CD pipeline
 - [x] GitHub Actions workflow (test.yml)
 - [x] Test matrix (Ubuntu, macOS) × (stable Rust)
-- [x] Coverage reporting (Codecov)
+- [x] Coverage reporting (optional, won't fail CI)
 - [x] Automated builds on push/PR
 
 ### M6.2: Set up binary builds
