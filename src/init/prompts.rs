@@ -187,6 +187,7 @@ pub fn prompt_version_files() -> Result<Vec<String>> {
     let options = vec![
         ".nvmrc (standard Node.js convention)",
         ".node-version (alternative format)",
+        "package.json (engines.node field, supports semver ranges)",
         ".tool-versions (asdf compatibility)",
     ];
 

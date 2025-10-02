@@ -3,8 +3,8 @@ use crate::config::{AutoInstallMode, Config};
 use crate::output;
 use crate::plugins::{PluginRegistry, VersionManagerPlugin};
 use crate::shell::CommandWriter;
-use crate::version_file::VersionFile;
-use log::{debug, info};
+use crate::version_file::{VersionFile, VersionFileSource, SemverResolver};
+use log::{debug, info, warn};
 use std::path::Path;
 use std::sync::Arc;
 
@@ -64,18 +64,42 @@ impl<'a> Orchestrator<'a> {
         info!("Found version file: {}", version_file.path.display());
         info!("Node.js version: {}", version_file.version);
 
+        // Resolve semver range if from package.json
+        let version_to_use = if version_file.source == VersionFileSource::PackageJson {
+            // Try to resolve semver range using first available plugin
+            if let Some(plugin) = self.registry.plugins().first() {
+                let resolver = SemverResolver::new(plugin.as_ref());
+                match resolver.resolve(&version_file.version) {
+                    Ok(resolved) => {
+                        if resolved != version_file.version {
+                            info!("Resolved semver range '{}' → '{}'", version_file.version, resolved);
+                        }
+                        resolved
+                    }
+                    Err(e) => {
+                        warn!("Failed to resolve semver range: {}", e);
+                        version_file.version.clone()
+                    }
+                }
+            } else {
+                version_file.version.clone()
+            }
+        } else {
+            version_file.version.clone()
+        };
+
         // 2. Try to find a plugin with this version installed
         match self
             .registry
-            .find_plugin_with_version(&version_file.version)
+            .find_plugin_with_version(&version_to_use)
         {
             Ok(Some(plugin)) => {
                 // Version is already installed - activate it
-                self.activate_existing_version(&plugin, &version_file.version)?;
+                self.activate_existing_version(&plugin, &version_to_use)?;
             }
             Ok(None) => {
                 // Version not installed - handle auto-install
-                self.handle_missing_version(&version_file.version)?;
+                self.handle_missing_version(&version_to_use)?;
             }
             Err(e) => {
                 return Err(ActivationError::PluginError {
