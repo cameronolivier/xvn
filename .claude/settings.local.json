@@ -27,7 +27,10 @@
       "Bash(RUST_BACKTRACE=1 cargo test --lib test_install_with_v_prefix -- --show-output)",
       "Bash(do echo \"Run $i:\")",
       "Bash(find:*)",
-      "Bash(sort:*)"
+      "Bash(sort:*)",
+      "Bash(./target/release/xvn:*)",
+      "Read(//private/tmp/**)",
+      "Bash(env RUST_LOG=info /Users/cam/mo/dev/tools/xvn/target/release/xvn activate)"
     ],
     "deny": [],
     "ask": []
