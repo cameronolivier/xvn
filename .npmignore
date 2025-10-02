@@ -1,0 +1,33 @@
+# Rust source
+src/
+tests/
+target/
+Cargo.toml
+Cargo.lock
+.cargo/
+
+# Git
+.git/
+.gitignore
+
+# CI
+.github/
+
+# Docs
+docs/
+spec/
+
+# Build artifacts
+*.tar.gz
+*.sha256
+
+# Scripts
+scripts/
+
+# Keep these
+!README.md
+!LICENSE
+!package.json
+!install.js
+!bin/
+!shell/

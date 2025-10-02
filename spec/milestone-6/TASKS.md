@@ -21,12 +21,12 @@
 - [x] Upload artifacts to GitHub Releases
 
 ### M6.3: Create npm package structure
-- [ ] package.json with metadata
-- [ ] install.js (postinstall script)
-- [ ] Binary download logic
-- [ ] Checksum verification
-- [ ] Platform detection
-- [ ] bin/ wrapper script
+- [x] package.json with metadata
+- [x] install.js (postinstall script)
+- [x] Binary download logic
+- [x] Checksum verification
+- [x] Platform detection
+- [x] bin/ wrapper script
 
 ### M6.4: Test installation flow
 - [ ] Test npm install locally

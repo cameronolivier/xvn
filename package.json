@@ -1,11 +1,45 @@
 {
   "name": "xvn",
-  "version": "1.0.0",
-  "description": "A shell automation layer that sits above version managers like nvm/n/nodebrew and automatically switches to the specified Node.js version when detected",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.6.0",
+  "description": "Automatic Node.js version switching for cd - 2-3x faster than avn",
+  "main": "install.js",
+  "bin": {
+    "xvn": "./bin/xvn"
   },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "keywords": [
+    "node",
+    "version",
+    "nvm",
+    "fnm",
+    "automatic",
+    "switching",
+    "cli"
+  ],
   "author": "cameronolivier@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cameronolivier/xvn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cameronolivier/xvn/issues"
+  },
+  "homepage": "https://github.com/cameronolivier/xvn#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "dependencies": {
+    "tar-stream": "^3.1.7"
+  }
 }

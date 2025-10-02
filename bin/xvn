@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Wrapper script for xvn npm package
+
+# Find the native binary
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+NATIVE_BINARY="$SCRIPT_DIR/../native/xvn"
+
+if [ ! -f "$NATIVE_BINARY" ]; then
+  echo "Error: xvn binary not found at $NATIVE_BINARY"
+  echo "Please try reinstalling: npm install -g xvn"
+  exit 1
+fi
+
+# Execute the native binary
+exec "$NATIVE_BINARY" "$@"

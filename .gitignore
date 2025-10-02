@@ -164,3 +164,6 @@ dist/
 # Added by cargo
 
 /target
+
+# npm binary downloads
+native/
