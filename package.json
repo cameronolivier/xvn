@@ -1,6 +1,6 @@
 {
   "name": "@olvrcc/xvn",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Automatic Node.js version switching for cd - 2-3x faster than avn",
   "main": "install.js",
   "bin": {
