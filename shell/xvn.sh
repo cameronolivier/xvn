@@ -31,9 +31,14 @@ __xvn_find_file() {
     __xvn_debug "Searching for version files: $search_files"
 
     while [[ "$current_dir" != "/" ]]; do
-        # Word splitting: Use ${=var} in zsh, plain $var in bash
+        # Word splitting for zsh compatibility
+        # In zsh, we need to enable word splitting with setopt
+        # In bash, it's enabled by default
+        if [[ -n "${ZSH_VERSION:-}" ]]; then
+            setopt local_options sh_word_split
+        fi
         # shellcheck disable=SC2086
-        for filename in ${ZSH_VERSION:+=}$search_files; do
+        for filename in $search_files; do
             local filepath="$current_dir/$filename"
             if [[ -f "$filepath" ]]; then
                 __xvn_debug "Found version file: $filepath"

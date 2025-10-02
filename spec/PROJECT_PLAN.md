@@ -425,6 +425,105 @@
 
 ---
 
+### Extra Milestones (Phase 1 Enhancements)
+
+These milestones extend Phase 1 with quality-of-life improvements and enhanced user experience.
+
+### Milestone 7: Interactive Setup Wizard (v0.8.0)
+
+**Goal:** Transform the basic setup command into an interactive wizard that guides users through configuration and provides educational context.
+
+**Core Deliverables:**
+- Rename `xvn setup` to `xvn init` (maintain `setup` as alias for compatibility)
+- Interactive configuration wizard:
+  - Shell selection (auto-detect with confirmation)
+  - Plugin priority ordering (nvm, fnm, n, etc.)
+  - Auto-install mode preference (prompt, always, never)
+  - Version file preferences (.nvmrc, .node-version, custom)
+- Educational prompts explaining each configuration option
+- Configuration preview before saving
+- Final summary showing:
+  - Generated config file location (`~/.xvnrc`)
+  - Shell profile modified (`.bashrc`, `.zshrc`)
+  - Next steps and helpful commands
+- Option to skip wizard with `--quick` flag (uses defaults)
+- Ability to re-run wizard to modify existing configuration
+
+**User Experience Flow:**
+```
+$ xvn init
+
+xvn - automatic node version switching
+Welcome! Let's set up xvn for your environment.
+
+[1/5] Shell Detection
+  ✓ Detected: zsh
+  Use zsh? [Y/n]:
+
+[2/5] Version Managers
+  Which version managers do you have installed?
+  [✓] nvm (detected at ~/.nvm)
+  [ ] fnm
+  [ ] n
+
+  Priority order: nvm
+  Press enter to continue...
+
+[3/5] Auto-Install Behavior
+  When a required Node.js version isn't installed:
+  1. Prompt me each time (recommended)
+  2. Always install automatically
+  3. Never install, just show error
+
+  Choose [1-3]: 1
+
+[4/5] Version Files
+  Which files should xvn check for version info?
+  [✓] .nvmrc (standard)
+  [✓] .node-version (alternative)
+  [ ] .tool-versions (asdf)
+
+  Priority order: .nvmrc, .node-version
+  Press enter to continue...
+
+[5/5] Review Configuration
+  Shell:        zsh
+  Profile:      /Users/you/.zshrc
+  Plugins:      nvm
+  Auto-install: prompt
+  Version files: .nvmrc, .node-version
+  Config file:  /Users/you/.xvnrc
+
+  Looks good? [Y/n]:
+
+xvn: ✓ Configuration saved!
+xvn: ✓ Shell integration installed!
+
+xvn: To start using xvn:
+  1. Restart your shell, or run:
+       source /Users/you/.zshrc
+  2. Navigate to a project with a .nvmrc file
+  3. xvn will automatically activate the correct Node.js version
+
+xvn: Your config file is at: /Users/you/.xvnrc
+xvn: Run 'xvn init' again to modify your configuration.
+```
+
+**Technical Implementation:**
+- Use `dialoguer` or `inquire` crate for interactive prompts
+- Detect installed version managers by checking common paths
+- Validate configuration before saving
+- Preserve existing config comments when re-running wizard
+- Graceful fallback to non-interactive mode if stdin isn't a TTY
+
+**Success Metrics:**
+- Users complete wizard without confusion
+- Generated config matches user intent
+- Wizard completable in <2 minutes
+- Config file location clearly communicated
+
+---
+
 ## Milestone-Specific Plans
 
 For detailed plans for each milestone, see:
@@ -435,6 +534,7 @@ For detailed plans for each milestone, see:
 - [Milestone 4: Version Activation & Auto-Install](./milestone-4/PLAN.md) (Weeks 7-8)
 - [Milestone 5: Testing & Polish](./milestone-5/PLAN.md) (Weeks 9-10)
 - [Milestone 6: Release Preparation](./milestone-6/PLAN.md) (Weeks 11-12)
+- [Milestone 7: Interactive Setup Wizard](./milestone-7/PLAN.md) (Extra - Phase 1 Enhancement)
 
 ---
 
