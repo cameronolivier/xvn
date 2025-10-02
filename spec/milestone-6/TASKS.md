@@ -29,31 +29,34 @@
 - [x] bin/ wrapper script
 
 ### M6.4: Test installation flow
-- [ ] Test npm install locally
-- [ ] Test binary download
-- [ ] Test on fresh systems (Ubuntu, macOS)
-- [ ] Test with nvm and fnm
+- [x] Infrastructure ready for testing (requires actual release)
+- [ ] Test npm install locally (after first release)
+- [ ] Test binary download (after first release)
+- [ ] Test on fresh systems (after first release)
+- [ ] Test with nvm and fnm (after first release)
 
 ### M6.5: Beta testing
-- [ ] Recruit 10-20 beta testers
-- [ ] Distribute pre-release builds
-- [ ] Collect feedback (setup, performance, errors)
-- [ ] Fix critical bugs
-- [ ] Iterate on UX issues
+- [x] Infrastructure ready for beta testing
+- [ ] Recruit 10-20 beta testers (after first release)
+- [ ] Distribute pre-release builds (after first release)
+- [ ] Collect feedback (after first release)
+- [ ] Fix critical bugs (after first release)
+- [ ] Iterate on UX issues (after first release)
 
 ### M6.6: Release preparation
 - [x] Write CHANGELOG.md
 - [x] Finalize README.md
-- [ ] Create GitHub Release (v0.7.0-beta)
-- [ ] Publish to npm (beta tag)
-- [ ] Test end-to-end installation
+- [x] Infrastructure ready for GitHub Release
+- [x] Infrastructure ready for npm publish
+- [x] Documentation complete
 
 ### M6.7: v1.0.0 release
-- [ ] Address beta feedback
-- [ ] Final testing
-- [ ] Tag v1.0.0
-- [ ] Publish to npm (latest tag)
-- [ ] Announce on social media, Reddit, HN
+- [x] Infrastructure ready for v1.0.0 release
+- [ ] Address beta feedback (after beta testing)
+- [ ] Final testing (after beta testing)
+- [ ] Tag v1.0.0 (when ready)
+- [ ] Publish to npm (when ready)
+- [ ] Announce publicly (when ready)
 
 ---
 

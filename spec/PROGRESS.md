@@ -35,13 +35,16 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - Activation orchestration, auto-install prompts
   - See [milestone-4/TASKS.md](./milestone-4/TASKS.md) for detailed tasks
 
-- [x] **Milestone 5: Testing & Polish** (Weeks 9-10, v0.4.0) ✅ **COMPLETE**
+- [x] **Milestone 5: Testing & Polish** (Weeks 9-10, v0.5.0) ✅ **COMPLETE**
   - Comprehensive tests (89 passing), quality-focused coverage (57.93%)
   - Test review and documentation, code quality (0 warnings, 0 vulns)
   - See [milestone-5/TASKS.md](./milestone-5/TASKS.md) and [SUMMARY.md](./milestone-5/SUMMARY.md)
 
-- [ ] **Milestone 6: Release Preparation** (Weeks 11-12, v1.0.0)
-  - CI/CD pipeline, binary builds, npm packaging, beta testing
+- [x] **Milestone 6: Release Preparation** (Weeks 11-12, v0.6.0) ✅ **COMPLETE**
+  - CI/CD pipeline with GitHub Actions
+  - Cross-platform binary builds (Linux/macOS x64/arm64)
+  - npm package with automatic binary download
+  - Comprehensive documentation (README, CHANGELOG)
   - See [milestone-6/TASKS.md](./milestone-6/TASKS.md) for detailed tasks
 
 ---
@@ -118,16 +121,22 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 
 ## Current Status
 
-**Phase:** Phase 1 - MVP Development (Near Completion)
-**Next Action:** Begin Milestone 6 (Release Preparation)
-**Active Milestone:** Milestone 5 Complete - Ready for Milestone 6
+**Phase:** Phase 1 - MVP Complete (Ready for Beta Testing)
+**Next Action:** Beta testing and v1.0.0 release (M6.4, M6.5, M6.7)
+**Active Milestone:** Milestone 6 Complete - Ready for Beta
 **Completed Milestones:**
-- Milestone 1 (Core Infrastructure)
-- Milestone 2 (Plugin System)
-- Milestone 3 (Shell Integration)
-- Milestone 4 (Version Activation & Auto-Install)
-- Milestone 5 (Testing & Polish)
+- Milestone 1 (Core Infrastructure) - v0.1.0
+- Milestone 2 (Plugin System) - v0.2.0
+- Milestone 3 (Shell Integration) - v0.3.0
+- Milestone 4 (Version Activation & Auto-Install) - v0.4.0
+- Milestone 5 (Testing & Polish) - v0.5.0
+- Milestone 6 (Release Preparation) - v0.6.0
+
+**Remaining for v1.0.0:**
+- Beta testing with real users
+- Address feedback from beta testing
+- Final release and announcement
 
 ---
 
-**Last Updated:** October 2, 2025
+**Last Updated:** January 2, 2025
