@@ -190,11 +190,13 @@ fn test_version_file_struct_equality() {
     let vf1 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
+        source: xvn::version_file::VersionFileSource::Nvmrc,
     };
 
     let vf2 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
+        source: xvn::version_file::VersionFileSource::Nvmrc,
     };
 
     // VersionFile implements PartialEq
@@ -210,6 +212,7 @@ fn test_version_file_struct_clone() {
     let vf1 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
+        source: xvn::version_file::VersionFileSource::Nvmrc,
     };
 
     // VersionFile implements Clone

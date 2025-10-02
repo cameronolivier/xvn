@@ -2,6 +2,7 @@ use anyhow::{Context, Result};
 use log::{debug, trace};
 use std::fs;
 use std::path::{Path, PathBuf};
+use super::PackageJson;
 
 /// Represents a discovered version file
 #[derive(Debug, Clone, PartialEq)]
@@ -9,8 +10,26 @@ pub struct VersionFile {
     /// Absolute path to the version file
     pub path: PathBuf,
 
-    /// Node.js version string (e.g., "18.20.0", "lts/hydrogen")
+    /// Node.js version string (e.g., "18.20.0", "lts/hydrogen", ">=18.0.0")
     pub version: String,
+
+    /// Source type of version file (for logging/debugging)
+    pub source: VersionFileSource,
+}
+
+/// Type of version file found
+#[derive(Debug, Clone, PartialEq)]
+pub enum VersionFileSource {
+    /// .nvmrc file
+    Nvmrc,
+    /// .node-version file
+    NodeVersion,
+    /// package.json engines.node field
+    PackageJson,
+    /// .tool-versions file (asdf)
+    ToolVersions,
+    /// Other/unknown
+    Other(String),
 }
 
 impl VersionFile {
@@ -52,13 +71,37 @@ impl VersionFile {
                 if file_path.exists() && file_path.is_file() {
                     debug!("Found version file: {file_path:?}");
 
+                    // Special handling for package.json
+                    if filename == "package.json" {
+                        if let Ok(pkg) = PackageJson::parse(&file_path) {
+                            if let Some(node_version) = pkg.node_version() {
+                                debug!("Found Node.js version in package.json: {node_version}");
+                                return Ok(Some(Self {
+                                    path: file_path,
+                                    version: node_version.to_string(),
+                                    source: VersionFileSource::PackageJson,
+                                }));
+                            } else {
+                                debug!("package.json has no engines.node field, skipping");
+                                continue;
+                            }
+                        } else {
+                            debug!("Failed to parse package.json, skipping");
+                            continue;
+                        }
+                    }
+
+                    // Parse regular version files (.nvmrc, .node-version, etc.)
                     let version = Self::parse(&file_path).with_context(|| {
                         format!("failed to parse version file: {}", file_path.display())
                     })?;
 
+                    let source = Self::detect_source(filename);
+
                     return Ok(Some(Self {
                         path: file_path,
                         version,
+                        source,
                     }));
                 }
             }
@@ -104,6 +147,17 @@ impl VersionFile {
             "version file is empty or contains only comments: {}",
             path.display()
         )
+    }
+
+    /// Detect source type from filename
+    fn detect_source(filename: &str) -> VersionFileSource {
+        match filename {
+            ".nvmrc" => VersionFileSource::Nvmrc,
+            ".node-version" => VersionFileSource::NodeVersion,
+            "package.json" => VersionFileSource::PackageJson,
+            ".tool-versions" => VersionFileSource::ToolVersions,
+            other => VersionFileSource::Other(other.to_string()),
+        }
     }
 }
 
@@ -225,5 +279,85 @@ mod tests {
 
         assert!(result.is_some());
         assert_eq!(result.unwrap().version, "18.20.0");
+    }
+
+    #[test]
+    fn test_find_package_json_with_engines() {
+        let temp_dir = tempdir().unwrap();
+        let pkg_path = temp_dir.path().join("package.json");
+
+        fs::write(&pkg_path, r#"{
+            "name": "test-app",
+            "engines": {
+                "node": ">=18.0.0"
+            }
+        }"#).unwrap();
+
+        let result = VersionFile::find(temp_dir.path(), &["package.json".to_string()]).unwrap();
+
+        assert!(result.is_some());
+        let vf = result.unwrap();
+        assert_eq!(vf.version, ">=18.0.0");
+        assert_eq!(vf.source, VersionFileSource::PackageJson);
+    }
+
+    #[test]
+    fn test_find_package_json_without_engines() {
+        let temp_dir = tempdir().unwrap();
+        let pkg_path = temp_dir.path().join("package.json");
+
+        fs::write(&pkg_path, r#"{
+            "name": "test-app",
+            "version": "1.0.0"
+        }"#).unwrap();
+
+        let result = VersionFile::find(temp_dir.path(), &["package.json".to_string()]).unwrap();
+
+        // Should return None since no engines.node field
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn test_priority_nvmrc_over_package_json() {
+        let temp_dir = tempdir().unwrap();
+
+        fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+        fs::write(temp_dir.path().join("package.json"), r#"{
+            "engines": { "node": ">=20.0.0" }
+        }"#).unwrap();
+
+        // .nvmrc should take precedence
+        let result = VersionFile::find(
+            temp_dir.path(),
+            &[".nvmrc".to_string(), "package.json".to_string()],
+        )
+        .unwrap();
+
+        assert!(result.is_some());
+        let vf = result.unwrap();
+        assert_eq!(vf.version, "18.20.0");
+        assert_eq!(vf.source, VersionFileSource::Nvmrc);
+    }
+
+    #[test]
+    fn test_package_json_priority_over_nvmrc() {
+        let temp_dir = tempdir().unwrap();
+
+        fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+        fs::write(temp_dir.path().join("package.json"), r#"{
+            "engines": { "node": ">=20.0.0" }
+        }"#).unwrap();
+
+        // package.json first in priority list
+        let result = VersionFile::find(
+            temp_dir.path(),
+            &["package.json".to_string(), ".nvmrc".to_string()],
+        )
+        .unwrap();
+
+        assert!(result.is_some());
+        let vf = result.unwrap();
+        assert_eq!(vf.version, ">=20.0.0");
+        assert_eq!(vf.source, VersionFileSource::PackageJson);
     }
 }
