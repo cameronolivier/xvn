@@ -2,7 +2,7 @@
 
 > Automatic Node.js version switching for cd - 2-3x faster than avn
 
-**xvn** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc` or `.node-version` file.
+**xvn** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file.
 
 ## Features
 
@@ -28,11 +28,35 @@ source ~/.bashrc  # or ~/.zshrc
 
 ## Usage
 
-Just `cd` into a directory with a `.nvmrc` or `.node-version` file:
+Just `cd` into a directory with a version file:
 
 ```bash
 cd ~/my-project  # xvn automatically switches Node.js version
 ```
+
+### Supported Version Files
+
+xvn supports multiple version file formats:
+
+- **`.nvmrc`** - Standard nvm format with exact version or alias
+  ```
+  18.20.0
+  ```
+
+- **`.node-version`** - Alternative format, same as .nvmrc
+  ```
+  20.11.0
+  ```
+
+- **`package.json`** - npm standard with semver ranges *(new in v1.1.0)*
+  ```json
+  {
+    "engines": {
+      "node": ">=18.0.0"
+    }
+  }
+  ```
+  Supports semver ranges: `^20.0.0`, `~18.20.0`, `>=18 <21`, `18.x`
 
 ### Manual Activation
 
@@ -62,10 +86,11 @@ auto_install: prompt  # or 'always' or 'never'
 # Silent mode (no output)
 silent: false
 
-# Version file priority
+# Version file priority (first match wins)
 version_files:
   - .nvmrc
   - .node-version
+  - package.json  # optional, supports semver ranges
 ```
 
 Project-level configuration (`.xvn.yaml` in project root):

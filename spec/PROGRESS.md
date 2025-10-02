@@ -61,15 +61,18 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Phase 2: Enhanced Features (v1.1.0 - v1.5.0)
 
 **Timeline:** 8-12 weeks post-MVP
-**Status:** Not Started
+**Status:** In Progress
 
-### Planned Milestones
+### Milestones
 
-- [ ] **Milestone 7: package.json Support** (v1.1.0)
+- [x] **Milestone 8: package.json Support** (v1.1.0) ✅ **COMPLETE**
   - Parse `package.json` "engines.node" field
-  - Semver range resolution
+  - Semver range resolution (^, ~, >=, etc.)
+  - Integration with version file detection
+  - Init wizard updates
+  - See [milestone-8/PLAN.md](./milestone-8/PLAN.md) and [TASKS.md](./milestone-8/TASKS.md)
 
-- [ ] **Milestone 8: Daemon Mode** (v1.2.0)
+- [ ] **Milestone 9: Daemon Mode** (v1.2.0)
   - Daemon process management
   - IPC protocol (Unix socket)
   - File system watcher
@@ -130,9 +133,9 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 
 ## Current Status
 
-**Phase:** Phase 1+ - MVP Complete + UX Enhancement
-**Next Action:** Documentation and changelog updates
-**Active Milestone:** Milestone 7 Complete - v0.8.0
+**Phase:** Phase 2 - Enhanced Features
+**Next Action:** Milestone 9 (Daemon Mode) or continue with additional enhancements
+**Active Milestone:** Milestone 8 Complete - v1.1.0
 **Completed Milestones:**
 - Milestone 1 (Core Infrastructure) - v0.1.0
 - Milestone 2 (Plugin System) - v0.2.0
@@ -141,12 +144,13 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 - Milestone 5 (Testing & Polish) - v0.5.0
 - Milestone 6 (Release Preparation) - v0.6.0
 - Milestone 7 (Interactive Setup Wizard) - v0.8.0
+- Milestone 8 (package.json Support) - v1.1.0
 
-**Recent Improvements (v0.7.0 - v0.8.0):**
-- Colored terminal output with branding (v0.7.0)
-- Interactive configuration wizard (v0.8.0)
-- Quick and non-interactive setup modes
-- Enhanced user experience and onboarding
+**Recent Improvements (v0.8.0 - v1.1.0):**
+- Enhanced wizard UI with colors and emojis (v0.8.0)
+- package.json engines.node support (v1.1.0)
+- Semver range resolution (^, ~, >=, etc.)
+- Automatic version matching from installed versions
 
 ---
 

@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-10-02
+
+### Added - package.json Support (Milestone 8)
+
+- **`package.json` Version Detection**
+  - Parse `engines.node` field from package.json files
+  - Support for semver ranges (`^20.0.0`, `~18.20.0`, `>=18.0.0`, etc.)
+  - Automatic resolution to highest matching installed version
+  - Configurable priority with `.nvmrc` and `.node-version`
+
+- **Semver Range Resolution**
+  - New `SemverResolver` for range-to-version resolution
+  - Query version managers for installed versions
+  - Find best match for semver requirements
+  - Fallback to original range if no match found
+
+- **Enhanced Version Manager Plugin API**
+  - New `list_versions()` method to support semver resolution
+  - Default implementation returns empty list
+  - MockPlugin updated for testing
+
+- **Init Wizard Updates**
+  - package.json option in version files prompt
+  - Help text explaining semver range support
+  - Educational descriptions for each file type
+
+### Changed
+
+- VersionFile now includes `source` field to track file type
+- Version finder handles package.json with special logic
+- Activation flow resolves semver ranges before checking installation
+- README updated with package.json examples and semver syntax
+
+### Technical Details
+
+- Dependencies: Added `serde_json` 1.0 and `semver` 1.0
+- New modules: `version_file::package_json`, `version_file::semver`
+- 20 new unit tests for package.json and semver
+- All 116 tests passing
+
 ### Planned for v1.0.0
 
 - Incorporate beta feedback
