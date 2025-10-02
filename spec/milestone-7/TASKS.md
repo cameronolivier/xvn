@@ -195,11 +195,11 @@
 ## Phase 7: Testing & Documentation (Week 3)
 
 ### Task 7.1: Write unit tests
-- [ ] Test all detection functions with mocked data
-- [ ] Test all prompt functions with simulated input
-- [ ] Test validation functions with valid/invalid configs
-- [ ] Test state management and transitions
-- [ ] Achieve >85% code coverage
+- [x] Test all detection functions with mocked data
+- [x] Test all prompt functions with simulated input
+- [x] Test validation functions with valid/invalid configs
+- [x] Test state management and transitions
+- [x] Achieve >85% code coverage
 
 ### Task 7.2: Write integration tests
 - [ ] Test full wizard flow end-to-end
@@ -209,13 +209,13 @@
 - [ ] Test with various version manager combinations
 
 ### Task 7.3: Manual testing
-- [ ] Test on clean system (no config)
-- [ ] Test with existing config
-- [ ] Test with nvm only
+- [x] Test on clean system (no config)
+- [x] Test with existing config
+- [x] Test with nvm only
 - [ ] Test with fnm only
 - [ ] Test with no version managers
 - [ ] Test in CI environment (non-TTY)
-- [ ] Test all CLI flags
+- [x] Test all CLI flags
 
 ### Task 7.4: Update documentation
 - [ ] Update README with init command
