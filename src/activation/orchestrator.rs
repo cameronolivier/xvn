@@ -1,5 +1,6 @@
 use super::{ActivationError, ActivationResult, StdinUserPrompt, UserPrompt};
 use crate::config::{AutoInstallMode, Config};
+use crate::output;
 use crate::plugins::{PluginRegistry, VersionManagerPlugin};
 use crate::shell::CommandWriter;
 use crate::version_file::VersionFile;
@@ -108,7 +109,7 @@ impl<'a> Orchestrator<'a> {
         self.command_writer.write_command(&cmd)?;
 
         // Print success message to stdout
-        println!("✓ Switched to Node.js {} (via {})", version, plugin.name());
+        output::switched(version, plugin.name());
 
         Ok(())
     }
@@ -153,11 +154,7 @@ impl<'a> Orchestrator<'a> {
             }
             AutoInstallMode::Prompt => {
                 // Prompt user for confirmation
-                let message = format!(
-                    "Node.js {} is not installed. Install it using {}?",
-                    version,
-                    plugin.name()
-                );
+                let message = output::install_prompt(version, plugin.name());
 
                 match self.user_prompt.confirm(&message) {
                     Ok(true) => {
@@ -166,7 +163,7 @@ impl<'a> Orchestrator<'a> {
                     }
                     Ok(false) => {
                         // User declined - show mismatch
-                        println!("Install declined.");
+                        output::info("Install declined.");
                         self.show_version_mismatch(version)?;
                         Ok(())
                     }
@@ -210,7 +207,7 @@ impl<'a> Orchestrator<'a> {
         self.command_writer.write_command(&combined_cmd)?;
 
         // Print message to stdout
-        println!("Installing Node.js {} using {}...", version, plugin.name());
+        output::installing(version, plugin.name());
 
         Ok(())
     }
@@ -231,18 +228,11 @@ impl<'a> Orchestrator<'a> {
                     .trim_start_matches('v')
                     .to_string();
 
-                println!();
-                println!("⚠ Version mismatch:");
-                println!("  Required: {required_version}");
-                println!("  Current:  {current_version}");
-                println!();
-                println!("This may cause compatibility issues.");
+                output::version_mismatch(required_version, Some(&current_version));
             }
             _ => {
                 // Node.js not found or command failed
-                println!();
-                println!("⚠ Node.js {required_version} is required but not active.");
-                println!("This may cause compatibility issues.");
+                output::version_mismatch(required_version, None);
             }
         }
 
