@@ -24,25 +24,25 @@
 ## Phase 2: Detection Logic (Week 1)
 
 ### Task 2.1: Implement shell detection
-- [ ] Implement `detect_shell()` in `init/detection.rs`
-- [ ] Parse `$SHELL` environment variable
-- [ ] Support bash and zsh
-- [ ] Return shell type and profile path
-- [ ] Add tests with mocked environment
+- [x] Implement `detect_shell()` in `init/detection.rs`
+- [x] Parse `$SHELL` environment variable
+- [x] Support bash and zsh
+- [x] Return shell type and profile path
+- [x] Add tests with mocked environment
 
 ### Task 2.2: Implement version manager detection
-- [ ] Implement `detect_version_managers()` returning Vec of detected managers
-- [ ] Implement `check_nvm()` - check `~/.nvm/nvm.sh`, `$NVM_DIR`
-- [ ] Implement `check_fnm()` - check `which fnm`, `~/.fnm`
-- [ ] Implement `check_n()` - check `which n`, `/usr/local/n`
-- [ ] Return manager name and installation path
-- [ ] Add tests with mocked filesystem
+- [x] Implement `detect_version_managers()` returning Vec of detected managers
+- [x] Implement `check_nvm()` - check `~/.nvm/nvm.sh`, `$NVM_DIR`
+- [x] Implement `check_fnm()` - check `which fnm`, `~/.fnm`
+- [x] Implement `check_n()` - check `which n`, `/usr/local/n`
+- [x] Return manager name and installation path
+- [x] Add tests with mocked filesystem
 
 ### Task 2.3: Implement TTY detection
-- [ ] Implement `is_interactive()` checking if stdin is TTY
-- [ ] Use `atty` crate or `std::io::IsTerminal`
-- [ ] Handle `--non-interactive` flag
-- [ ] Add tests for interactive/non-interactive modes
+- [x] Implement `is_interactive()` checking if stdin is TTY
+- [x] Use `atty` crate or `std::io::IsTerminal`
+- [x] Handle `--non-interactive` flag
+- [x] Add tests for interactive/non-interactive modes
 
 ## Phase 3: Prompt Functions (Week 1-2)
 
