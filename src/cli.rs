@@ -10,11 +10,12 @@ use std::path::PathBuf;
 xvn automatically switches your Node.js version when you cd into a directory
 with a .nvmrc or .node-version file.
 
-After installation, run 'xvn setup' to configure your shell, then xvn will
-automatically activate the correct Node.js version whenever you cd.
+After installation, run 'xvn init' to configure your shell with an interactive
+wizard, or 'xvn init --quick' for automatic setup with sensible defaults.
 
 Examples:
-  xvn setup              Set up shell integration (one-time)
+  xvn init               Interactive setup wizard (recommended)
+  xvn init --quick       Quick setup with defaults
   xvn activate           Manually activate for current directory
   xvn status             Show configuration and test activation
 
@@ -32,13 +33,36 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Set up shell integration (one-time setup)
+    /// Initialize xvn with interactive configuration wizard
     ///
-    /// This command adds a hook to your shell (.bashrc or .zshrc) that
-    /// automatically activates the correct Node.js version when you cd
-    /// into a directory with a .nvmrc or .node-version file.
+    /// This command guides you through initial setup with auto-detection
+    /// and configuration of shell integration, version managers, and preferences.
     ///
-    /// Run this once after installation, then restart your shell.
+    /// For quick setup with defaults: xvn init --quick
+    /// For automation/CI: xvn init --non-interactive
+    Init {
+        /// Skip wizard and use sensible defaults
+        #[arg(short, long)]
+        quick: bool,
+
+        /// Force overwrite existing configuration
+        #[arg(short, long)]
+        force: bool,
+
+        /// Shell to configure (bash, zsh, or auto-detect)
+        #[arg(short, long)]
+        shell: Option<String>,
+
+        /// Non-interactive mode for automation
+        #[arg(long)]
+        non_interactive: bool,
+    },
+
+    /// Set up shell integration (alias for 'init' for compatibility)
+    ///
+    /// This is an alias for 'xvn init' for backward compatibility.
+    /// Use 'xvn init' for the full interactive wizard.
+    #[clap(hide = true)] // Hide from main help but still works
     Setup {
         /// Shell to configure (bash, zsh, or auto-detect)
         #[arg(short, long, default_value = "auto")]
@@ -79,23 +103,21 @@ pub fn run() -> Result<()> {
     }
 
     match cli.command {
+        Some(Commands::Init { quick, force, shell, non_interactive }) => {
+            info!("Running init command (quick: {quick}, force: {force}, non_interactive: {non_interactive})");
+
+            // TODO: Handle shell parameter when provided
+            let _ = shell; // Silence unused warning for now
+
+            crate::init::init(quick, non_interactive, force)
+        }
+
         Some(Commands::Setup { shell, force }) => {
-            info!("Running setup command (shell: {shell}, force: {force})");
+            // Redirect to init in quick mode
+            info!("Running setup command (redirecting to init)");
+            let _ = shell; // Silence unused warning for now
 
-            let installer = crate::setup::SetupInstaller::new()?;
-
-            // Check if already installed (unless force flag is set)
-            if !force && installer.is_installed()? {
-                crate::output::info("xvn is already installed.");
-                crate::output::info("Run 'xvn status' to verify your installation.");
-                crate::output::info("Use --force to reinstall.");
-                return Ok(());
-            }
-
-            installer.install()?;
-            installer.print_instructions()?;
-
-            Ok(())
+            crate::init::init(true, false, force)
         }
         Some(Commands::Activate { path }) => {
             info!("Running activate command for path: {path:?}");

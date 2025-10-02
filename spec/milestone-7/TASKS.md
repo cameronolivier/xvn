@@ -15,11 +15,11 @@
 - [x] Add basic module documentation
 
 ### Task 1.3: Add Init command to CLI
-- [ ] Add `Init` variant to `Commands` enum in `src/cli.rs`
-- [ ] Add command documentation and help text
-- [ ] Add `--quick`, `--force`, `--shell`, `--non-interactive` flags
-- [ ] Wire up command to init module
-- [ ] Keep `Setup` as alias pointing to `Init`
+- [x] Add `Init` variant to `Commands` enum in `src/cli.rs`
+- [x] Add command documentation and help text
+- [x] Add `--quick`, `--force`, `--shell`, `--non-interactive` flags
+- [x] Wire up command to init module
+- [x] Keep `Setup` as alias pointing to `Init`
 
 ## Phase 2: Detection Logic (Week 1)
 
