@@ -72,23 +72,30 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - Init wizard updates
   - See [milestone-8/PLAN.md](./milestone-8/PLAN.md) and [TASKS.md](./milestone-8/TASKS.md)
 
-- [ ] **Milestone 9: Daemon Mode** (v1.2.0)
+- [ ] **Milestone 9: Homebrew Distribution** (v1.1.0)
+  - Homebrew formula creation
+  - Custom tap (olvrcc/homebrew-xvn)
+  - Automated formula updates via GitHub Actions
+  - macOS x64/arm64 support
+  - See [milestone-9/PLAN.md](./milestone-9/PLAN.md) and [TASKS.md](./milestone-9/TASKS.md)
+
+- [ ] **Milestone 10: Daemon Mode** (v1.2.0)
   - Daemon process management
   - IPC protocol (Unix socket)
   - File system watcher
   - Target: <10ms activation time
 
-- [ ] **Milestone 9: Windows & PowerShell** (v1.3.0)
+- [ ] **Milestone 11: Windows & PowerShell** (v1.3.0)
   - Windows binary compilation
   - PowerShell hook script
   - Profile modification for PowerShell
 
-- [ ] **Milestone 10: Additional Version Managers** (v1.4.0)
+- [ ] **Milestone 12: Additional Version Managers** (v1.4.0)
   - Plugin: `n`
   - Plugin: `asdf`
   - Plugin: `volta`
 
-- [ ] **Milestone 11: Performance Optimization** (v1.5.0)
+- [ ] **Milestone 13: Performance Optimization** (v1.5.0)
   - Profile-guided optimization (PGO)
   - Link-time optimization (LTO)
   - Strip debug symbols
@@ -134,8 +141,8 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Current Status
 
 **Phase:** Phase 2 - Enhanced Features
-**Next Action:** Milestone 9 (Daemon Mode) or continue with additional enhancements
-**Active Milestone:** Milestone 8 Complete - v1.1.0
+**Next Action:** Milestone 9 (Homebrew Distribution) for v1.1.0 release
+**Active Milestone:** Milestone 8 Complete - v1.1.0 (preparing for Homebrew distribution)
 **Completed Milestones:**
 - Milestone 1 (Core Infrastructure) - v0.1.0
 - Milestone 2 (Plugin System) - v0.2.0
@@ -154,4 +161,4 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 
 ---
 
-**Last Updated:** October 2, 2025
+**Last Updated:** October 3, 2025

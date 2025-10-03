@@ -45,7 +45,13 @@
       "Bash(zsh:*)",
       "Bash(cat:*)",
       "Bash(ps:*)",
-      "Bash(/Users/cam/nona-mac/dev/tooling/xvn/target/release/xvn:*)"
+      "Bash(/Users/cam/nona-mac/dev/tooling/xvn/target/release/xvn:*)",
+      "Bash(RUST_LOG=info cargo run -- activate /tmp/test-xvn-packagejson)",
+      "Bash(XVN_CONFIG=/tmp/test-xvnrc RUST_LOG=info cargo run -- activate /tmp/test-xvn-packagejson)",
+      "Bash(echo:*)",
+      "Bash(RUST_LOG=info /Users/cam/nona-mac/dev/tooling/xvn/target/debug/xvn activate .)",
+      "Bash(env RUST_LOG=info /Users/cam/nona-mac/dev/tooling/xvn/target/debug/xvn activate .)",
+      "Bash(npm:*)"
     ],
     "deny": [],
     "ask": []
