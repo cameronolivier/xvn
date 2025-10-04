@@ -37,7 +37,7 @@ impl JsonCommandWriter {
         // Escape PowerShell special characters
         let escaped_value = Self::escape_powershell(value);
         self.commands
-            .push(format!(r#"$env:{} = "{}""#, key, escaped_value));
+            .push(format!(r#"$env:{key} = "{escaped_value}""#));
     }
 
     /// Add PATH prepend command (PowerShell syntax)
@@ -48,10 +48,8 @@ impl JsonCommandWriter {
     /// * `path` - Path to prepend (will be escaped)
     pub fn prepend_path(&mut self, path: &str) {
         let escaped_path = Self::escape_powershell(path);
-        self.commands.push(format!(
-            r#"$env:PATH = "{};" + $env:PATH"#,
-            escaped_path
-        ));
+        self.commands
+            .push(format!(r#"$env:PATH = "{escaped_path};" + $env:PATH"#));
     }
 
     /// Add a raw PowerShell command
@@ -92,7 +90,7 @@ impl JsonCommandWriter {
         let json = serde_json::to_string(&output)?;
 
         println!("__XVN_COMMANDS_START__");
-        println!("{}", json);
+        println!("{json}");
         println!("__XVN_COMMANDS_END__");
 
         io::stdout().flush()?;

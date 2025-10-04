@@ -1,6 +1,13 @@
 # xvn.ps1 - PowerShell integration for xvn
 # Automatically switches Node.js version when entering directories with version files
 
+#Requires -Version 5.1
+
+# Suppress PSScriptAnalyzer warnings for intentional design choices
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Justification = 'Global state required for prompt integration')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification = 'Required for executing dynamic shell commands from xvn binary')]
+param()
+
 # Store the last directory to detect changes
 $global:XVN_LAST_DIR = $PWD.Path
 $global:XVN_ACTIVE_KEY = $null
