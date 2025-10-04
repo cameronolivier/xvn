@@ -58,13 +58,18 @@ __xvn_find_file() {
 __xvn_activate() {
     local version_file="$1"
 
-    # Check if already activated for this file (idempotency)
+    # Check if already activated for this file+version (idempotency)
     # This prevents re-activation when:
     # - User runs 'cd .' in same directory
     # - User cd's into subdirectory of same project
     # - Shell re-runs hook on prompt refresh
-    if [[ "${XVN_ACTIVE_FILE:-}" == "$version_file" ]]; then
-        __xvn_debug "Already activated for $version_file, skipping"
+    # We check both the file path AND its content hash to detect version changes
+    local version_hash
+    version_hash=$(cksum "$version_file" 2>/dev/null | cut -d' ' -f1)
+    local active_key="${version_file}:${version_hash}"
+
+    if [[ "${XVN_ACTIVE_KEY:-}" == "$active_key" ]]; then
+        __xvn_debug "Already activated for $version_file (hash: $version_hash), skipping"
         return 0
     fi
 
@@ -90,7 +95,7 @@ __xvn_activate() {
     if [[ -n "$commands" ]]; then
         __xvn_debug "Evaluating commands: $commands"
         eval "$commands"
-        export XVN_ACTIVE_FILE="$version_file"
+        export XVN_ACTIVE_KEY="$active_key"
     else
         __xvn_debug "No commands returned"
     fi
@@ -104,10 +109,10 @@ __xvn_chpwd() {
     if version_file=$(__xvn_find_file "$PWD"); then
         __xvn_activate "$version_file"
     else
-        # No version file found, clear active file
-        if [[ -n "${XVN_ACTIVE_FILE:-}" ]]; then
-            __xvn_debug "Left project directory, clearing active file"
-            unset XVN_ACTIVE_FILE
+        # No version file found, clear active key
+        if [[ -n "${XVN_ACTIVE_KEY:-}" ]]; then
+            __xvn_debug "Left project directory, clearing active key"
+            unset XVN_ACTIVE_KEY
         fi
     fi
 }
