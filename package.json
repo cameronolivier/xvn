@@ -1,7 +1,7 @@
 {
   "name": "@olvrcc/xvn",
-  "version": "1.1.0",
-  "description": "Automatic Node.js version switching for cd - 2-3x faster than avn",
+  "version": "1.1.1",
+  "description": "Automatic Node.js version switching for cd",
   "main": "install.js",
   "bin": {
     "xvn": "./bin/xvn"
@@ -50,7 +50,9 @@
     "x64",
     "arm64"
   ],
-  "dependencies": {
-    "tar-stream": "^3.1.7"
-  }
+  "files": [
+    "bin/",
+    "native/",
+    "install.js"
+  ]
 }
