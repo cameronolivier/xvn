@@ -69,7 +69,8 @@
       "Bash(rustup target:*)",
       "Bash(git grep:*)",
       "Bash(git log:*)",
-      "Bash(git filter-branch:*)"
+      "Bash(git filter-branch:*)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --env-filter '\nOLD_EMAIL=\"\"cameron.olivier@mohara.co\"\"\nCORRECT_EMAIL=\"\"cameronolivier@gmail.com\"\"\nif [ \"\"$GIT_COMMITTER_EMAIL\"\" = \"\"$OLD_EMAIL\"\" ]\nthen\n    export GIT_COMMITTER_EMAIL=\"\"$CORRECT_EMAIL\"\"\nfi\nif [ \"\"$GIT_AUTHOR_EMAIL\"\" = \"\"$OLD_EMAIL\"\" ]\nthen\n    export GIT_AUTHOR_EMAIL=\"\"$CORRECT_EMAIL\"\"\nfi\n' --tag-name-filter cat -- --branches --tags)"
     ],
     "deny": [],
     "ask": []
