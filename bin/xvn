@@ -2,8 +2,14 @@
 
 # Wrapper script for xvn npm package
 
-# Find the native binary
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Find the native binary (resolve symlinks)
+SCRIPT="$0"
+while [ -L "$SCRIPT" ]; do
+  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT")" && pwd)"
+  SCRIPT="$(readlink "$SCRIPT")"
+  [[ "$SCRIPT" != /* ]] && SCRIPT="$SCRIPT_DIR/$SCRIPT"
+done
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT")" && pwd)"
 NATIVE_BINARY="$SCRIPT_DIR/../native/xvn"
 
 if [ ! -f "$NATIVE_BINARY" ]; then
