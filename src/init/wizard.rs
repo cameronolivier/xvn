@@ -60,10 +60,10 @@ fn print_wizard_header() {
     println!("  {} {}", "👋".bright_cyan(), "Welcome! Let's set up xvn for your environment.".bold());
     println!();
     println!("  {}", "This wizard will guide you through:".dimmed());
-    println!("    {} {}", "•".bright_cyan(), "Shell detection and integration");
-    println!("    {} {}", "•".bright_cyan(), "Version manager selection");
-    println!("    {} {}", "•".bright_cyan(), "Installation preferences");
-    println!("    {} {}", "•".bright_cyan(), "Version file configuration");
+    println!("    {} Shell detection and integration", "•".bright_cyan());
+    println!("    {} Version manager selection", "•".bright_cyan());
+    println!("    {} Installation preferences", "•".bright_cyan());
+    println!("    {} Version file configuration", "•".bright_cyan());
     println!();
     println!("  {} {}", "ℹ".blue(), "Press Ctrl+C at any time to cancel.".dimmed());
     println!();
@@ -144,12 +144,12 @@ version_files:
 "#,
         timestamp,
         config.plugins.iter()
-            .map(|p| format!("  - {}", p))
+            .map(|p| format!("  - {p}"))
             .collect::<Vec<_>>()
             .join("\n"),
         auto_install_str,
         config.version_files.iter()
-            .map(|f| format!("  - {}", f))
+            .map(|f| format!("  - {f}"))
             .collect::<Vec<_>>()
             .join("\n")
     )

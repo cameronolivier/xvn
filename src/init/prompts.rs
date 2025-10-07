@@ -89,7 +89,7 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
         let path_str = manager.path.as_ref()
             .map(|p| p.display().to_string())
             .unwrap_or_else(|| "system".to_string());
-        println!("      {} {} {}", "✓".bright_green(), manager.name.bright_white(), format!("({})", path_str).dimmed());
+        println!("      {} {} {}", "✓".bright_green(), manager.name.bright_white(), format!("({path_str})").dimmed());
     }
     println!();
 
@@ -143,7 +143,7 @@ pub fn prompt_auto_install() -> Result<AutoInstallMode> {
     println!("  {} {}", "⚙️".bright_cyan(), "Step 3/5: Auto-Install Behavior".cyan().bold());
     println!();
 
-    println!("    {} {}", "When a version isn't installed:".dimmed(), "");
+    println!("    {}", "When a version isn't installed:".dimmed());
     println!();
 
     let options = vec![
@@ -169,7 +169,7 @@ pub fn prompt_auto_install() -> Result<AutoInstallMode> {
         AutoInstallMode::Never => "never",
     };
 
-    output::success(&format!("Auto-install: {}", mode_str));
+    output::success(&format!("Auto-install: {mode_str}"));
     Ok(mode)
 }
 
@@ -181,7 +181,7 @@ pub fn prompt_version_files() -> Result<Vec<String>> {
     println!("  {} {}", "📄".bright_cyan(), "Step 4/5: Version Files".cyan().bold());
     println!();
 
-    println!("    {} {}", "Configure:".dimmed(), "Which files should xvn check?");
+    println!("    {} Which files should xvn check?", "Configure:".dimmed());
     println!();
 
     let options = vec![

@@ -18,7 +18,7 @@ pub fn print_header() {
 pub fn success(msg: &str) {
     println!(
         "{} {}",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         msg.green()
     );
 }
@@ -27,7 +27,7 @@ pub fn success(msg: &str) {
 pub fn info(msg: &str) {
     println!(
         "{} {}",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         msg
     );
 }
@@ -36,7 +36,7 @@ pub fn info(msg: &str) {
 pub fn warning(msg: &str) {
     println!(
         "{} {}",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         msg.yellow()
     );
 }
@@ -45,7 +45,7 @@ pub fn warning(msg: &str) {
 pub fn error(msg: &str) {
     eprintln!(
         "{} {}",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         msg.red().bold()
     );
 }
@@ -54,9 +54,9 @@ pub fn error(msg: &str) {
 pub fn switched(version: &str, plugin: &str) {
     println!(
         "{} {} {}",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         "✓".green().bold(),
-        format!("Switched to Node.js {} (via {})", version, plugin).green()
+        format!("Switched to Node.js {version} (via {plugin})").green()
     );
 }
 
@@ -64,8 +64,8 @@ pub fn switched(version: &str, plugin: &str) {
 pub fn installing(version: &str, plugin: &str) {
     println!(
         "{} {}",
-        format!("{}:", BRAND).bright_cyan(),
-        format!("Installing Node.js {} using {}...", version, plugin).cyan()
+        format!("{BRAND}:").bright_cyan(),
+        format!("Installing Node.js {version} using {plugin}...").cyan()
     );
 }
 
@@ -85,7 +85,7 @@ pub fn version_mismatch(required: &str, current: Option<&str>) {
 pub fn install_prompt(version: &str, plugin: &str) -> String {
     format!(
         "{} Node.js {} is not installed. Install it using {}?",
-        format!("{}:", BRAND).bright_cyan(),
+        format!("{BRAND}:").bright_cyan(),
         version,
         plugin
     )

@@ -61,9 +61,7 @@ fn test_activate_command() {
 
     assert!(
         has_valid_output,
-        "Expected version reference or plugin error, got stdout: {}, stderr: {}",
-        stdout,
-        stderr
+        "Expected version reference or plugin error, got stdout: {stdout}, stderr: {stderr}"
     );
 }
 

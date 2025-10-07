@@ -20,7 +20,7 @@ pub fn detect_shell() -> Result<Shell> {
         "bash" => Ok(Shell::Bash),
         "zsh" => Ok(Shell::Zsh),
         other => {
-            log::warn!("Unknown shell: {}, defaulting to bash", other);
+            log::warn!("Unknown shell: {other}, defaulting to bash");
             Ok(Shell::Bash)
         }
     }
@@ -180,7 +180,7 @@ mod tests {
 
         // Should find at least one in dev environment
         // Don't assert on CI as it may not have any installed
-        println!("Detected managers: {:?}", managers);
+        println!("Detected managers: {managers:?}");
     }
 
     #[test]

@@ -77,7 +77,7 @@ impl<'a> Orchestrator<'a> {
                         resolved
                     }
                     Err(e) => {
-                        warn!("Failed to resolve semver range: {}", e);
+                        warn!("Failed to resolve semver range: {e}");
                         version_file.version.clone()
                     }
                 }

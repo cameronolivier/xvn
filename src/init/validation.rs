@@ -19,7 +19,7 @@ fn validate_plugins(plugins: &[String]) -> Result<()> {
     let known_plugins = ["nvm", "fnm", "n", "asdf", "volta"];
     for plugin in plugins {
         if !known_plugins.contains(&plugin.as_str()) {
-            log::warn!("Unknown plugin: {}", plugin);
+            log::warn!("Unknown plugin: {plugin}");
         }
     }
 
@@ -35,7 +35,7 @@ fn validate_version_files(files: &[String]) -> Result<()> {
     // Validate file names
     for file in files {
         if !file.starts_with('.') {
-            log::warn!("Version file should start with '.': {}", file);
+            log::warn!("Version file should start with '.': {file}");
         }
     }
 
