@@ -1,5 +1,5 @@
 use crate::setup::shell_detection::Shell;
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use std::env;
 use std::io::IsTerminal;
 use std::path::PathBuf;
@@ -7,8 +7,7 @@ use std::path::PathBuf;
 /// Detect the user's current shell from environment
 pub fn detect_shell() -> Result<Shell> {
     // Check $SHELL environment variable
-    let shell_path = env::var("SHELL")
-        .context("SHELL environment variable not set")?;
+    let shell_path = env::var("SHELL").context("SHELL environment variable not set")?;
 
     // Parse shell from path (e.g., /bin/zsh -> zsh)
     let shell_name = shell_path
@@ -28,8 +27,7 @@ pub fn detect_shell() -> Result<Shell> {
 
 /// Get the profile path for a given shell
 pub fn get_profile_path(shell: &Shell) -> Result<PathBuf> {
-    let home = dirs::home_dir()
-        .context("Could not determine home directory")?;
+    let home = dirs::home_dir().context("Could not determine home directory")?;
 
     let profile_name = match shell {
         Shell::Bash => ".bashrc",
@@ -97,9 +95,7 @@ fn check_fnm() -> Option<DetectedManager> {
     // Try `which fnm`
     if let Ok(output) = Command::new("which").arg("fnm").output() {
         if output.status.success() {
-            let path = String::from_utf8_lossy(&output.stdout)
-                .trim()
-                .to_string();
+            let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
             return Some(DetectedManager {
                 name: "fnm".to_string(),
                 path: Some(PathBuf::from(path)),
@@ -128,9 +124,7 @@ fn check_n() -> Option<DetectedManager> {
     // Try `which n`
     if let Ok(output) = Command::new("which").arg("n").output() {
         if output.status.success() {
-            let path = String::from_utf8_lossy(&output.stdout)
-                .trim()
-                .to_string();
+            let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
             return Some(DetectedManager {
                 name: "n".to_string(),
                 path: Some(PathBuf::from(path)),

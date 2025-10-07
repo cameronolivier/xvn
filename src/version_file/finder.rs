@@ -1,8 +1,8 @@
+use super::PackageJson;
 use anyhow::{Context, Result};
 use log::{debug, trace};
 use std::fs;
 use std::path::{Path, PathBuf};
-use super::PackageJson;
 
 /// Represents a discovered version file
 #[derive(Debug, Clone, PartialEq)]
@@ -286,12 +286,16 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "name": "test-app",
             "engines": {
                 "node": ">=18.0.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let result = VersionFile::find(temp_dir.path(), &["package.json".to_string()]).unwrap();
 
@@ -306,10 +310,14 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "name": "test-app",
             "version": "1.0.0"
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let result = VersionFile::find(temp_dir.path(), &["package.json".to_string()]).unwrap();
 
@@ -322,9 +330,13 @@ mod tests {
         let temp_dir = tempdir().unwrap();
 
         fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
-        fs::write(temp_dir.path().join("package.json"), r#"{
+        fs::write(
+            temp_dir.path().join("package.json"),
+            r#"{
             "engines": { "node": ">=20.0.0" }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         // .nvmrc should take precedence
         let result = VersionFile::find(
@@ -344,9 +356,13 @@ mod tests {
         let temp_dir = tempdir().unwrap();
 
         fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
-        fs::write(temp_dir.path().join("package.json"), r#"{
+        fs::write(
+            temp_dir.path().join("package.json"),
+            r#"{
             "engines": { "node": ">=20.0.0" }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         // package.json first in priority list
         let result = VersionFile::find(

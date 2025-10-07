@@ -65,9 +65,7 @@ impl PackageJson {
     /// * `Some(&str)` - Version requirement exists (e.g., ">=18.0.0", "18.20.0")
     /// * `None` - No engines.node field
     pub fn node_version(&self) -> Option<&str> {
-        self.engines
-            .as_ref()
-            .and_then(|e| e.node.as_deref())
+        self.engines.as_ref().and_then(|e| e.node.as_deref())
     }
 
     /// Check if package.json has Node.js version requirement
@@ -86,14 +84,18 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "name": "test-app",
             "version": "1.0.0",
             "engines": {
                 "node": ">=18.0.0",
                 "npm": ">=9.0.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.name, Some("test-app".to_string()));
@@ -106,10 +108,14 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "name": "test-app",
             "version": "1.0.0"
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.name, Some("test-app".to_string()));
@@ -122,12 +128,16 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "name": "test-app",
             "engines": {
                 "npm": ">=9.0.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.node_version(), None);
@@ -139,11 +149,15 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "engines": {
                 "node": "18.20.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.node_version(), Some("18.20.0"));
@@ -154,11 +168,15 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "engines": {
                 "node": "^20.0.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.node_version(), Some("^20.0.0"));
@@ -169,11 +187,15 @@ mod tests {
         let temp_dir = tempdir().unwrap();
         let pkg_path = temp_dir.path().join("package.json");
 
-        fs::write(&pkg_path, r#"{
+        fs::write(
+            &pkg_path,
+            r#"{
             "engines": {
                 "node": "~18.20.0"
             }
-        }"#).unwrap();
+        }"#,
+        )
+        .unwrap();
 
         let pkg = PackageJson::parse(&pkg_path).unwrap();
         assert_eq!(pkg.node_version(), Some("~18.20.0"));

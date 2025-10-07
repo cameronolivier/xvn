@@ -1,9 +1,9 @@
-use crate::setup::shell_detection::Shell;
-use crate::init::detection::{detect_shell, get_profile_path, detect_version_managers};
 use crate::config::AutoInstallMode;
+use crate::init::detection::{detect_shell, detect_version_managers, get_profile_path};
 use crate::output;
+use crate::setup::shell_detection::Shell;
 use anyhow::Result;
-use inquire::{Confirm, Select, MultiSelect};
+use inquire::{Confirm, MultiSelect, Select};
 use std::path::PathBuf;
 
 /// Prompt user to select shell
@@ -11,15 +11,27 @@ pub fn prompt_shell() -> Result<Shell> {
     use owo_colors::OwoColorize;
 
     println!();
-    println!("  {} {}", "🐚".bright_cyan(), "Step 1/5: Shell Detection".cyan().bold());
+    println!(
+        "  {} {}",
+        "🐚".bright_cyan(),
+        "Step 1/5: Shell Detection".cyan().bold()
+    );
     println!();
 
     // Try to detect shell
     let detected = detect_shell()?;
     let profile_path = get_profile_path(&detected)?;
 
-    println!("    {} {}", "Detected:".dimmed(), detected.name().bright_green());
-    println!("    {} {}", "Profile:".dimmed(), profile_path.display().to_string().bright_white());
+    println!(
+        "    {} {}",
+        "Detected:".dimmed(),
+        detected.name().bright_green()
+    );
+    println!(
+        "    {} {}",
+        "Profile:".dimmed(),
+        profile_path.display().to_string().bright_white()
+    );
     println!();
 
     // Ask for confirmation
@@ -55,7 +67,11 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
     use owo_colors::OwoColorize;
 
     println!();
-    println!("  {} {}", "📦".bright_cyan(), "Step 2/5: Version Managers".cyan().bold());
+    println!(
+        "  {} {}",
+        "📦".bright_cyan(),
+        "Step 2/5: Version Managers".cyan().bold()
+    );
     println!();
 
     // Detect installed managers
@@ -84,23 +100,39 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
     }
 
     // Display detected managers
-    println!("    {} {}", "Detected:".dimmed(), format!("{} manager(s)", detected.len()).bright_green());
+    println!(
+        "    {} {}",
+        "Detected:".dimmed(),
+        format!("{} manager(s)", detected.len()).bright_green()
+    );
     for manager in &detected {
-        let path_str = manager.path.as_ref()
+        let path_str = manager
+            .path
+            .as_ref()
             .map(|p| p.display().to_string())
             .unwrap_or_else(|| "system".to_string());
-        println!("      {} {} {}", "✓".bright_green(), manager.name.bright_white(), format!("({path_str})").dimmed());
+        println!(
+            "      {} {} {}",
+            "✓".bright_green(),
+            manager.name.bright_white(),
+            format!("({path_str})").dimmed()
+        );
     }
     println!();
 
     // Create options for MultiSelect
-    let options: Vec<String> = detected.iter()
-        .map(|m| format!("{} ({})",
-            m.name,
-            m.path.as_ref()
-                .map(|p| p.display().to_string())
-                .unwrap_or_else(|| "system".to_string())
-        ))
+    let options: Vec<String> = detected
+        .iter()
+        .map(|m| {
+            format!(
+                "{} ({})",
+                m.name,
+                m.path
+                    .as_ref()
+                    .map(|p| p.display().to_string())
+                    .unwrap_or_else(|| "system".to_string())
+            )
+        })
         .collect();
 
     // Pre-select all detected (using indices)
@@ -112,7 +144,8 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
         .prompt()?;
 
     // Extract manager names from selections
-    let mut plugins: Vec<String> = selected.iter()
+    let mut plugins: Vec<String> = selected
+        .iter()
         .filter_map(|sel| {
             // Parse "nvm (path)" -> "nvm"
             sel.split_whitespace().next().map(|s| s.to_string())
@@ -121,9 +154,7 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
 
     if plugins.is_empty() {
         output::warning("No version managers selected");
-        plugins = detected.iter()
-            .map(|m| m.name.clone())
-            .collect();
+        plugins = detected.iter().map(|m| m.name.clone()).collect();
         output::info(&format!("Defaulting to: {}", plugins.join(", ")));
     } else {
         output::success(&format!("Selected: {}", plugins.join(", ")));
@@ -140,7 +171,11 @@ pub fn prompt_auto_install() -> Result<AutoInstallMode> {
     use owo_colors::OwoColorize;
 
     println!();
-    println!("  {} {}", "⚙️".bright_cyan(), "Step 3/5: Auto-Install Behavior".cyan().bold());
+    println!(
+        "  {} {}",
+        "⚙️".bright_cyan(),
+        "Step 3/5: Auto-Install Behavior".cyan().bold()
+    );
     println!();
 
     println!("    {}", "When a version isn't installed:".dimmed());
@@ -178,10 +213,17 @@ pub fn prompt_version_files() -> Result<Vec<String>> {
     use owo_colors::OwoColorize;
 
     println!();
-    println!("  {} {}", "📄".bright_cyan(), "Step 4/5: Version Files".cyan().bold());
+    println!(
+        "  {} {}",
+        "📄".bright_cyan(),
+        "Step 4/5: Version Files".cyan().bold()
+    );
     println!();
 
-    println!("    {} Which files should xvn check?", "Configure:".dimmed());
+    println!(
+        "    {} Which files should xvn check?",
+        "Configure:".dimmed()
+    );
     println!();
 
     let options = vec![
@@ -200,13 +242,11 @@ pub fn prompt_version_files() -> Result<Vec<String>> {
         .prompt()?;
 
     // Extract filenames
-    let files: Vec<String> = selected.iter()
+    let files: Vec<String> = selected
+        .iter()
         .map(|s| {
             // Parse ".nvmrc (description)" -> ".nvmrc"
-            s.split_whitespace()
-                .next()
-                .unwrap_or(".nvmrc")
-                .to_string()
+            s.split_whitespace().next().unwrap_or(".nvmrc").to_string()
         })
         .collect();
 
@@ -233,29 +273,63 @@ pub fn prompt_confirm_config(summary: &ConfigSummary) -> Result<bool> {
     use owo_colors::OwoColorize;
 
     println!();
-    println!("  {} {}", "✓".bright_green(), "Step 5/5: Review Configuration".cyan().bold());
+    println!(
+        "  {} {}",
+        "✓".bright_green(),
+        "Step 5/5: Review Configuration".cyan().bold()
+    );
     println!();
-    println!("{}", "  ┌─ Configuration Summary ─────────────────────────────┐".bright_cyan());
+    println!(
+        "{}",
+        "  ┌─ Configuration Summary ─────────────────────────────┐".bright_cyan()
+    );
 
-    println!("  │  {} {:<48} │", "Shell:".dimmed(), summary.shell.name().bright_white());
-    println!("  │  {} {:<48} │", "Profile:".dimmed(), summary.profile_path.display().to_string().bright_white());
+    println!(
+        "  │  {} {:<48} │",
+        "Shell:".dimmed(),
+        summary.shell.name().bright_white()
+    );
+    println!(
+        "  │  {} {:<48} │",
+        "Profile:".dimmed(),
+        summary.profile_path.display().to_string().bright_white()
+    );
 
     let plugins_str = if summary.plugins.is_empty() {
         "none".to_string()
     } else {
         summary.plugins.join(", ")
     };
-    println!("  │  {} {:<48} │", "Plugins:".dimmed(), plugins_str.bright_white());
+    println!(
+        "  │  {} {:<48} │",
+        "Plugins:".dimmed(),
+        plugins_str.bright_white()
+    );
 
     let auto_install_str = match summary.auto_install {
         AutoInstallMode::Prompt => format!("{}", "prompt".bright_yellow()),
         AutoInstallMode::Always => format!("{}", "always".bright_green()),
         AutoInstallMode::Never => format!("{}", "never".bright_red()),
     };
-    println!("  │  {} {:<48} │", "Auto-install:".dimmed(), auto_install_str);
-    println!("  │  {} {:<48} │", "Version files:".dimmed(), summary.version_files.join(", ").bright_white());
-    println!("  │  {} {:<48} │", "Config file:".dimmed(), summary.config_path.display().to_string().bright_white());
-    println!("{}", "  └──────────────────────────────────────────────────────┘".bright_cyan());
+    println!(
+        "  │  {} {:<48} │",
+        "Auto-install:".dimmed(),
+        auto_install_str
+    );
+    println!(
+        "  │  {} {:<48} │",
+        "Version files:".dimmed(),
+        summary.version_files.join(", ").bright_white()
+    );
+    println!(
+        "  │  {} {:<48} │",
+        "Config file:".dimmed(),
+        summary.config_path.display().to_string().bright_white()
+    );
+    println!(
+        "{}",
+        "  └──────────────────────────────────────────────────────┘".bright_cyan()
+    );
     println!();
 
     let confirmed = Confirm::new("Looks good?")

@@ -1,4 +1,4 @@
-use crate::config::{Config, AutoInstallMode};
+use crate::config::{AutoInstallMode, Config};
 use crate::setup::shell_detection::Shell;
 use anyhow::Result;
 

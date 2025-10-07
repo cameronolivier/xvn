@@ -6,7 +6,9 @@ use std::path::PathBuf;
 /// Automatic Node.js version switching for cd
 #[derive(Parser, Debug)]
 #[command(name = "xvn")]
-#[command(about = "Automatic Node.js version switching", long_about = r#"
+#[command(
+    about = "Automatic Node.js version switching",
+    long_about = r#"
 xvn automatically switches your Node.js version when you cd into a directory
 with a .nvmrc or .node-version file.
 
@@ -20,7 +22,8 @@ Examples:
   xvn status             Show configuration and test activation
 
 For more information, visit: https://github.com/cameronolivier/xvn
-"#)]
+"#
+)]
 #[command(version)]
 pub struct Cli {
     /// Enable verbose output
@@ -103,7 +106,12 @@ pub fn run() -> Result<()> {
     }
 
     match cli.command {
-        Some(Commands::Init { quick, force, shell, non_interactive }) => {
+        Some(Commands::Init {
+            quick,
+            force,
+            shell,
+            non_interactive,
+        }) => {
             info!("Running init command (quick: {quick}, force: {force}, non_interactive: {non_interactive})");
 
             // TODO: Handle shell parameter when provided
@@ -160,7 +168,10 @@ pub fn run() -> Result<()> {
                 Ok(config) => {
                     crate::output::info(&format!("Plugins: {}", config.plugins.join(", ")));
                     crate::output::info(&format!("Auto-install: {:?}", config.auto_install));
-                    crate::output::info(&format!("Version files: {}", config.version_files.join(", ")));
+                    crate::output::info(&format!(
+                        "Version files: {}",
+                        config.version_files.join(", ")
+                    ));
                 }
                 Err(e) => {
                     crate::output::error(&format!("Error loading config: {e}"));

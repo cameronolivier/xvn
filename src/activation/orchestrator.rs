@@ -3,7 +3,7 @@ use crate::config::{AutoInstallMode, Config};
 use crate::output;
 use crate::plugins::{PluginRegistry, VersionManagerPlugin};
 use crate::shell::CommandWriter;
-use crate::version_file::{VersionFile, VersionFileSource, SemverResolver};
+use crate::version_file::{SemverResolver, VersionFile, VersionFileSource};
 use log::{debug, info, warn};
 use std::path::Path;
 use std::sync::Arc;
@@ -72,7 +72,10 @@ impl<'a> Orchestrator<'a> {
                 match resolver.resolve(&version_file.version) {
                     Ok(resolved) => {
                         if resolved != version_file.version {
-                            info!("Resolved semver range '{}' → '{}'", version_file.version, resolved);
+                            info!(
+                                "Resolved semver range '{}' → '{}'",
+                                version_file.version, resolved
+                            );
                         }
                         resolved
                     }
@@ -89,10 +92,7 @@ impl<'a> Orchestrator<'a> {
         };
 
         // 2. Try to find a plugin with this version installed
-        match self
-            .registry
-            .find_plugin_with_version(&version_to_use)
-        {
+        match self.registry.find_plugin_with_version(&version_to_use) {
             Ok(Some(plugin)) => {
                 // Version is already installed - activate it
                 self.activate_existing_version(&plugin, &version_to_use)?;

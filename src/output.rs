@@ -7,47 +7,27 @@ const TAGLINE: &str = "automatic node version switching";
 
 /// Print branded header message
 pub fn print_header() {
-    println!(
-        "{} - {}",
-        BRAND.bright_cyan().bold(),
-        TAGLINE.dimmed()
-    );
+    println!("{} - {}", BRAND.bright_cyan().bold(), TAGLINE.dimmed());
 }
 
 /// Print success message with green checkmark
 pub fn success(msg: &str) {
-    println!(
-        "{} {}",
-        format!("{BRAND}:").bright_cyan(),
-        msg.green()
-    );
+    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg.green());
 }
 
 /// Print info message
 pub fn info(msg: &str) {
-    println!(
-        "{} {}",
-        format!("{BRAND}:").bright_cyan(),
-        msg
-    );
+    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg);
 }
 
 /// Print warning message with yellow color
 pub fn warning(msg: &str) {
-    println!(
-        "{} {}",
-        format!("{BRAND}:").bright_cyan(),
-        msg.yellow()
-    );
+    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg.yellow());
 }
 
 /// Print error message with red color
 pub fn error(msg: &str) {
-    eprintln!(
-        "{} {}",
-        format!("{BRAND}:").bright_cyan(),
-        msg.red().bold()
-    );
+    eprintln!("{} {}", format!("{BRAND}:").bright_cyan(), msg.red().bold());
 }
 
 /// Print version switch success

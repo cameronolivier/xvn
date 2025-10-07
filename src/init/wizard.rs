@@ -1,9 +1,9 @@
-use crate::config::{Config, AutoInstallMode};
-use crate::setup::shell_detection::Shell;
-use crate::init::prompts::{self, ConfigSummary};
+use crate::config::{AutoInstallMode, Config};
 use crate::init::detection::{detect_shell, detect_version_managers, get_profile_path};
+use crate::init::prompts::{self, ConfigSummary};
 use crate::output;
-use anyhow::{Result, Context};
+use crate::setup::shell_detection::Shell;
+use anyhow::{Context, Result};
 use dirs::home_dir;
 
 /// Wizard state - collects configuration through steps
@@ -37,8 +37,7 @@ impl WizardState {
 
     /// Get shell or error
     pub fn get_shell(&self) -> Result<Shell> {
-        self.shell
-            .ok_or_else(|| anyhow::anyhow!("Shell not set"))
+        self.shell.ok_or_else(|| anyhow::anyhow!("Shell not set"))
     }
 }
 
@@ -57,7 +56,11 @@ fn print_wizard_header() {
     crate::output::print_header();
     println!("{}", "━".repeat(60).bright_cyan());
     println!();
-    println!("  {} {}", "👋".bright_cyan(), "Welcome! Let's set up xvn for your environment.".bold());
+    println!(
+        "  {} {}",
+        "👋".bright_cyan(),
+        "Welcome! Let's set up xvn for your environment.".bold()
+    );
     println!();
     println!("  {}", "This wizard will guide you through:".dimmed());
     println!("    {} Shell detection and integration", "•".bright_cyan());
@@ -65,7 +68,11 @@ fn print_wizard_header() {
     println!("    {} Installation preferences", "•".bright_cyan());
     println!("    {} Version file configuration", "•".bright_cyan());
     println!();
-    println!("  {} {}", "ℹ".blue(), "Press Ctrl+C at any time to cancel.".dimmed());
+    println!(
+        "  {} {}",
+        "ℹ".blue(),
+        "Press Ctrl+C at any time to cancel.".dimmed()
+    );
     println!();
     println!("{}", "━".repeat(60).bright_cyan());
     println!();
@@ -78,31 +85,74 @@ fn print_success_message(summary: &ConfigSummary) -> Result<()> {
     println!();
     println!("{}", "━".repeat(60).bright_cyan());
     println!();
-    println!("  {} {}", "✨".bright_green(), "Setup complete!".bright_green().bold());
+    println!(
+        "  {} {}",
+        "✨".bright_green(),
+        "Setup complete!".bright_green().bold()
+    );
     println!();
     println!("{}", "━".repeat(60).bright_cyan());
     println!();
 
     println!("  {}", "📋 Configuration Summary:".cyan().bold());
-    println!("    {} {}", "Shell:".dimmed(), summary.shell.name().bright_white());
-    println!("    {} {}", "Profile:".dimmed(), summary.profile_path.display().to_string().bright_white());
-    println!("    {} {}", "Config:".dimmed(), summary.config_path.display().to_string().bright_white());
+    println!(
+        "    {} {}",
+        "Shell:".dimmed(),
+        summary.shell.name().bright_white()
+    );
+    println!(
+        "    {} {}",
+        "Profile:".dimmed(),
+        summary.profile_path.display().to_string().bright_white()
+    );
+    println!(
+        "    {} {}",
+        "Config:".dimmed(),
+        summary.config_path.display().to_string().bright_white()
+    );
     println!();
 
     println!("  {}", "🚀 Next Steps:".cyan().bold());
     println!();
-    println!("    {} {}", "1.".bright_cyan(), "Restart your shell, or run:".dimmed());
-    println!("       {}", format!("source {}", summary.profile_path.display()).bright_yellow());
+    println!(
+        "    {} {}",
+        "1.".bright_cyan(),
+        "Restart your shell, or run:".dimmed()
+    );
+    println!(
+        "       {}",
+        format!("source {}", summary.profile_path.display()).bright_yellow()
+    );
     println!();
-    println!("    {} {}", "2.".bright_cyan(), "Navigate to a project with a .nvmrc file".dimmed());
+    println!(
+        "    {} {}",
+        "2.".bright_cyan(),
+        "Navigate to a project with a .nvmrc file".dimmed()
+    );
     println!();
-    println!("    {} {}", "3.".bright_cyan(), "xvn will automatically activate the correct Node.js version!".dimmed());
+    println!(
+        "    {} {}",
+        "3.".bright_cyan(),
+        "xvn will automatically activate the correct Node.js version!".dimmed()
+    );
     println!();
 
     println!("  {}", "💡 Useful Commands:".cyan().bold());
-    println!("    {} {}", "xvn status".bright_yellow().bold(), "     Show current configuration".dimmed());
-    println!("    {} {}", "xvn activate".bright_yellow().bold(), "   Manually activate for a directory".dimmed());
-    println!("    {} {}", "xvn init".bright_yellow().bold(), "       Re-run this wizard to modify config".dimmed());
+    println!(
+        "    {} {}",
+        "xvn status".bright_yellow().bold(),
+        "     Show current configuration".dimmed()
+    );
+    println!(
+        "    {} {}",
+        "xvn activate".bright_yellow().bold(),
+        "   Manually activate for a directory".dimmed()
+    );
+    println!(
+        "    {} {}",
+        "xvn init".bright_yellow().bold(),
+        "       Re-run this wizard to modify config".dimmed()
+    );
     println!();
     println!("{}", "━".repeat(60).bright_cyan());
     println!();
@@ -143,12 +193,16 @@ version_files:
 {}
 "#,
         timestamp,
-        config.plugins.iter()
+        config
+            .plugins
+            .iter()
             .map(|p| format!("  - {p}"))
             .collect::<Vec<_>>()
             .join("\n"),
         auto_install_str,
-        config.version_files.iter()
+        config
+            .version_files
+            .iter()
             .map(|f| format!("  - {f}"))
             .collect::<Vec<_>>()
             .join("\n")
@@ -157,8 +211,8 @@ version_files:
 
 /// Write configuration to file
 fn write_config(config: &Config, path: &std::path::Path, force: bool) -> Result<()> {
-    use std::fs;
     use inquire::Confirm;
+    use std::fs;
 
     // Check if config exists
     if path.exists() && !force {
@@ -179,8 +233,7 @@ fn write_config(config: &Config, path: &std::path::Path, force: bool) -> Result<
     let content = generate_config(config);
 
     // Write to file
-    fs::write(path, content)
-        .context("Failed to write configuration file")?;
+    fs::write(path, content).context("Failed to write configuration file")?;
 
     log::info!("Config written to: {}", path.display());
     Ok(())
@@ -265,9 +318,7 @@ pub fn run_quick_setup(force: bool) -> Result<()> {
 
     // Auto-detect version managers
     let detected = detect_version_managers();
-    let plugins: Vec<String> = detected.iter()
-        .map(|m| m.name.clone())
-        .collect();
+    let plugins: Vec<String> = detected.iter().map(|m| m.name.clone()).collect();
 
     if plugins.is_empty() {
         output::warning("No version managers detected");

@@ -1,7 +1,7 @@
+use crate::plugins::VersionManagerPlugin;
 use anyhow::{Context, Result};
 use log::{debug, trace};
 use semver::{Version, VersionReq};
-use crate::plugins::VersionManagerPlugin;
 
 /// Semver range resolver
 ///
@@ -53,7 +53,8 @@ impl<'a> SemverResolver<'a> {
         };
 
         // Get installed versions from version manager
-        let installed = self.get_installed_versions()
+        let installed = self
+            .get_installed_versions()
             .context("failed to get installed versions from version manager")?;
 
         if installed.is_empty() {
@@ -75,7 +76,9 @@ impl<'a> SemverResolver<'a> {
     fn get_installed_versions(&self) -> Result<Vec<String>> {
         trace!("Querying version manager for installed versions");
 
-        let versions = self.version_manager.list_versions()
+        let versions = self
+            .version_manager
+            .list_versions()
             .context("failed to list versions")?;
 
         trace!("Found {} installed versions", versions.len());
@@ -113,7 +116,9 @@ impl<'a> SemverResolver<'a> {
         // Sort by version (descending) and return highest
         matching_versions.sort_by(|a, b| b.0.cmp(&a.0));
 
-        matching_versions.first().map(|(_, original)| original.clone())
+        matching_versions
+            .first()
+            .map(|(_, original)| original.clone())
     }
 }
 
