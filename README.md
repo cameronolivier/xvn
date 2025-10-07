@@ -1,4 +1,8 @@
-# xvn
+# xvn - Extreme Version Switcher
+
+[![CI](https://github.com/cameronolivier/xvn/workflows/Test/badge.svg)](https://github.com/cameronolivier/xvn/actions)
+[![npm version](https://badge.fury.io/js/@olvrcc%2Fxvn.svg)](https://www.npmjs.com/package/@olvrcc/xvn)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > Automatic Node.js version switching for cd - 2-3x faster than avn
 
