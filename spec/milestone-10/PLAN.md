@@ -128,10 +128,12 @@ Dynamically add Node.js version's global bin to PATH in shell hook.
 
 ### Directory Structure
 
+#### Unix (macOS/Linux)
+
 ```
 ~/.xvn/
 ├── bin/
-│   └── xvn              # Rust binary (symlink to current version)
+│   └── xvn              # Symlink to current version's binary
 ├── current -> versions/v1.2.0/
 ├── versions/
 │   ├── v1.2.0/
@@ -146,10 +148,62 @@ Dynamically add Node.js version's global bin to PATH in shell hook.
 ~/.xvn/bin:...:$PATH     # xvn bin always first in PATH
 ```
 
+#### Windows (PowerShell)
+
+```
+~/.xvn/
+├── bin/
+│   ├── xvn.exe          # Copy of binary (NOT symlink - see rationale below)
+│   └── xvn.ps1          # PowerShell integration script
+├── current -> versions/v1.2.0/  # Directory junction
+├── versions/
+│   ├── v1.2.0/
+│   │   ├── bin/
+│   │   │   └── xvn.exe  # Actual binary
+│   │   └── lib/
+│   │       └── xvn.ps1  # Shell integration script
+│   └── v1.1.2/          # Old version (for rollback)
+└── config.yaml          # User configuration
+
+# PATH structure
+~/.xvn/bin;...;$env:PATH     # xvn bin always first in PATH
+```
+
+**Windows Symlink Rationale:**
+
+**Problem:** Windows symlinks traditionally require administrator privileges or Developer Mode to be enabled (Windows 10 Creators Update+).
+
+**Solution (Hybrid Approach):**
+- **Unix (macOS/Linux)**: Use symlinks for the binary (`~/.xvn/bin/xvn -> versions/v1.2.0/bin/xvn`)
+  - Works without special permissions
+  - Efficient, no duplication
+
+- **Windows**: Copy the binary file + use directory junction
+  - **Binary**: `~/.xvn/bin/xvn.exe` is a **copy** of `versions/v1.2.0/bin/xvn.exe`
+  - **Current directory**: `~/.xvn/current` is a **directory junction** (works without elevation)
+  - Binary is small (~5MB), copying is acceptable
+  - npm postinstall replaces the copied binary on upgrade
+
+**Why not use symlinks on Windows?**
+1. Requires administrator privileges (or Developer Mode)
+2. Creates friction during installation
+3. May fail in corporate/restricted environments
+4. Copy approach is simpler and more reliable
+
+**Why not copy on Unix?**
+1. Symlinks work without any special setup
+2. More efficient (no duplication)
+3. Industry standard approach (rbenv, pyenv, etc.)
+
+**Update mechanism:**
+- Unix: Update symlink to point to new version
+- Windows: Copy new binary over old one in `~/.xvn/bin/`
+
 ### Installation Flow
 
 #### New Installation (npm)
 
+**Unix (macOS/Linux):**
 ```bash
 $ npm install -g @olvrcc/xvn
 
@@ -164,14 +218,37 @@ $ npm install -g @olvrcc/xvn
 $ xvn setup
 
 # Setup command:
-1. Detect shell (bash/zsh/powershell)
+1. Detect shell (bash/zsh)
 2. Add ~/.xvn/bin to PATH in shell profile
 3. Install shell hook (sources xvn.sh)
 4. Verify installation
 ```
 
+**Windows (PowerShell):**
+```powershell
+PS> npm install -g @olvrcc/xvn
+
+# Postinstall script (install.js):
+1. Detect platform and architecture
+2. Download/extract appropriate pre-compiled binary
+3. Create ~/.xvn/ directory structure
+4. Install binary to ~/.xvn/versions/v1.2.0/bin/xvn.exe
+5. Copy binary to ~/.xvn/bin/xvn.exe (NOT symlink)
+6. Create directory junction ~/.xvn/current -> versions/v1.2.0/
+7. Prompt user to run `xvn setup`
+
+PS> xvn setup
+
+# Setup command:
+1. Detect shell (PowerShell)
+2. Add ~/.xvn/bin to PATH in PowerShell profile
+3. Install shell hook (sources xvn.ps1)
+4. Verify installation
+```
+
 #### Upgrade (npm)
 
+**Unix (macOS/Linux):**
 ```bash
 $ npm update -g @olvrcc/xvn
 
@@ -180,6 +257,18 @@ $ npm update -g @olvrcc/xvn
 2. Update symlink ~/.xvn/bin/xvn -> versions/v1.3.0/bin/xvn
 3. Keep previous version for rollback (v1.2.0)
 4. Clean up old versions (keep last 2)
+```
+
+**Windows (PowerShell):**
+```powershell
+PS> npm update -g @olvrcc/xvn
+
+# Postinstall script:
+1. Install new binary to ~/.xvn/versions/v1.3.0/bin/xvn.exe
+2. Copy new binary to ~/.xvn/bin/xvn.exe (overwrite old copy)
+3. Update junction ~/.xvn/current -> versions/v1.3.0/
+4. Keep previous version for rollback (v1.2.0)
+5. Clean up old versions (keep last 2)
 ```
 
 ### Shell Integration Changes

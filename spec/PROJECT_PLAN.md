@@ -213,6 +213,252 @@
 
 ---
 
+## Windows Support Strategy
+
+**Status:** Secondary priority - Focus on "bullet proof" macOS and Linux first
+
+### Current Windows Implementation Status
+
+xvn has comprehensive Windows support implemented in Milestone 11 (v1.3.0), including:
+
+- ✅ Windows binary compilation (x64, ARM64)
+- ✅ PowerShell hook script (xvn.ps1)
+- ✅ JSON command protocol for PowerShell
+- ✅ nvm-windows and fnm plugin support
+- ✅ Cross-platform path handling
+- ✅ PowerShell profile modification
+- ✅ Complete Windows documentation
+
+**Reference:** See [Milestone 11: Windows & PowerShell Support](./milestone-11/PLAN.md) for full implementation details.
+
+### Platform Development Priorities
+
+1. **Primary Focus: macOS** (Weeks 1-10)
+   - Core platform for development and testing
+   - Target: "bullet proof" reliability and performance
+   - All features must work flawlessly on macOS first
+   - Performance targets must be met on macOS
+
+2. **Secondary Focus: Linux** (Weeks 8-12)
+   - Test on Ubuntu, Debian, Fedora, Arch
+   - Verify binary compatibility across distributions
+   - CI/CD testing on multiple Linux versions
+   - Performance validation on Linux
+
+3. **Tertiary Focus: Windows** (Post-MVP, Phase 2)
+   - Windows implementation exists but is **lower priority for refinement**
+   - Focus on macOS/Linux stability before Windows optimizations
+   - Windows features documented but may have rough edges
+   - Community contributions welcome for Windows improvements
+
+### Windows-Specific Features & Issues
+
+#### Implemented Features (Milestone 11)
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Windows binary compilation | ✅ Complete | x64 and ARM64 targets |
+| PowerShell integration | ✅ Complete | Prompt override approach |
+| JSON command protocol | ✅ Complete | Alternative to FD:3 |
+| nvm-windows support | ✅ Complete | Plugin detects %APPDATA%\nvm |
+| fnm support | ✅ Complete | Works on Windows |
+| Path handling | ✅ Complete | Windows path separators |
+| Profile modification | ✅ Complete | Modifies $PROFILE |
+| Documentation | ✅ Complete | Windows-specific guide |
+
+#### Known Windows Limitations
+
+| Limitation | Impact | Workaround | Priority |
+|------------|--------|------------|----------|
+| **cmd.exe not supported** | Medium | Use PowerShell | Low - PowerShell is standard |
+| **Execution policy required** | High | User must set `RemoteSigned` | Documentation covers this |
+| **Symlinks require elevation** | Medium | Milestone 10 uses copy approach | Addressed in M10 |
+| **Slower than Unix** | Low | ~150-200ms vs ~100ms | Acceptable for v1.x |
+| **WSL uses Unix scripts** | Low | WSL should use bash/zsh | Not a bug, by design |
+
+#### Windows Installation Approach (Milestone 10 Consideration)
+
+**Problem:** Symlinks on Windows traditionally require administrator privileges or Developer Mode.
+
+**Solution (Hybrid Approach):**
+
+```
+Unix (macOS/Linux):
+  ~/.xvn/bin/xvn -> versions/v1.2.0/bin/xvn  (symlink)
+
+Windows:
+  ~/.xvn/bin/xvn.exe                         (copy of binary)
+  ~/.xvn/current -> versions/v1.2.0/         (directory junction)
+```
+
+**Rationale:**
+- **Symlinks**: Work without elevation on macOS/Linux
+- **Copy + Junction**: Works without elevation on Windows
+- **Binary size**: ~5MB, copying is acceptable
+- **Update strategy**: npm postinstall replaces copied binary
+
+**Reference:** See [Milestone 10: Version-Independent Installation](./milestone-10/PLAN.md) section on Windows considerations.
+
+#### Outstanding Windows Tasks (Backlog)
+
+These tasks are **documented but deprioritized** until macOS/Linux are stable:
+
+1. **Performance Optimization**
+   - Profile Windows-specific bottlenecks
+   - Optimize PowerShell parsing
+   - Target: <100ms activation (currently ~150ms)
+   - Priority: **Low** (Phase 2+)
+
+2. **Windows Terminal Deep Integration**
+   - Tab title updates with Node version
+   - Custom color scheme integration
+   - Priority: **Low** (Phase 3+)
+
+3. **PowerShell Gallery Distribution**
+   - Alternative to npm installation
+   - `Install-Module xvn`
+   - Priority: **Low** (Phase 2+)
+
+4. **cmd.exe Support**
+   - Batch script wrapper
+   - Environment variable protocol
+   - Priority: **Very Low** (unlikely)
+
+5. **Windows-Specific Plugins**
+   - Volta plugin for Windows
+   - asdf-windows support
+   - Priority: **Low** (Phase 2+)
+
+6. **Enhanced Error Messages**
+   - Windows-specific troubleshooting
+   - Detect antivirus interference
+   - Priority: **Medium** (Phase 2)
+
+### Windows Testing Strategy
+
+**Current Coverage:**
+- ✅ Unit tests with `#[cfg(windows)]`
+- ✅ CI testing on `windows-latest`
+- ✅ PSScriptAnalyzer validation
+- ✅ Integration tests for JSON protocol
+- ✅ Manual testing checklist (docs/WINDOWS_TESTING.md)
+
+**Deferred Testing:**
+- ⏳ Real hardware testing (multiple Windows versions)
+- ⏳ Performance benchmarking on Windows
+- ⏳ Long-term stability testing
+- ⏳ Antivirus compatibility testing
+
+### Windows Documentation
+
+**Completed:**
+- ✅ Windows installation guide (README.md)
+- ✅ Windows-specific documentation (docs/WINDOWS.md)
+- ✅ PowerShell troubleshooting guide
+- ✅ Execution policy guidance
+- ✅ Architecture documentation for Windows
+
+**Maintained:**
+- Windows docs will be kept up-to-date
+- Community can contribute Windows improvements
+- Issues will be tracked but may not be prioritized
+
+### Development Workflow
+
+**Phase 1 (MVP):** macOS-first development
+```bash
+# Develop on macOS
+cargo build
+cargo test
+
+# Verify Linux compatibility
+cargo test --target x86_64-unknown-linux-gnu
+
+# Windows builds in CI (don't block on Windows issues)
+```
+
+**Phase 2 (Enhanced):** Linux validation
+```bash
+# After macOS is stable, focus on Linux
+# Test on multiple distributions
+# Fix Linux-specific issues
+
+# Windows improvements welcome but not required
+```
+
+**Phase 3 (Advanced):** Windows refinement
+```bash
+# Once macOS/Linux are "bullet proof"
+# Dedicate time to Windows optimizations
+# Community-driven Windows features
+```
+
+### Community Contributions
+
+**Windows improvements are welcome!**
+
+Areas where community can help:
+- Performance optimizations for Windows
+- Better Windows Terminal integration
+- Additional Windows version manager plugins
+- Windows-specific bug fixes
+- Enhanced troubleshooting documentation
+
+**Contribution Guidelines:**
+- Windows PRs must not break macOS/Linux
+- All platforms must pass CI before merge
+- Windows-specific code should be clearly marked with `#[cfg(windows)]`
+- Document Windows-specific behavior
+
+### Success Metrics
+
+**macOS (Primary):**
+- ✅ Activation time: <70ms (P50), <100ms (P95)
+- ✅ Zero reported crashes or shell breakage
+- ✅ 95%+ user satisfaction
+
+**Linux (Secondary):**
+- ✅ Activation time: <80ms (P50), <120ms (P95)
+- ✅ Works on Ubuntu, Debian, Fedora, Arch
+- ✅ 90%+ user satisfaction
+
+**Windows (Tertiary):**
+- ⚠️ Activation time: <150ms (P50), <200ms (P95) *(acceptable)*
+- ⚠️ Works on Windows 10/11 with PowerShell
+- ⚠️ 80%+ user satisfaction *(lower bar initially)*
+
+### Milestone Breakdown
+
+| Milestone | macOS | Linux | Windows |
+|-----------|-------|-------|---------|
+| M1-M5 | 🎯 Primary | ✓ Supported | ⏸️ Deferred |
+| M6 | 🎯 Primary | ✓ Supported | ⏸️ Deferred |
+| M7 | 🎯 Primary | ✓ Supported | ⏸️ Deferred |
+| M10 | 🎯 Primary | 🎯 Secondary | ⚠️ Hybrid approach |
+| M11 | ⏸️ Stable | ⏸️ Stable | 🎯 Implementation |
+| Post-M11 | 🎯 Refinement | 🎯 Refinement | ⏸️ Community-driven |
+
+**Legend:**
+- 🎯 Active development focus
+- ✓ Supported and tested
+- ⚠️ Special considerations
+- ⏸️ Lower priority
+- 🎯 Secondary: Important but not primary
+
+### Summary
+
+**Windows support is complete but secondary to macOS/Linux excellence.**
+
+The goal is to have a "bullet proof" working version of xvn for macOS first, with Linux as a close secondary. Windows implementation exists and works, but refinements and optimizations will come after macOS and Linux are rock-solid.
+
+This approach ensures:
+1. **Quality over breadth** - Perfect one platform before spreading resources
+2. **Clear priorities** - macOS developers (primary audience) get best experience
+3. **Community engagement** - Windows users can contribute improvements
+4. **Realistic expectations** - Windows users know it's supported but may have rough edges
+
+---
+
 ## Risk Analysis & Mitigation
 
 ### Technical Risks
