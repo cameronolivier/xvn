@@ -22,7 +22,8 @@ fi
 BUMP_TYPE=$1
 
 # Get current version from Cargo.toml
-CURRENT_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+CURRENT_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/
+/)
 echo "Current version: ${CURRENT_VERSION}"
 
 # Parse current version
@@ -63,17 +64,17 @@ fi
 # Update Cargo.toml
 echo "Updating Cargo.toml..."
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/^version = \".*\"/version = \"${NEW_VERSION}\"/" Cargo.toml
+    sed -i '' "s/^version = ".*"/version = "${NEW_VERSION}"/" Cargo.toml
 else
-    sed -i "s/^version = \".*\"/version = \"${NEW_VERSION}\"/" Cargo.toml
+    sed -i "s/^version = ".*"/version = "${NEW_VERSION}"/" Cargo.toml
 fi
 
 # Update package.json
 echo "Updating package.json..."
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/\"version\": \".*\"/\"version\": \"${NEW_VERSION}\"/" package.json
+    sed -i '' "s/"version": ".*"/"version": "${NEW_VERSION}"/" package.json
 else
-    sed -i "s/\"version\": \".*\"/\"version\": \"${NEW_VERSION}\"/" package.json
+    sed -i "s/"version": ".*"/"version": "${NEW_VERSION}"/" package.json
 fi
 
 # Update CLI test
@@ -99,7 +100,7 @@ fi
 echo "Creating git commit and tag..."
 git add Cargo.toml Cargo.lock package.json tests/cli_test.rs
 
-git commit -m "chore: bump version to v${NEW_VERSION}
+git commit -m "chore: bump version to v${NEW_VERSION}"
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -115,6 +116,7 @@ echo ""
 echo "Next steps:"
 echo "  git push origin main"
 echo "  git push origin v${NEW_VERSION}"
+
 echo ""
 echo "Or to push everything at once:"
 echo "  git push && git push --tags"

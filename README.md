@@ -19,16 +19,21 @@
 
 ## Installation
 
+`xvn` is installed to a central directory (`~/.xvn`) to ensure it's always available, regardless of the active Node.js version.
+
 ```bash
+# Step 1: Install the package
 npm install -g @olvrcc/xvn
+
+# Step 2: Set up your shell
 xvn setup
 ```
 
-Then restart your shell or run:
+Finally, restart your shell or run `source ~/.bashrc` / `source ~/.zshrc` to complete the installation.
 
-```bash
-source ~/.bashrc  # or ~/.zshrc
-```
+### Upgrading from v1.1.x
+
+If you are upgrading from an older version of `xvn`, the installation process has changed. Please follow our **[Migration Guide](./docs/MIGRATION.md)** to upgrade your existing installation.
 
 ## Usage
 
@@ -120,22 +125,30 @@ silent: true
 - Linux or macOS (x64 or arm64)
 - Windows support planned for v1.1.0
 
-## Performance
-
-| Tool | P50 Activation | P95 Activation | Memory |
-|------|---------------|---------------|---------|
-| xvn  | <100ms        | <150ms        | <5MB    |
-| avn  | ~200ms        | ~300ms        | ~30MB   |
-
-*Benchmarks run on macOS M1, Node.js 20.x*
-
 ## Troubleshooting
+
+### `xvn: command not found`
+
+This can happen after installation if your shell hasn't been restarted. Make sure you have run `xvn setup` and restarted your shell.
+
+Verify that `~/.xvn/bin` is in your `PATH`:
+
+```bash
+echo $PATH
+```
+
+Verify the `xvn` binary is in the right place:
+
+```bash
+which xvn
+# Should output: /Users/your-name/.xvn/bin/xvn
+```
 
 ### Shell hook not triggering
 
 Make sure you ran `xvn setup` and restarted your shell.
 
-Verify the hook was added:
+Verify the hook was added to your profile:
 
 ```bash
 grep xvn ~/.bashrc  # or ~/.zshrc
@@ -155,45 +168,20 @@ Check that xvn detects your version file:
 xvn status
 ```
 
-### Binary not found on install
-
-If the postinstall script fails, try reinstalling:
-
-```bash
-npm uninstall -g @olvrcc/xvn
-npm install -g @olvrcc/xvn
-```
-
-Or install from source:
-
-```bash
-git clone https://github.com/cameronolivier/xvn.git
-cd xvn
-cargo install --path .
-xvn setup
-```
-
-### Permission denied
-
-If you see "permission denied" when running `xvn`, the binary may not be executable:
-
-```bash
-chmod +x $(which xvn)
-```
-
 ## How It Works
 
-xvn integrates with your shell using the `chpwd` hook (bash/zsh) and communicates with the parent shell via file descriptor 3 (FD:3), the same protocol used by avn. When you `cd` into a directory:
+xvn is installed to `~/.xvn/bin` and this directory is added to your shell's `PATH`. It integrates with your shell using the `chpwd` hook (bash/zsh) and communicates with the parent shell via file descriptor 3 (FD:3).
 
-1. Shell hook triggers on directory change
-2. xvn searches for `.nvmrc` or `.node-version` files
-3. xvn queries configured version managers for the version
-4. If version is installed, xvn generates activation command
-5. If version is missing, xvn prompts to install (if configured)
-6. Activation command is written to FD:3
-7. Parent shell executes the command
+When you `cd` into a directory:
 
-This approach ensures xvn can modify the parent shell environment without `eval` or `source` commands.
+1. Shell hook triggers on directory change.
+2. xvn searches for version files (`.nvmrc`, etc.).
+3. xvn queries configured version managers (nvm, fnm) for the version.
+4. If the version is missing, xvn prompts to install it.
+5. An activation command is generated and written to FD:3.
+6. The parent shell executes the command, changing the Node.js version.
+
+This approach ensures xvn can modify the parent shell environment safely.
 
 ## Development
 
@@ -208,17 +196,14 @@ cargo build
 # Run tests
 cargo test
 
-# Run benchmarks
-cargo bench
-
-# Install locally
+# Install locally for development
 cargo install --path .
 xvn setup
 ```
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## Architecture
 

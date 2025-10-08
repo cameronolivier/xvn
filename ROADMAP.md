@@ -2,7 +2,7 @@
 
 This document outlines the development roadmap for xvn, including completed milestones, current work, and future plans. We welcome community contributions!
 
-## Current Version: v1.1.2
+## Current Version: v1.2.0
 
 **Status:** Production-ready for macOS and Linux (bash/zsh)
 
@@ -21,13 +21,15 @@ This document outlines the development roadmap for xvn, including completed mile
 - ✅ **M7:** Interactive Setup Wizard - `xvn init` command
 - ✅ **M8:** package.json Support - Semver range resolution
 
+### Phase 2: Stability & Features (v1.1.0 - v1.5.0)
+
+- ✅ **M10: Version-Independent Installation (v1.2.0)** - Critical bootstrap fix to ensure `xvn` is always available by installing to `~/.xvn`.
+
 ---
 
 ## 🚧 In Progress
 
-### Phase 2: Enhanced Features (v1.1.0 - v1.5.0)
-
-#### Milestone 9: Homebrew Distribution (v1.1.x)
+### Milestone 9: Homebrew Distribution (v1.3.0)
 **Status:** Planned
 **Help Wanted:** macOS developers
 
@@ -42,7 +44,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ---
 
-#### Milestone 11: Windows & PowerShell Support (v1.3.0)
+### Milestone 11: Windows & PowerShell Support (v1.4.0)
 **Status:** Foundation Complete - Testing Needed
 **Help Wanted:** Windows developers with PowerShell experience
 
@@ -56,113 +58,47 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ##### M11.4: Plugin System for Windows
 - [ ] Update `nvm` plugin to detect nvm-windows
-  - [ ] Check for `nvm` command on Windows
-  - [ ] Detect version install location (`%APPDATA%\nvm\`)
-  - [ ] Handle Windows-style paths in commands
 - [ ] Update `fnm` plugin for Windows
-  - [ ] Detect `fnm.exe` on PATH
-  - [ ] Handle Windows install locations
-- [ ] Add Windows-specific path utilities
-  - [ ] Expand `%VAR%` environment variables
-  - [ ] Handle UNC paths (`\\server\share`)
 
 **Skills Needed:** Rust, Windows environment, nvm-windows experience
-
-**Files to Modify:**
-- `src/plugins/nvm.rs`
-- `src/plugins/fnm.rs`
-- New: `src/utils/windows_paths.rs` (suggested)
 
 ---
 
 ##### M11.5: PowerShell Profile Modification
 - [ ] Add PowerShell profile detection
-  - [ ] Detect `$PROFILE` path
-  - [ ] Create profile directory if missing
-  - [ ] Detect PowerShell version (5.1 vs 7+)
-- [ ] Update `xvn init` command for Windows
-  - [ ] Copy `xvn.ps1` to `~/.xvn/bin/`
-  - [ ] Add source line to `$PROFILE`
-  - [ ] Check idempotency (don't duplicate)
-- [ ] Add Windows-specific setup instructions
-  - [ ] Handle execution policy prompts
-  - [ ] Test in different PowerShell hosts
+- [ ] Update `xvn setup` command for Windows
 
 **Skills Needed:** Rust, PowerShell, Windows development
-
-**Files to Modify:**
-- `src/setup/mod.rs`
-- `src/setup/shell_detection.rs`
-- `src/setup/profile_modification.rs`
 
 ---
 
 ##### M11.6: Cross-Platform Path Handling
 - [ ] Audit all path operations in codebase
-  - [ ] Use `PathBuf::join()` instead of string concat
-  - [ ] Avoid hardcoded `/` separators
 - [ ] Add Windows-specific path utilities
-  - [ ] Expand `%VAR%` environment variables
-  - [ ] Handle UNC paths
-  - [ ] Normalize mixed separators
-- [ ] Update config loader for Windows paths
-  - [ ] Support `~` expansion on Windows
-  - [ ] Support Windows environment variables
 
 **Skills Needed:** Rust, cross-platform development
-
-**Files to Audit:**
-- `src/config/loader.rs`
-- `src/version_file/finder.rs`
-- `src/plugins/nvm.rs`
-- `src/plugins/fnm.rs`
 
 ---
 
 ##### M11.7: npm Package for Windows
-- [x] Update `install.js` to detect Windows
 - [ ] Create `bin/xvn.cmd` wrapper script for Windows
 - [ ] Test npm install on Windows
-  - [ ] Verify binary extraction
-  - [ ] Verify executable permissions
-  - [ ] Test global install path
 
 **Skills Needed:** Node.js, Windows batch scripting
-
-**Files to Modify:**
-- `install.js` (already updated)
-- New: `bin/xvn.cmd`
 
 ---
 
 ##### M11.8: Windows Testing
 - [ ] Add Windows integration tests
-  - [ ] Test version activation with nvm-windows
-  - [ ] Test directory change detection
-  - [ ] Test idempotency
-  - [ ] Test error handling
 - [ ] Manual testing checklist
-  - [ ] Windows 10 x64
-  - [ ] Windows 11 ARM64
-  - [ ] Windows Terminal
-  - [ ] VS Code integrated terminal
-  - [ ] PowerShell ISE
 
 **Skills Needed:** Windows testing, PowerShell
-
-**Testing Guide:** See [spec/milestone-11/PLAN.md](./spec/milestone-11/PLAN.md#testing-strategy)
 
 ---
 
 ##### M11.9: Windows Documentation
 - [ ] Update README.md with Windows installation
 - [ ] Create Windows troubleshooting guide
-  - [ ] Execution policy issues
-  - [ ] PATH configuration
-  - [ ] nvm-windows vs Unix nvm differences
-- [ ] Update ARCHITECTURE.md
-  - [ ] Document PowerShell integration
-  - [ ] Document JSON protocol
 
 **Skills Needed:** Technical writing, Windows experience
 
@@ -170,7 +106,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ## 🔮 Future Milestones
 
-### Milestone 10: Daemon Mode (v1.2.0)
+### Daemon Mode (Post-v1.5.0)
 **Goal:** Achieve <10ms activation time
 
 - [ ] Daemon process management
@@ -182,7 +118,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ---
 
-### Milestone 12: Additional Version Managers (v1.4.0)
+### Additional Version Managers (Post-v1.5.0)
 
 - [ ] Plugin: `n` (Node version manager)
 - [ ] Plugin: `asdf` (multi-runtime version manager)
@@ -192,7 +128,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ---
 
-### Milestone 13: Performance Optimization (v1.5.0)
+### Performance Optimization (Post-v1.5.0)
 
 - [ ] Profile-guided optimization (PGO)
 - [ ] Link-time optimization (LTO)
@@ -228,21 +164,9 @@ This document outlines the development roadmap for xvn, including completed mile
 - [ ] Zsh theme integration (show version in prompt)
 - [ ] Monorepo/workspace support
 
-### Exotic Platforms
-- [ ] FreeBSD support
-- [ ] OpenBSD support
-- [ ] RISC-V architecture
-- [ ] Alpine Linux (musl)
-
 ---
 
 ## 🤝 How to Contribute
-
-### Getting Started
-
-1. **Check existing issues:** Look for issues tagged with `help-wanted` or `good-first-issue`
-2. **Read the docs:** Familiarize yourself with [ARCHITECTURE.md](./docs/ARCHITECTURE.md) and [CONTRIBUTING.md](./CONTRIBUTING.md)
-3. **Ask questions:** Open a discussion on GitHub if you need clarification
 
 ### Priority Areas
 
@@ -251,73 +175,19 @@ This document outlines the development roadmap for xvn, including completed mile
 - ⭐ **Homebrew formula** - macOS users would benefit from `brew install xvn`
 - ⭐ **Additional version manager plugins** - Expand compatibility
 
-**Medium Priority:**
-- Performance optimizations
-- Documentation improvements
-- Cross-platform testing
-
-**Low Priority (but welcomed!):**
-- Additional shell support
-- Advanced features
-- Exotic platforms
-
-### Windows Contributors Needed!
-
-We have a solid foundation for Windows support but need help with:
-- Testing on real Windows environments
-- Debugging nvm-windows integration
-- PowerShell profile setup testing
-- Path handling edge cases
-
-**Requirements:**
-- Windows 10+ with PowerShell 5.1+
-- Rust toolchain installed
-- nvm-windows or fnm installed
-- Familiarity with PowerShell
-
-See [spec/milestone-11/TASKS.md](./spec/milestone-11/TASKS.md) for detailed breakdown.
+See the relevant milestone specs in the `spec/` directory for details.
 
 ---
 
 ## 📋 Development Guidelines
 
-### Before Starting
-
-1. Open an issue to discuss your proposal
-2. Get consensus on approach
-3. Follow the existing code style
-4. Write tests for new features
-5. Update documentation
-
-### Code Quality
-
-- Maintain >85% test coverage
-- All clippy warnings must be addressed
-- Run `cargo fmt` before committing
-- Follow conventional commit messages
-
-### Milestone Structure
-
-Each milestone has:
-- `spec/milestone-N/SPEC.md` - Architecture and design
-- `spec/milestone-N/TASKS.md` - Task checklist
-- `spec/milestone-N/PLAN.md` - Implementation guide
+- Open an issue to discuss your proposal
+- Follow the existing code style
+- Write tests for new features
+- Update documentation
+- Run `cargo fmt` and `cargo clippy` before committing
 
 ---
 
-## 📞 Contact & Discussion
-
-- **GitHub Issues:** Bug reports and feature requests
-- **GitHub Discussions:** General questions and ideas
-- **Pull Requests:** Code contributions
-
----
-
-## 📜 License
-
-xvn is MIT licensed. All contributions will be under the same license.
-
----
-
-**Last Updated:** October 4, 2025
+**Last Updated:** October 8, 2025
 **Current Focus:** Milestone 9 (Homebrew) & Milestone 11 (Windows Testing)

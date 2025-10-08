@@ -1,22 +1,19 @@
 #!/bin/sh
 
 # Wrapper script for xvn npm package
+# This script is a temporary entrypoint to allow users to run `xvn setup`.
+# After setup, the `xvn` command in the user's PATH should be the one
+# from ~/.xvn/bin.
 
-# Find the native binary (resolve symlinks)
-SCRIPT="$0"
-while [ -L "$SCRIPT" ]; do
-  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT")" && pwd)"
-  SCRIPT="$(readlink "$SCRIPT")"
-  [[ "$SCRIPT" != /* ]] && SCRIPT="$SCRIPT_DIR/$SCRIPT"
-done
-SCRIPT_DIR="$(cd "$(dirname "$SCRIPT")" && pwd)"
-NATIVE_BINARY="$SCRIPT_DIR/../native/xvn"
+# The actual binary is installed by the postinstall script to ~/.xvn/bin/xvn
+XVN_BINARY="$HOME/.xvn/bin/xvn"
 
-if [ ! -f "$NATIVE_BINARY" ]; then
-  echo "Error: xvn binary not found at $NATIVE_BINARY"
-  echo "Please try reinstalling: npm install -g @olvrcc/xvn"
+if [ ! -f "$XVN_BINARY" ]; then
+  echo "Error: xvn binary not found at $XVN_BINARY"
+  echo "It seems the installation may have failed. Please try reinstalling:"
+  echo "  npm install -g @olvrcc/xvn"
   exit 1
 fi
 
-# Execute the native binary
-exec "$NATIVE_BINARY" "$@"
+# Execute the native binary, passing all arguments
+exec "$XVN_BINARY" "$@"
