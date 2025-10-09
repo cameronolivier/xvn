@@ -8,6 +8,7 @@
   },
   "scripts": {
     "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js",
     "build": "cargo build --release",
     "test": "cargo test",
     "dev": "cargo build && cargo install --path .",
@@ -53,6 +54,7 @@
   "files": [
     "bin/",
     "native/",
-    "install.js"
+    "install.js",
+    "uninstall.js"
   ]
 }
