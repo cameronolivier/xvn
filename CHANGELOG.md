@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-10-09
+
+### Added - Interactive Configuration Setter
+
+- **`xvn set` Command**
+  - Easily update individual config settings without re-running full `xvn init` wizard
+  - Interactive menu when called without arguments: `xvn set`
+  - Direct setting modification: `xvn set auto-install`, `xvn set plugins`, `xvn set version-files`
+  - Colorful, user-friendly prompts with help text
+  - Shows current value before prompting for new value
+  - Automatic config file save with timestamp
+
+- **Supported Settings**
+  - `auto-install`: Choose prompt/always/never mode
+  - `plugins`: Select version managers with multi-select (maintains priority order)
+  - `version-files`: Select version files to check (maintains priority order)
+
+### Changed
+
+- Config module now exports `loader` as public for use by other commands
+- Improved modularity with new `commands/` module structure
+
+### Technical Details
+
+- Files added: `src/commands/mod.rs`, `src/commands/set.rs`
+- Files modified: `src/cli.rs`, `src/lib.rs`, `src/config/mod.rs`
+- Uses `inquire` crate for rich interactive prompts
+- Config file format preserved with comments and timestamps
+
 ## [1.3.0] - 2025-10-09
 
 ### Added - Version-Independent Installation (Milestone 10)

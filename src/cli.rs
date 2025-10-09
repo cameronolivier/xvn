@@ -95,6 +95,20 @@ pub enum Commands {
     /// - Current directory's Node.js version (if any)
     /// - Activation timing for performance testing
     Status,
+
+    /// Interactively change a specific configuration setting
+    ///
+    /// Easily update individual settings without re-running the full init wizard.
+    ///
+    /// Examples:
+    ///   xvn set                    Choose setting from menu
+    ///   xvn set auto-install       Change auto-install mode
+    ///   xvn set plugins            Change version manager plugins
+    ///   xvn set version-files      Change version file priority
+    Set {
+        /// Setting to change (auto-install, plugins, version-files)
+        setting: Option<String>,
+    },
 }
 
 pub fn run() -> Result<()> {
@@ -179,6 +193,10 @@ pub fn run() -> Result<()> {
                 }
             }
             Ok(())
+        }
+        Some(Commands::Set { setting }) => {
+            info!("Running set command for setting: {:?}", setting);
+            crate::commands::set::set_config(setting)
         }
         None => {
             // No subcommand provided - show help
