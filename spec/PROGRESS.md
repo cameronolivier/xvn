@@ -79,11 +79,12 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - macOS x64/arm64 support
   - See [milestone-9/PLAN.md](./milestone-9/PLAN.md) and [TASKS.md](./milestone-9/TASKS.md)
 
-- [ ] **Milestone 10: Daemon Mode** (v1.2.0)
-  - Daemon process management
-  - IPC protocol (Unix socket)
-  - File system watcher
-  - Target: <10ms activation time
+- [x] **Milestone 10: Version-Independent Installation** (v1.2.0) ✅ **COMPLETE**
+  - Install binary to `~/.xvn/versions/v{VERSION}/bin/xvn`
+  - Create symlinks: `~/.xvn/bin/xvn` and `~/.xvn/current`
+  - Setup command adds `export PATH="$HOME/.xvn/bin:$PATH"` to shell profile
+  - xvn remains available after switching Node.js versions
+  - See [milestone-10/PLAN.md](./milestone-10/PLAN.md) and [TASKS.md](./milestone-10/TASKS.md)
 
 - [ ] **Milestone 11: Windows & PowerShell** (v1.3.0)
   - Windows binary compilation
@@ -141,8 +142,8 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Current Status
 
 **Phase:** Phase 2 - Enhanced Features
-**Next Action:** Milestone 9 (Homebrew Distribution) for v1.1.0 release
-**Active Milestone:** Milestone 8 Complete - v1.1.0 (preparing for Homebrew distribution)
+**Next Action:** Milestone 9 (Homebrew Distribution) for macOS distribution
+**Active Milestone:** Milestone 10 Complete - v1.2.0 (version-independent installation working!)
 **Completed Milestones:**
 - Milestone 1 (Core Infrastructure) - v0.1.0
 - Milestone 2 (Plugin System) - v0.2.0
@@ -152,13 +153,15 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 - Milestone 6 (Release Preparation) - v0.6.0
 - Milestone 7 (Interactive Setup Wizard) - v0.8.0
 - Milestone 8 (package.json Support) - v1.1.0
+- Milestone 10 (Version-Independent Installation) - v1.2.0
 
-**Recent Improvements (v0.8.0 - v1.1.0):**
-- Enhanced wizard UI with colors and emojis (v0.8.0)
-- package.json engines.node support (v1.1.0)
-- Semver range resolution (^, ~, >=, etc.)
-- Automatic version matching from installed versions
+**Recent Improvements (v1.1.0 - v1.2.0):**
+- Version-independent installation to `~/.xvn/` (v1.2.0) 🎉
+- xvn binary now available across all Node.js versions
+- Automatic symlink management for upgrades
+- PATH modification via `xvn setup`
+- Fixes critical "xvn not found after version switch" issue
 
 ---
 
-**Last Updated:** October 3, 2025
+**Last Updated:** October 9, 2025
