@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-10-09
+
+### Added - Version-Independent Installation (Milestone 10)
+
+- **Version-Independent Binary Installation**
+  - xvn binary now installed to `~/.xvn/versions/v{VERSION}/bin/xvn`
+  - Symlink `~/.xvn/bin/xvn` always points to current version
+  - Symlink `~/.xvn/current` points to active version directory
+  - Binary remains available after switching Node.js versions
+  - Fixes critical "xvn not found after version switch" issue
+
+- **Automatic Uninstall Script**
+  - New `uninstall.js` runs automatically via `preuninstall` hook
+  - Removes shell integration from `.zshrc`/`.bashrc`
+  - Removes `~/.xvn` directory (all versions and binaries)
+  - Removes `~/.xvnrc` configuration file
+  - Provides helpful restart shell instructions
+
+- **Enhanced Setup Command**
+  - `xvn setup` now adds `export PATH="$HOME/.xvn/bin:$PATH"` to shell profile
+  - Shell hook sources from `$XVN_DIR/current/lib/xvn.sh`
+  - Both `xvn init` and `xvn setup` install shell integration automatically
+
+### Changed
+
+- `install.js` creates versioned directory structure at `~/.xvn/versions/v{VERSION}/`
+- Automatic symlink creation during installation
+- Automatic cleanup of old versions (keeps last 2)
+- Shell integration now includes PATH modification for version-independent access
+
+### Technical Details
+
+- Files added: `uninstall.js`
+- Files modified: `install.js`, `package.json`, `src/setup/profile_modification.rs`
+- Shell profile markers: `# >>> xvn initialize >>>` and `# <<< xvn initialize <<<`
+- All tests passing
+
 ## [1.1.0] - 2025-10-02
 
 ### Added - package.json Support (Milestone 8)
