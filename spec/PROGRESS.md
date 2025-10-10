@@ -79,24 +79,39 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - macOS x64/arm64 support
   - See [milestone-9/PLAN.md](./milestone-9/PLAN.md) and [TASKS.md](./milestone-9/TASKS.md)
 
-- [x] **Milestone 10: Version-Independent Installation** (v1.2.0) ✅ **COMPLETE**
+- [x] **Milestone 10: Version-Independent Installation** (v1.2.0 → v1.3.0) ✅ **COMPLETE**
   - Install binary to `~/.xvn/versions/v{VERSION}/bin/xvn`
   - Create symlinks: `~/.xvn/bin/xvn` and `~/.xvn/current`
   - Setup command adds `export PATH="$HOME/.xvn/bin:$PATH"` to shell profile
+  - Automatic uninstall script (v1.3.0)
   - xvn remains available after switching Node.js versions
   - See [milestone-10/PLAN.md](./milestone-10/PLAN.md) and [TASKS.md](./milestone-10/TASKS.md)
 
-- [ ] **Milestone 11: Windows & PowerShell** (v1.3.0)
+- [x] **Milestone 11: Interactive Configuration Updates** (v1.4.0) ✅ **COMPLETE**
+  - `xvn set` command for easy config updates
+  - Interactive prompts for auto-install, plugins, version-files settings
+  - Show current values before modification
+  - Config file saved with timestamps
+  - See CHANGELOG.md for details
+
+- [x] **Milestone 12: Release Automation** (v1.4.1) ✅ **COMPLETE**
+  - Scripts to download GitHub Actions artifacts
+  - Scripts to extract and copy platform binaries
+  - npm scripts for release workflow
+  - Package distribution fixes (shell/ directory inclusion)
+  - See scripts/README.md for release process
+
+- [ ] **Milestone 13: Windows & PowerShell** (v1.5.0)
   - Windows binary compilation
   - PowerShell hook script
   - Profile modification for PowerShell
 
-- [ ] **Milestone 12: Additional Version Managers** (v1.4.0)
+- [ ] **Milestone 14: Additional Version Managers** (v1.6.0)
   - Plugin: `n`
   - Plugin: `asdf`
   - Plugin: `volta`
 
-- [ ] **Milestone 13: Performance Optimization** (v1.5.0)
+- [ ] **Milestone 15: Performance Optimization** (v1.7.0)
   - Profile-guided optimization (PGO)
   - Link-time optimization (LTO)
   - Strip debug symbols
@@ -142,8 +157,9 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 ## Current Status
 
 **Phase:** Phase 2 - Enhanced Features
+**Current Version:** v1.4.1 (published to npm 🎉)
 **Next Action:** Milestone 9 (Homebrew Distribution) for macOS distribution
-**Active Milestone:** Milestone 10 Complete - v1.2.0 (version-independent installation working!)
+**Active Milestone:** Starting Milestone 9
 **Completed Milestones:**
 - Milestone 1 (Core Infrastructure) - v0.1.0
 - Milestone 2 (Plugin System) - v0.2.0
@@ -153,15 +169,18 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 - Milestone 6 (Release Preparation) - v0.6.0
 - Milestone 7 (Interactive Setup Wizard) - v0.8.0
 - Milestone 8 (package.json Support) - v1.1.0
-- Milestone 10 (Version-Independent Installation) - v1.2.0
+- Milestone 10 (Version-Independent Installation) - v1.2.0 → v1.3.0
+- Milestone 11 (Interactive Configuration Updates) - v1.4.0
+- Milestone 12 (Release Automation) - v1.4.1
 
-**Recent Improvements (v1.1.0 - v1.2.0):**
+**Recent Improvements (v1.2.0 - v1.4.1):**
 - Version-independent installation to `~/.xvn/` (v1.2.0) 🎉
 - xvn binary now available across all Node.js versions
-- Automatic symlink management for upgrades
-- PATH modification via `xvn setup`
-- Fixes critical "xvn not found after version switch" issue
+- Automatic uninstall script via npm preuninstall hook (v1.3.0)
+- `xvn set` command for easy config updates (v1.4.0)
+- Release automation scripts for artifact management (v1.4.1)
+- Package distribution fixes (shell/ directory inclusion) (v1.4.1)
 
 ---
 
-**Last Updated:** October 9, 2025
+**Last Updated:** October 10, 2025
