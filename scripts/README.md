@@ -1,63 +1,103 @@
-# Scripts
+# Release Scripts
 
-Utility scripts for xvn development and releases.
+Scripts to automate the xvn release process.
 
-## version.sh
+## Prerequisites
 
-Semantic version bumping with automatic file updates, testing, and git tagging.
+- `gh` CLI installed and authenticated (`brew install gh`)
+- Git tag pushed to GitHub (triggers GitHub Actions build)
+- Successful GitHub Actions build completed
 
-**Usage:**
+## Quick Release Process
+
+After pushing a new version tag (e.g., `v1.4.1`):
 
 ```bash
-# Patch release (bug fixes)
-./scripts/version.sh patch   # 0.6.1 -> 0.6.2
+# 1. Download and extract binaries
+./scripts/download-artifacts.sh v1.4.1
+./scripts/extract-binaries.sh v1.4.1
 
-# Minor release (new features, backwards compatible)
-./scripts/version.sh minor   # 0.6.1 -> 0.7.0
+# 2. Create the npm package
+npm run release:pack
 
-# Major release (breaking changes)
-./scripts/version.sh major   # 0.6.1 -> 1.0.0
+# 3. Verify the package contents
+npm run release:verify
 
-# Exact version
-./scripts/version.sh 1.0.0   # Set to 1.0.0
+# 4. Test installation locally (optional but recommended)
+npm uninstall -g @olvrcc/xvn
+rm -rf ~/.xvn ~/.xvnrc
+npm install -g ./olvrcc-xvn-1.4.1.tgz
+xvn --version
+
+# 5. Publish to npm
+npm publish
+```
+
+## Scripts Reference
+
+### download-artifacts.sh
+
+Downloads GitHub Actions artifacts for a specific version.
+
+```bash
+./scripts/download-artifacts.sh v1.4.1
 ```
 
 **What it does:**
+- Finds the successful GitHub Actions run for the tag
+- Downloads all build artifacts to `/tmp/xvn-v1.4.1-artifacts/`
+- Shows the run URL for reference
 
-1. Prompts for confirmation
-2. Updates `Cargo.toml`, `package.json`, and test files
-3. Rebuilds and runs tests
-4. Creates git commit with conventional commit message
-5. Creates git tag (e.g., `v1.0.0`)
-6. Prints push instructions
+### extract-binaries.sh
 
-**After running:**
+Extracts binaries from downloaded artifacts and copies them to `native/` directories.
 
 ```bash
-# Push to trigger GitHub Actions build
-git push origin main
-git push origin v1.0.0
-
-# Or push everything at once
-git push && git push --tags
+./scripts/extract-binaries.sh v1.4.1
 ```
 
-## bump-version.sh (deprecated)
+**What it does:**
+- Extracts tarballs from `/tmp/xvn-v1.4.1-artifacts/`
+- Copies binaries to `native/<platform>/xvn`
+- Verifies each binary (shows version for macOS binaries)
+- Supports platforms:
+  - `x86_64-apple-darwin` (macOS Intel)
+  - `aarch64-apple-darwin` (macOS Apple Silicon)
+  - `x86_64-unknown-linux-gnu` (Linux x64)
+  - `aarch64-unknown-linux-gnu` (Linux arm64)
 
-Original milestone-based version bumping (0.X.0 only).
+## Troubleshooting
 
-**Migration:** Use `version.sh` instead for more flexible versioning.
+### "No successful build found for version"
 
-## Other Scripts
-
-### coverage.sh
-
-Generate code coverage reports.
-
+The GitHub Actions build may still be running or failed. Check:
 ```bash
-./scripts/coverage.sh
+gh run list --workflow=build.yml
 ```
 
-### bump-version.sh
+Or visit: https://github.com/cameronolivier/xvn/actions
 
-Legacy milestone-based versioning (use `version.sh` instead).
+### "Artifacts directory not found"
+
+Run the download script first:
+```bash
+./scripts/download-artifacts.sh v1.4.1
+```
+
+### Binary version mismatch
+
+Ensure Cargo.toml and package.json versions match the tag:
+```bash
+grep version Cargo.toml
+grep version package.json
+```
+
+## What Gets Included in the Package
+
+The `npm pack` command includes:
+- ✅ `native/` directories with platform binaries (from GitHub Actions)
+- ✅ `shell/` directory with shell integration scripts (from git)
+- ✅ `bin/` directory with npm wrapper script (from git)
+- ✅ `install.js` and `uninstall.js` (from git)
+
+The `shell/` directory is tracked in git and listed in `package.json` files array, so it's automatically included even though GitHub Actions only builds binaries.
