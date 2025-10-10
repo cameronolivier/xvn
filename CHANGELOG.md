@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2025-10-10
+
+### Fixed
+
+- **Package Distribution Issue**
+  - Added missing `shell/` directory to npm package files
+  - Fixes installation error: "ENOENT: no such file or directory, copyfile shell/xvn.sh"
+  - Shell integration scripts now properly included in published package
+
+### Technical Details
+
+- Files modified: `package.json` (added "shell/" to files array)
+- This is a patch release to fix the broken v1.4.0 npm package
+
 ## [1.4.0] - 2025-10-09
 
 ### Added - Interactive Configuration Setter
