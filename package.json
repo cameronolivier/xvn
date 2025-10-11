@@ -34,12 +34,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cameronolivier/xvn.git"
+    "url": "git+https://github.com/olvrcc/xvn.git"
   },
   "bugs": {
-    "url": "https://github.com/cameronolivier/xvn/issues"
+    "url": "https://github.com/olvrcc/xvn/issues"
   },
-  "homepage": "https://github.com/cameronolivier/xvn#readme",
+  "homepage": "https://github.com/olvrcc/xvn#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

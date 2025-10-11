@@ -39,12 +39,12 @@ jobs:
       - name: Download macOS x64 binary
         run: |
           curl -L -o xvn-x86_64.tar.gz \
-            "https://github.com/cameronolivier/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-x86_64-apple-darwin.tar.gz"
+            "https://github.com/olvrcc/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-x86_64-apple-darwin.tar.gz"
 
       - name: Download macOS arm64 binary
         run: |
           curl -L -o xvn-aarch64.tar.gz \
-            "https://github.com/cameronolivier/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-aarch64-apple-darwin.tar.gz"
+            "https://github.com/olvrcc/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-aarch64-apple-darwin.tar.gz"
 
       - name: Calculate SHA256 checksums
         id: checksums
