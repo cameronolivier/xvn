@@ -1,6 +1,6 @@
 # xvn - Extreme Version Switcher
 
-[![CI](https://github.com/cameronolivier/xvn/workflows/Test/badge.svg)](https://github.com/cameronolivier/xvn/actions)
+[![CI](https://github.com/olvrcc/xvn/workflows/Test/badge.svg)](https://github.com/olvrcc/xvn/actions)
 [![npm version](https://badge.fury.io/js/@olvrcc%2Fxvn.svg)](https://www.npmjs.com/package/@olvrcc/xvn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,6 +21,8 @@
 
 `xvn` is installed to a central directory (`~/.xvn`) to ensure it's always available, regardless of the active Node.js version.
 
+### Option 1: npm (Recommended for Linux and macOS)
+
 ```bash
 # Step 1: Install the package
 npm install -g @olvrcc/xvn
@@ -29,7 +31,53 @@ npm install -g @olvrcc/xvn
 xvn setup
 ```
 
-Finally, restart your shell or run `source ~/.bashrc` / `source ~/.zshrc` to complete the installation.
+### Option 2: Homebrew (macOS only)
+
+```bash
+# Step 1: Tap the repository
+brew tap olvrcc/xvn
+
+# Step 2: Install xvn
+brew install xvn
+
+# Step 3: Set up your shell
+xvn setup
+```
+
+### Option 3: Cargo (Build from source)
+
+```bash
+# Install from source
+cargo install --git https://github.com/olvrcc/xvn
+
+# Set up your shell
+xvn setup
+```
+
+### Complete the Installation
+
+After installation via any method, restart your shell or run:
+
+```bash
+source ~/.bashrc  # or ~/.zshrc
+```
+
+### Upgrading
+
+**npm:**
+```bash
+npm update -g @olvrcc/xvn
+```
+
+**Homebrew:**
+```bash
+brew upgrade xvn
+```
+
+**Cargo:**
+```bash
+cargo install --git https://github.com/olvrcc/xvn --force
+```
 
 ### Upgrading from v1.1.x
 
@@ -187,7 +235,7 @@ This approach ensures xvn can modify the parent shell environment safely.
 
 ```bash
 # Clone the repository
-git clone https://github.com/cameronolivier/xvn.git
+git clone https://github.com/olvrcc/xvn.git
 cd xvn
 
 # Build
