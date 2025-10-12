@@ -20,8 +20,10 @@ Examples:
   xvn init --quick       Quick setup with defaults
   xvn activate           Manually activate for current directory
   xvn status             Show configuration and test activation
+  xvn set                Change configuration settings
+  xvn uninstall          Completely remove xvn
 
-For more information, visit: https://github.com/cameronolivier/xvn
+For more information, visit: https://github.com/olvrcc/xvn
 "#
 )]
 #[command(version)]
