@@ -69,6 +69,8 @@ source ~/.bashrc  # or ~/.zshrc
 npm update -g @olvrcc/xvn
 ```
 
+**Note for nvm users:** Global packages are Node version-specific in nvm. If you installed xvn while on Node v20 but later switched to Node v22, the global package only exists in v20. To uninstall completely, switch back to the Node version where xvn was installed before running `npm uninstall -g @olvrcc/xvn`.
+
 **Homebrew:**
 ```bash
 brew upgrade xvn
