@@ -1,6 +1,6 @@
 [package]
 name = "xvn"
-version = "1.4.1"
+version = "1.4.2"
 edition = "2021"
 authors = ["cameronolivier@gmail.com"]
 description = "Extreme Version Switcher for Node.js"

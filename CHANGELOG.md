@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2025-10-12
+
+### Added - Installation Conflict Detection (M9.6)
+
+- **Multiple Installation Detection**
+  - Automatically detects when xvn is installed via multiple methods (npm, Homebrew, Cargo)
+  - Uses `which::which_all()` to find all xvn binaries in PATH
+  - Identifies installation method by examining binary path patterns
+  - Ignores internal symlinks at `~/.xvn/bin/xvn` and `~/.xvn/current/`
+
+- **Interactive Conflict Warning (init/setup)**
+  - Shows detailed warning during `xvn init` or `xvn setup` when conflicts detected
+  - Lists all installations with method descriptions and file paths
+  - Provides uninstall commands for each method (npm, Homebrew, Cargo)
+  - Prompts user to continue or cancel setup
+  - Creates persistent flag file at `~/.xvn/conflict_warning` for future warnings
+
+- **Activation Warning**
+  - Shows brief warning on `xvn activate` if conflict flag exists
+  - Directs user to run `xvn init` for details
+  - Minimal performance impact (single file existence check)
+  - Warning automatically clears when conflicts resolved
+
+### Changed
+
+- Added `which = "6.0"` dependency to Cargo.toml
+- Applied cargo fmt formatting improvements
+
+### Technical Details
+
+- Files added: `src/installation_detector.rs`, `spec/milestone-9/M9.6_CONFLICT_DETECTION.md`
+- Files modified: `src/lib.rs`, `src/init/wizard.rs`, `src/cli.rs`, `Cargo.toml`
+- New module: `installation_detector` with `InstallMethod` enum and `InstallationDetector` struct
+- State management via `~/.xvn/conflict_warning` flag file
+- All 124 unit tests + 6 CLI tests passing
+
 ## [1.4.1] - 2025-10-10
 
 ### Fixed
