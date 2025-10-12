@@ -122,13 +122,71 @@ pub fn uninstall(force: bool) -> Result<()> {
 
     println!();
 
-    // Show next steps for external installations
+    // Handle external installations
     if !installations.is_empty() {
-        output::info("To complete uninstallation, remove external packages:");
+        println!();
+        output::info("Detected external installations:");
         for (method, _) in &installations {
-            output::info(&format!("  {}", method.uninstall_command().cyan()));
+            output::info(&format!("  • {}", method.description()));
         }
         println!();
+
+        let should_uninstall = if force {
+            true
+        } else {
+            Confirm::new("Also uninstall external packages?")
+                .with_default(true)
+                .with_help_message("This will run the uninstall commands for detected packages")
+                .prompt()
+                .context("Failed to get confirmation")?
+        };
+
+        if should_uninstall {
+            println!();
+            output::info("Uninstalling external packages...");
+            println!();
+
+            for (method, _) in &installations {
+                let cmd = method.uninstall_command();
+                output::info(&format!("Running: {}", cmd.cyan()));
+
+                // Execute the uninstall command
+                let result = std::process::Command::new("sh")
+                    .arg("-c")
+                    .arg(cmd)
+                    .status();
+
+                match result {
+                    Ok(status) if status.success() => {
+                        output::success(&format!("✓ Uninstalled {}", method.description()));
+                    }
+                    Ok(status) => {
+                        output::warning(&format!(
+                            "Warning: {} returned exit code {}",
+                            method.description(),
+                            status.code().unwrap_or(-1)
+                        ));
+                        output::info("You may need to run the command manually");
+                    }
+                    Err(e) => {
+                        output::warning(&format!(
+                            "Warning: Failed to uninstall {}: {}",
+                            method.description(),
+                            e
+                        ));
+                        output::info(&format!("Please run manually: {}", cmd));
+                    }
+                }
+            }
+            println!();
+        } else {
+            println!();
+            output::info("To complete uninstallation manually, run:");
+            for (method, _) in &installations {
+                output::info(&format!("  {}", method.uninstall_command().cyan()));
+            }
+            println!();
+        }
     }
 
     output::info("Please restart your shell or run:");
