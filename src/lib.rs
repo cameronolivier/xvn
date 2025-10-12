@@ -8,6 +8,7 @@ pub mod commands;
 pub mod config;
 pub mod error;
 pub mod init;
+pub mod installation_detector;
 pub mod output;
 pub mod plugins;
 pub mod setup;

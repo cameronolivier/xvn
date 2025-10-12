@@ -144,6 +144,14 @@ pub fn run() -> Result<()> {
         Some(Commands::Activate { path }) => {
             info!("Running activate command for path: {path:?}");
 
+            // Check for installation conflicts and show warning if flagged
+            if crate::installation_detector::InstallationDetector::should_warn() {
+                eprintln!();
+                crate::output::warning("⚠️  Multiple xvn installations detected!");
+                crate::output::info("Run 'xvn init' to see details and resolve conflicts.");
+                eprintln!();
+            }
+
             // Load config
             let config = crate::config::Config::load().context("failed to load configuration")?;
 

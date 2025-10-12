@@ -47,6 +47,64 @@ impl Default for WizardState {
     }
 }
 
+/// Check for installation conflicts and warn user
+fn check_installation_conflicts() -> Result<()> {
+    use crate::installation_detector::InstallationDetector;
+
+    let installations = InstallationDetector::detect_all();
+
+    if installations.len() > 1 {
+        println!();
+        output::warning("⚠️  Multiple xvn installations detected!");
+        println!();
+        output::info("Found the following installations:");
+
+        for (method, path) in &installations {
+            output::info(&format!(
+                "  • {} at {}",
+                method.description(),
+                path.display()
+            ));
+        }
+
+        println!();
+        output::warning(
+            "Having multiple installations can cause conflicts and unexpected behavior.",
+        );
+        output::info("It's recommended to keep only one installation method.");
+        println!();
+        output::info("To uninstall:");
+
+        for (method, _) in &installations {
+            output::info(&format!(
+                "  • {}: {}",
+                method.description(),
+                method.uninstall_command()
+            ));
+        }
+
+        println!();
+
+        // Ask user if they want to continue
+        let should_continue = inquire::Confirm::new("Continue with setup anyway?")
+            .with_default(true)
+            .with_help_message("xvn will still work, but you may see warnings")
+            .prompt()
+            .context("Failed to get user confirmation")?;
+
+        if !should_continue {
+            output::info("Setup cancelled. Please resolve conflicts and try again.");
+            return Err(anyhow::anyhow!("Setup cancelled by user"));
+        }
+
+        // Mark that conflicts exist so we can warn during activation
+        InstallationDetector::mark_conflict();
+        println!();
+    }
+
+    Ok(())
+}
+
 /// Print wizard header
 fn print_wizard_header() {
     use owo_colors::OwoColorize;
@@ -244,6 +302,9 @@ pub fn run_interactive_wizard(force: bool) -> Result<()> {
     // Print header
     print_wizard_header();
 
+    // Check for installation conflicts
+    check_installation_conflicts()?;
+
     // Initialize state
     let mut state = WizardState::new();
 
@@ -311,6 +372,9 @@ pub fn run_quick_setup(force: bool) -> Result<()> {
     output::print_header();
     output::info("Running quick setup with defaults...");
     println!();
+
+    // Check for installation conflicts
+    check_installation_conflicts()?;
 
     // Auto-detect shell
     let shell = detect_shell()?;

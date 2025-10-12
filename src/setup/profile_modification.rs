@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use log::{debug};
+use log::debug;
 use std::fs;
 use std::path::Path;
 

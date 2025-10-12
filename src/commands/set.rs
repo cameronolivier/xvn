@@ -13,14 +13,11 @@ use crate::output;
 /// Set a specific configuration value interactively
 pub fn set_config(setting: Option<String>) -> Result<()> {
     // Load current config
-    let home = dirs::home_dir()
-        .context("Could not determine home directory")?;
+    let home = dirs::home_dir().context("Could not determine home directory")?;
     let config_file = home.join(".xvnrc");
     let mut config = if config_file.exists() {
-        let content = fs::read_to_string(&config_file)
-            .context("Failed to read config file")?;
-        serde_yaml::from_str::<Config>(&content)
-            .context("Failed to parse config file")?
+        let content = fs::read_to_string(&config_file).context("Failed to read config file")?;
+        serde_yaml::from_str::<Config>(&content).context("Failed to parse config file")?
     } else {
         output::warning("No config file found. Please run 'xvn init' first.");
         return Ok(());
@@ -30,11 +27,7 @@ pub fn set_config(setting: Option<String>) -> Result<()> {
     let setting = match setting {
         Some(s) => s,
         None => {
-            let options = vec![
-                "auto-install",
-                "plugins",
-                "version-files",
-            ];
+            let options = vec!["auto-install", "plugins", "version-files"];
 
             Select::new("Which setting would you like to change?", options)
                 .prompt()?
@@ -69,7 +62,10 @@ fn set_auto_install(config: &mut Config) -> Result<()> {
     println!();
     println!("  {} {}", "⚙️".cyan(), "Auto-Install Setting".bold());
     println!();
-    println!("  Current: {}", format!("{:?}", config.auto_install).yellow());
+    println!(
+        "  Current: {}",
+        format!("{:?}", config.auto_install).yellow()
+    );
     println!();
 
     let options = vec![
@@ -125,11 +121,10 @@ fn set_plugins(config: &mut Config) -> Result<()> {
         .collect();
 
     // Pre-select currently configured plugins
-    let defaults: Vec<usize> = config.plugins
+    let defaults: Vec<usize> = config
+        .plugins
         .iter()
-        .filter_map(|p| {
-            all_plugins.iter().position(|(name, _)| name == &p.as_str())
-        })
+        .filter_map(|p| all_plugins.iter().position(|(name, _)| name == &p.as_str()))
         .collect();
 
     let selections = MultiSelect::new("Select version managers (in priority order):", options)
@@ -178,11 +173,10 @@ fn set_version_files(config: &mut Config) -> Result<()> {
         .collect();
 
     // Pre-select currently configured files
-    let defaults: Vec<usize> = config.version_files
+    let defaults: Vec<usize> = config
+        .version_files
         .iter()
-        .filter_map(|f| {
-            all_files.iter().position(|(name, _)| name == &f.as_str())
-        })
+        .filter_map(|f| all_files.iter().position(|(name, _)| name == &f.as_str()))
         .collect();
 
     let selections = MultiSelect::new("Select version files (in priority order):", options)
@@ -232,17 +226,26 @@ fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
          # Version files to search for (in priority order)\n\
          version_files:\n{}\n",
         timestamp,
-        config.plugins.iter().map(|p| format!("  - {}", p)).collect::<Vec<_>>().join("\n"),
+        config
+            .plugins
+            .iter()
+            .map(|p| format!("  - {}", p))
+            .collect::<Vec<_>>()
+            .join("\n"),
         match config.auto_install {
             AutoInstallMode::Prompt => "prompt",
             AutoInstallMode::Always => "always",
             AutoInstallMode::Never => "never",
         },
-        config.version_files.iter().map(|f| format!("  - {}", f)).collect::<Vec<_>>().join("\n"),
+        config
+            .version_files
+            .iter()
+            .map(|f| format!("  - {}", f))
+            .collect::<Vec<_>>()
+            .join("\n"),
     );
 
-    fs::write(path, content)
-        .context("Failed to write config file")?;
+    fs::write(path, content).context("Failed to write config file")?;
 
     Ok(())
 }
