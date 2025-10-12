@@ -167,3 +167,4 @@ dist/
 
 # npm binary downloads
 native/
+/homebrew-xvn/
