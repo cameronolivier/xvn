@@ -175,6 +175,26 @@ silent: true
 - Linux or macOS (x64 or arm64)
 - Windows support planned for v1.1.0
 
+## Uninstalling
+
+To completely remove xvn and clean up all configuration:
+
+```bash
+xvn uninstall
+```
+
+This command will:
+- Detect all xvn installations (npm, Homebrew, Cargo)
+- Remove `~/.xvn` directory
+- Remove `~/.xvnrc` configuration
+- Remove shell integration from `.bashrc`/`.zshrc`
+- Provide instructions for uninstalling external packages
+
+Use `--force` to skip the confirmation prompt:
+```bash
+xvn uninstall --force
+```
+
 ## Troubleshooting
 
 ### `xvn: command not found`

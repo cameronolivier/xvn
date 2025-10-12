@@ -109,6 +109,23 @@ pub enum Commands {
         /// Setting to change (auto-install, plugins, version-files)
         setting: Option<String>,
     },
+
+    /// Uninstall xvn completely
+    ///
+    /// Removes all xvn installations, configuration files, and shell integration.
+    /// This command detects all installation methods (npm, Homebrew, Cargo) and
+    /// provides instructions for complete removal.
+    ///
+    /// WARNING: This will remove:
+    ///   - ~/.xvn directory (all versions and binaries)
+    ///   - ~/.xvnrc configuration file
+    ///   - Shell integration from .bashrc/.zshrc
+    ///   - All installed xvn packages (npm, Homebrew, Cargo)
+    Uninstall {
+        /// Skip confirmation prompt
+        #[arg(short, long)]
+        force: bool,
+    },
 }
 
 pub fn run() -> Result<()> {
@@ -205,6 +222,10 @@ pub fn run() -> Result<()> {
         Some(Commands::Set { setting }) => {
             info!("Running set command for setting: {:?}", setting);
             crate::commands::set::set_config(setting)
+        }
+        Some(Commands::Uninstall { force }) => {
+            info!("Running uninstall command (force: {})", force);
+            crate::commands::uninstall::uninstall(force)
         }
         None => {
             // No subcommand provided - show help

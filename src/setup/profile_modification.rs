@@ -46,6 +46,28 @@ export PATH="$XVN_DIR/bin:$PATH"
         .with_context(|| format!("Failed to write profile: {}", profile.display()))
 }
 
+/// Remove xvn block from a profile file
+/// Returns Ok(true) if block was found and removed, Ok(false) if not found
+pub fn remove_from_profile(profile: &Path) -> Result<bool> {
+    if !profile.exists() {
+        return Ok(false);
+    }
+
+    let content = fs::read_to_string(profile)
+        .with_context(|| format!("Failed to read profile: {}", profile.display()))?;
+
+    if !content.contains(XVN_MARKER_START) {
+        return Ok(false);
+    }
+
+    let new_content = remove_xvn_block(&content);
+
+    fs::write(profile, new_content)
+        .with_context(|| format!("Failed to write profile: {}", profile.display()))?;
+
+    Ok(true)
+}
+
 /// Removes the xvn initialization block from a string content.
 fn remove_xvn_block(content: &str) -> String {
     if !content.contains(XVN_MARKER_START) {
