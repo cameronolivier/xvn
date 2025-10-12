@@ -37,15 +37,14 @@ jobs:
             os: macos-latest
             cross: false
 
-          # Windows x64
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            cross: false
-
-          # Windows arm64
-          - target: aarch64-pc-windows-msvc
-            os: windows-latest
-            cross: false
+          # Windows support is planned for a future milestone
+          # - target: x86_64-pc-windows-msvc
+          #   os: windows-latest
+          #   cross: false
+          #
+          # - target: aarch64-pc-windows-msvc
+          #   os: windows-latest
+          #   cross: false
 
     steps:
       - name: Checkout code
