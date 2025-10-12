@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-10-12
+
+### Added - Complete Uninstall Command
+
+- **`xvn uninstall` Command**
+  - Complete removal of xvn with automatic cleanup
+  - Detects all installation methods (npm, Homebrew, Cargo)
+  - Removes `~/.xvn` directory (all versions and binaries)
+  - Removes `~/.xvnrc` configuration file
+  - Removes shell integration from `.bashrc` and `.zshrc`
+  - Interactive confirmation with `--force` flag to skip
+  - Actually executes uninstall commands for external packages
+  - Shows success/failure status for each removal step
+
+- **External Package Uninstallation**
+  - Prompts: "Also uninstall external packages?"
+  - Runs `brew uninstall xvn` for Homebrew installations
+  - Runs `npm uninstall -g @olvrcc/xvn` for npm installations
+  - Runs `cargo uninstall xvn` for Cargo installations
+  - Provides manual instructions if automatic removal fails
+
+### Changed
+
+- Made `profile_modification` module public for uninstall access
+- Added `remove_from_profile()` function for shell integration cleanup
+- Updated CLI help examples to include `xvn set` and `xvn uninstall`
+- Fixed GitHub repository URL from cameronolivier to olvrcc
+
+### Documentation
+
+- Added comprehensive "Uninstalling" section to README
+- Documented nvm global package behavior (why preuninstall hooks don't always run)
+- Explained Node version-specific global package storage in nvm
+
+### Technical Details
+
+- Files added: `src/commands/uninstall.rs`
+- Files modified: `src/cli.rs`, `src/commands/mod.rs`, `src/setup/mod.rs`, `src/setup/profile_modification.rs`, `README.md`
+- Uses `InstallationDetector` to find all xvn installations
+- Uses `std::process::Command` to execute package manager commands
+- All tests passing
+
 ## [1.4.2] - 2025-10-12
 
 ### Added - Installation Conflict Detection (M9.6)
