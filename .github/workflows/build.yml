@@ -70,13 +70,17 @@ jobs:
       - name: Package binary
         shell: bash
         run: |
-          cd target/${{ matrix.target }}/release
+          mkdir -p package/lib
+          cp target/${{ matrix.target }}/release/xvn package/
+          cp shell/xvn.sh package/lib/
+          cd package
           if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            tar czf xvn-${{ matrix.target }}.tar.gz xvn.exe
+            tar czf xvn-${{ matrix.target }}.tar.gz xvn.exe lib/
           else
-            tar czf xvn-${{ matrix.target }}.tar.gz xvn
+            tar czf xvn-${{ matrix.target }}.tar.gz xvn lib/
           fi
           shasum -a 256 xvn-${{ matrix.target }}.tar.gz > xvn-${{ matrix.target }}.tar.gz.sha256
+          mv xvn-${{ matrix.target }}.tar.gz* ../target/${{ matrix.target }}/release/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

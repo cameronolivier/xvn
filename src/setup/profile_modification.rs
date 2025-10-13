@@ -29,7 +29,14 @@ pub fn add_to_profile(profile: &Path) -> Result<()> {
     let setup_lines = r###"# xvn shell integration
 export XVN_DIR="$HOME/.xvn"
 export PATH="$XVN_DIR/bin:$PATH"
-[ -s "$XVN_DIR/current/lib/xvn.sh" ] && . "$XVN_DIR/current/lib/xvn.sh"
+
+# Try npm installation location first
+if [ -s "$XVN_DIR/current/lib/xvn.sh" ]; then
+  . "$XVN_DIR/current/lib/xvn.sh"
+# Try Homebrew installation location
+elif command -v brew >/dev/null 2>&1 && [ -s "$(brew --prefix xvn 2>/dev/null)/lib/xvn.sh" ]; then
+  . "$(brew --prefix xvn)/lib/xvn.sh"
+fi
 "###;
 
     // Add the new block
