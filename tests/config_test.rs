@@ -63,12 +63,14 @@ fn test_config_merge_precedence() {
         plugins: vec!["nvm".to_string(), "fnm".to_string()],
         version_files: vec![".nvmrc".to_string()],
         auto_install: AutoInstallMode::Never,
+        use_default: true,
     };
 
     let override_config = Config {
         plugins: vec!["fnm".to_string()],
         version_files: vec![".node-version".to_string()],
         auto_install: AutoInstallMode::Always,
+        use_default: true,
     };
 
     // Test that override values would take precedence
@@ -183,6 +185,7 @@ fn test_config_validation() {
         plugins: vec![],
         version_files: vec![".nvmrc".to_string()],
         auto_install: AutoInstallMode::Prompt,
+        use_default: true,
     };
     assert!(invalid_config.validate().is_err());
 
@@ -191,6 +194,7 @@ fn test_config_validation() {
         plugins: vec!["nvm".to_string()],
         version_files: vec![],
         auto_install: AutoInstallMode::Prompt,
+        use_default: true,
     };
     assert!(invalid_config.validate().is_err());
 
@@ -229,6 +233,7 @@ fn test_config_serde_round_trip() {
         plugins: vec!["nvm".to_string(), "fnm".to_string()],
         version_files: vec![".nvmrc".to_string()],
         auto_install: AutoInstallMode::Always,
+        use_default: true,
     };
 
     // Serialize to YAML

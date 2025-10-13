@@ -32,6 +32,7 @@ impl WizardState {
             plugins: self.plugins.clone(),
             auto_install: self.auto_install.clone(),
             version_files: self.version_files.clone(),
+            use_default: true, // Default to enabled
         })
     }
 
@@ -476,6 +477,7 @@ mod tests {
             plugins: vec!["nvm".to_string(), "fnm".to_string()],
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string()],
+            use_default: true,
         };
         let yaml = generate_config(&config);
 

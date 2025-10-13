@@ -7,7 +7,7 @@ fn test_version_flag() {
     cmd.arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("xvn 1.4.2"));
+        .stdout(predicate::str::contains("xvn 1.5.0"));
 }
 
 #[test]

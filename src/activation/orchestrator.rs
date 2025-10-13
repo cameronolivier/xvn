@@ -44,13 +44,21 @@ impl<'a> Orchestrator<'a> {
     /// 2. Try to find a plugin with this version installed
     /// 3. If found -> activate
     /// 4. If not found -> handle auto-install
-    pub fn activate(&mut self, path: &Path) -> ActivationResult<()> {
+    /// 5. If no version file and use_default -> activate default version
+    pub fn activate(&mut self, path: &Path, use_default: bool) -> ActivationResult<()> {
         // 1. Find version file
         let version_file = match VersionFile::find(path, &self.config.version_files) {
             Ok(Some(vf)) => vf,
             Ok(None) => {
-                // No version file is not an error - just do nothing
+                // No version file found
                 debug!("No version file found in {}", path.display());
+
+                // If use_default is enabled and config allows, activate default version
+                if use_default && self.config.use_default {
+                    return self.activate_default_version();
+                }
+
+                // Otherwise, just do nothing
                 return Ok(());
             }
             Err(e) => {
@@ -262,6 +270,58 @@ impl<'a> Orchestrator<'a> {
 
         Ok(())
     }
+
+    /// Activates the default Node.js version from the version manager
+    ///
+    /// This is called when leaving a project directory (no version file found)
+    /// and use_default is enabled in config.
+    fn activate_default_version(&mut self) -> ActivationResult<()> {
+        debug!("Attempting to activate default version");
+
+        // Try each plugin in priority order to find one with a default version
+        for plugin in self.registry.plugins() {
+            // Check if plugin is available
+            let available = plugin
+                .is_available()
+                .map_err(|e| ActivationError::PluginError {
+                    plugin: plugin.name().to_string(),
+                    source: e,
+                })?;
+
+            if !available {
+                debug!("Plugin {} not available, skipping", plugin.name());
+                continue;
+            }
+
+            // Get default version from plugin
+            match plugin.default_version() {
+                Ok(Some(version)) => {
+                    info!(
+                        "Found default version '{}' from plugin '{}'",
+                        version,
+                        plugin.name()
+                    );
+
+                    // Activate the default version
+                    return self.activate_existing_version(&plugin, &version);
+                }
+                Ok(None) => {
+                    debug!("Plugin {} has no default version configured", plugin.name());
+                }
+                Err(e) => {
+                    warn!(
+                        "Failed to get default version from plugin {}: {}",
+                        plugin.name(),
+                        e
+                    );
+                }
+            }
+        }
+
+        // No default version found in any plugin - this is not an error
+        debug!("No default version configured in any plugin");
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -278,6 +338,7 @@ mod tests {
             plugins: vec!["mock".to_string()],
             auto_install,
             version_files: vec![".nvmrc".to_string()],
+            use_default: true,
         }
     }
 
@@ -299,7 +360,7 @@ mod tests {
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
         // Activate
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok(), "Activation should succeed");
     }
 
@@ -317,7 +378,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_err());
 
         if let Err(ActivationError::VersionNotInstalled { version, .. }) = result {
@@ -341,7 +402,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
 
         // Verify install + activate commands written
@@ -366,7 +427,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
 
         // Verify install + activate commands written
@@ -390,7 +451,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
 
         // Verify no commands written (user declined)
@@ -409,7 +470,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         // No .nvmrc file
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
         // No commands written (verified by logic)
     }
@@ -428,7 +489,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_err());
 
         if let Err(ActivationError::NoPluginsAvailable) = result {
@@ -458,7 +519,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok(), "Activation failed: {result:?}");
 
         // Should use first plugin
@@ -477,7 +538,7 @@ mod tests {
 
         // Use an empty directory - no version file should be found
         let temp_dir = TempDir::new().unwrap();
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok()); // No version file is OK (not an error)
     }
 
@@ -497,7 +558,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "  18.20.0  \n").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
     }
 
@@ -517,7 +578,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "lts/hydrogen").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
     }
 
@@ -535,7 +596,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "v18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
     }
 
@@ -559,7 +620,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
     }
 
@@ -575,7 +636,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         // Should fail with VersionFileEmpty error (handled by VersionFile::find)
         assert!(result.is_err());
     }
@@ -599,7 +660,7 @@ mod tests {
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
         std::fs::write(temp_dir.path().join(".node-version"), "20.0.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_ok());
         // Should use .nvmrc (18.20.0) not .node-version (20.0.0)
     }
@@ -622,7 +683,7 @@ mod tests {
         let subdir = temp_dir.path().join("subdir");
         std::fs::create_dir(&subdir).unwrap();
 
-        let result = orchestrator.activate(&subdir);
+        let result = orchestrator.activate(&subdir, false);
         assert!(result.is_ok());
     }
 
@@ -666,7 +727,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_err());
 
         if let Err(ActivationError::PluginError { plugin, .. }) = result {
@@ -716,7 +777,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_err());
 
         if let Err(ActivationError::PluginError { plugin, .. }) = result {
@@ -724,6 +785,154 @@ mod tests {
         } else {
             panic!("Expected PluginError");
         }
+    }
+
+    #[test]
+    fn test_activate_default_version_when_use_default_enabled() {
+        // Test that default version is activated when no version file and use_default=true
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = true;
+
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_default("20.0.0")
+            .with_version("20.0.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Empty directory (no version file)
+        let temp_dir = TempDir::new().unwrap();
+
+        // Activate with use_default=true
+        let result = orchestrator.activate(temp_dir.path(), true);
+        assert!(result.is_ok(), "Should activate default version successfully");
+    }
+
+    #[test]
+    fn test_no_activate_default_when_use_default_disabled() {
+        // Test that default version is NOT activated when use_default=false
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = false;
+
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_default("20.0.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Empty directory (no version file)
+        let temp_dir = TempDir::new().unwrap();
+
+        // Activate with use_default=true, but config.use_default=false
+        let result = orchestrator.activate(temp_dir.path(), true);
+        assert!(result.is_ok());
+        // No activation should occur
+    }
+
+    #[test]
+    fn test_no_activate_default_when_flag_not_passed() {
+        // Test that default version is NOT activated when use_default flag not passed
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = true;
+
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_default("20.0.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Empty directory (no version file)
+        let temp_dir = TempDir::new().unwrap();
+
+        // Activate with use_default=false
+        let result = orchestrator.activate(temp_dir.path(), false);
+        assert!(result.is_ok());
+        // No activation should occur
+    }
+
+    #[test]
+    fn test_activate_default_no_default_configured() {
+        // Test graceful handling when no default version is configured
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = true;
+
+        let mock_plugin = MockPlugin::new("mock").with_availability(true);
+        // No default version set
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Empty directory (no version file)
+        let temp_dir = TempDir::new().unwrap();
+
+        // Activate with use_default=true
+        let result = orchestrator.activate(temp_dir.path(), true);
+        assert!(result.is_ok(), "Should not error when no default configured");
+    }
+
+    #[test]
+    fn test_activate_default_multiple_plugins() {
+        // Test that first available plugin with default is used
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = true;
+
+        let mock_plugin1 = MockPlugin::new("first").with_availability(true);
+        // first has no default
+
+        let mock_plugin2 = MockPlugin::new("second")
+            .with_availability(true)
+            .with_default("18.20.0")
+            .with_version("18.20.0");
+
+        let registry =
+            PluginRegistry::with_plugins(vec![Arc::new(mock_plugin1), Arc::new(mock_plugin2)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        // Empty directory (no version file)
+        let temp_dir = TempDir::new().unwrap();
+
+        // Activate with use_default=true
+        let result = orchestrator.activate(temp_dir.path(), true);
+        assert!(result.is_ok(), "Should use second plugin's default");
+    }
+
+    #[test]
+    fn test_version_file_takes_precedence_over_default() {
+        // Test that version file is used even when use_default=true
+        let mut config = create_test_config(AutoInstallMode::Never);
+        config.use_default = true;
+
+        let mock_plugin = MockPlugin::new("mock")
+            .with_availability(true)
+            .with_default("20.0.0")
+            .with_version("18.20.0") // Different from default
+            .with_version("20.0.0");
+
+        let registry = PluginRegistry::with_plugins(vec![Arc::new(mock_plugin)]);
+        let mut writer = CommandWriter::new().unwrap();
+
+        let mut orchestrator = Orchestrator::new(&config, &registry, &mut writer);
+
+        let temp_dir = TempDir::new().unwrap();
+        std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
+
+        // Activate with use_default=true
+        let result = orchestrator.activate(temp_dir.path(), true);
+        assert!(result.is_ok());
+        // Should activate 18.20.0 from .nvmrc, not 20.0.0 default
     }
 
     #[test]
@@ -766,7 +975,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         std::fs::write(temp_dir.path().join(".nvmrc"), "18.20.0").unwrap();
 
-        let result = orchestrator.activate(temp_dir.path());
+        let result = orchestrator.activate(temp_dir.path(), false);
         assert!(result.is_err(), "Should propagate registry errors");
     }
 }

@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.5.0] - 2025-10-12
+## [1.5.0] - 2025-10-13
+
+### Added - Automatic Default Version Return
+
+- **Automatic Default Version Switching**
+  - xvn now automatically switches to your default Node.js version when leaving a project directory
+  - Uses `nvm alias default` for nvm users
+  - Uses `fnm default` for fnm users
+  - Configurable via `use_default: true` setting in `~/.xvnrc` (enabled by default)
+  - Toggle with `xvn set use-default` command
+  - View status with `xvn status` command
+
+- **New Plugin Method: `default_version()`**
+  - All version manager plugins now support querying default version
+  - Graceful handling when no default is configured
+  - Priority-based plugin selection (first available plugin's default is used)
 
 ### Added - Complete Uninstall Command
 

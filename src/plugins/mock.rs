@@ -12,6 +12,7 @@ pub struct MockPlugin {
     pub available: bool,
     pub installed_versions: HashSet<String>,
     pub available_versions: Vec<String>,
+    pub default_version: Option<String>,
 }
 
 impl MockPlugin {
@@ -22,6 +23,7 @@ impl MockPlugin {
             available: true,
             installed_versions: HashSet::new(),
             available_versions: Vec::new(),
+            default_version: None,
         }
     }
 
@@ -42,6 +44,12 @@ impl MockPlugin {
         for version in versions {
             self.installed_versions.insert(version.to_string());
         }
+        self
+    }
+
+    /// Set the default version
+    pub fn with_default(mut self, version: impl Into<String>) -> Self {
+        self.default_version = Some(version.into());
         self
     }
 }
@@ -73,5 +81,9 @@ impl VersionManagerPlugin for MockPlugin {
 
     fn list_versions(&self) -> Result<Vec<String>> {
         Ok(self.available_versions.clone())
+    }
+
+    fn default_version(&self) -> Result<Option<String>> {
+        Ok(self.default_version.clone())
     }
 }

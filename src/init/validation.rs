@@ -96,6 +96,7 @@ mod tests {
             plugins: vec!["nvm".to_string()],
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string()],
+            use_default: true,
         };
         assert!(validate_config(&config).is_ok());
     }

@@ -163,6 +163,26 @@ impl VersionManagerPlugin for NvmPlugin {
             }
         }
     }
+
+    fn default_version(&self) -> Result<Option<String>> {
+        // Get nvm's default version using `nvm version default`
+        match self.run_nvm_command(&["version", "default"]) {
+            Ok(version) => {
+                // nvm returns "v18.20.0" format, or "N/A" if no default set
+                if version == "N/A" || version.is_empty() {
+                    Ok(None)
+                } else if version.starts_with('v') {
+                    Ok(Some(version.trim_start_matches('v').to_string()))
+                } else {
+                    Ok(Some(version))
+                }
+            }
+            Err(_) => {
+                // If command fails, assume no default is configured
+                Ok(None)
+            }
+        }
+    }
 }
 
 #[cfg(test)]

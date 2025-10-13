@@ -109,9 +109,26 @@ __xvn_chpwd() {
     if version_file=$(__xvn_find_file "$PWD"); then
         __xvn_activate "$version_file"
     else
-        # No version file found, clear active key
+        # No version file found - switch to default version if configured
         if [[ -n "${XVN_ACTIVE_KEY:-}" ]]; then
-            __xvn_debug "Left project directory, clearing active key"
+            __xvn_debug "Left project directory, switching to default version"
+
+            # Call xvn activate with --use-default flag
+            # This will switch to the version manager's default version (e.g., nvm default)
+            local commands
+            commands=$(xvn activate "$PWD" --use-default 3>&1 1>&2 2>&3) || {
+                __xvn_debug "Default version activation failed (exit code $?)"
+                # Clear active key even if activation fails
+                unset XVN_ACTIVE_KEY
+                return 0
+            }
+
+            if [[ -n "$commands" ]]; then
+                __xvn_debug "Evaluating default activation commands: $commands"
+                eval "$commands"
+            fi
+
+            # Clear active key to allow re-activation if entering another project
             unset XVN_ACTIVE_KEY
         fi
     fi

@@ -12,6 +12,10 @@ pub struct Config {
 
     /// Version files to search for (in priority order)
     pub version_files: Vec<String>,
+
+    /// Whether to switch to default version when leaving a project directory
+    /// Default: true (automatically switch to default version)
+    pub use_default: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -28,6 +32,7 @@ impl Default for Config {
             plugins: vec!["nvm".to_string(), "fnm".to_string()],
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string(), ".node-version".to_string()],
+            use_default: true,
         }
     }
 }

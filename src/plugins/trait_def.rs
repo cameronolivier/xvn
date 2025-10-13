@@ -102,4 +102,24 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
         // Default implementation: empty list
         Ok(Vec::new())
     }
+
+    /// Gets the default Node.js version configured for this version manager
+    ///
+    /// This is used when xvn needs to switch back to a "default" version,
+    /// such as when leaving a project directory that has a .nvmrc file.
+    ///
+    /// For nvm: returns the version aliased as "default" (via `nvm version default`)
+    /// For fnm: returns the default version (via `fnm default`)
+    /// For other managers: may return None if no default is configured
+    ///
+    /// Default implementation returns None.
+    ///
+    /// # Returns
+    /// - `Ok(Some(version))` if a default version is configured
+    /// - `Ok(None)` if no default is configured (not an error)
+    /// - `Err(_)` if unable to determine (e.g., version manager not available)
+    fn default_version(&self) -> Result<Option<String>> {
+        // Default implementation: no default configured
+        Ok(None)
+    }
 }

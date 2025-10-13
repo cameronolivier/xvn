@@ -160,6 +160,42 @@ impl VersionManagerPlugin for FnmPlugin {
         // Just return the version as-is
         Ok(version.to_string())
     }
+
+    fn default_version(&self) -> Result<Option<String>> {
+        // Get fnm's default version by parsing `fnm list` output
+        // The default version is marked with "default" label, e.g.:
+        // * v18.20.0 default
+        //   v20.0.0
+        match self.run_fnm_command(&["list"]) {
+            Ok(output) => {
+                for line in output.lines() {
+                    let line = line.trim();
+
+                    // Check if this line has the "default" marker
+                    if line.contains("default") {
+                        // Extract version from line like "* v18.20.0 default"
+                        let version_part = line
+                            .trim_start_matches('*')
+                            .split_whitespace()
+                            .next()
+                            .unwrap_or("");
+
+                        if !version_part.is_empty() && version_part != "system" {
+                            // Remove 'v' prefix if present
+                            let version = version_part.trim_start_matches('v');
+                            return Ok(Some(version.to_string()));
+                        }
+                    }
+                }
+                // No default found
+                Ok(None)
+            }
+            Err(_) => {
+                // If command fails, assume no default is configured
+                Ok(None)
+            }
+        }
+    }
 }
 
 #[cfg(test)]

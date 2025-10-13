@@ -27,7 +27,7 @@ pub fn set_config(setting: Option<String>) -> Result<()> {
     let setting = match setting {
         Some(s) => s,
         None => {
-            let options = vec!["auto-install", "plugins", "version-files"];
+            let options = vec!["auto-install", "plugins", "version-files", "use-default"];
 
             Select::new("Which setting would you like to change?", options)
                 .prompt()?
@@ -40,9 +40,10 @@ pub fn set_config(setting: Option<String>) -> Result<()> {
         "auto-install" => set_auto_install(&mut config)?,
         "plugins" => set_plugins(&mut config)?,
         "version-files" => set_version_files(&mut config)?,
+        "use-default" => set_use_default(&mut config)?,
         _ => {
             output::error(&format!("Unknown setting: {}", setting));
-            output::info("Available settings: auto-install, plugins, version-files");
+            output::info("Available settings: auto-install, plugins, version-files, use-default");
             return Ok(());
         }
     }
@@ -203,6 +204,37 @@ fn set_version_files(config: &mut Config) -> Result<()> {
     Ok(())
 }
 
+fn set_use_default(config: &mut Config) -> Result<()> {
+    use inquire::Confirm;
+    use owo_colors::OwoColorize;
+
+    println!();
+    println!("  {} {}", "🔄".cyan(), "Use Default Version".bold());
+    println!();
+    let status_text = if config.use_default {
+        "enabled".green().to_string()
+    } else {
+        "disabled".red().to_string()
+    };
+    println!("  Current: {}", status_text);
+    println!();
+    println!("  When enabled, xvn automatically switches to your version manager's");
+    println!("  default Node.js version when you leave a project directory.");
+    println!();
+    println!("  For nvm: Uses the version aliased as 'default' (nvm alias default)");
+    println!("  For fnm: Uses the fnm default version");
+    println!();
+
+    let enable = Confirm::new("Enable automatic switch to default version?")
+        .with_default(config.use_default)
+        .with_help_message("Recommended: yes")
+        .prompt()?;
+
+    config.use_default = enable;
+
+    Ok(())
+}
+
 fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
     use chrono::Local;
 
@@ -224,7 +256,11 @@ fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
          auto_install: {}\n\
          \n\
          # Version files to search for (in priority order)\n\
-         version_files:\n{}\n",
+         version_files:\n{}\n\
+         # Automatically switch to default version when leaving project directories\n\
+         # When enabled, xvn switches to your version manager's default Node.js version\n\
+         # (e.g., 'nvm alias default') when you cd out of a project directory.\n\
+         use_default: {}\n",
         timestamp,
         config
             .plugins
@@ -243,6 +279,7 @@ fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
             .map(|f| format!("  - {}", f))
             .collect::<Vec<_>>()
             .join("\n"),
+        config.use_default,
     );
 
     fs::write(path, content).context("Failed to write config file")?;

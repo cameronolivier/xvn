@@ -10,7 +10,8 @@ use std::path::PathBuf;
     about = "Automatic Node.js version switching",
     long_about = r#"
 xvn automatically switches your Node.js version when you cd into a directory
-with a .nvmrc or .node-version file.
+with a .nvmrc or .node-version file. When you leave a project directory, xvn
+automatically returns to your default Node.js version.
 
 After installation, run 'xvn init' to configure your shell with an interactive
 wizard, or 'xvn init --quick' for automatic setup with sensible defaults.
@@ -87,6 +88,15 @@ pub enum Commands {
         /// Directory to activate for (defaults to current directory)
         #[arg(default_value = ".")]
         path: PathBuf,
+
+        /// Use default version if no version file found
+        ///
+        /// When enabled, xvn will switch to the version manager's default
+        /// version (e.g., `nvm version default`) if no .nvmrc file is found.
+        /// This is used internally by the shell hook when leaving project
+        /// directories.
+        #[arg(long)]
+        use_default: bool,
     },
 
     /// Show configuration, installed plugins, and test activation
@@ -160,8 +170,8 @@ pub fn run() -> Result<()> {
 
             crate::init::init(true, false, force)
         }
-        Some(Commands::Activate { path }) => {
-            info!("Running activate command for path: {path:?}");
+        Some(Commands::Activate { path, use_default }) => {
+            info!("Running activate command for path: {path:?} (use_default: {use_default})");
 
             // Check for installation conflicts and show warning if flagged
             if crate::installation_detector::InstallationDetector::should_warn() {
@@ -185,7 +195,7 @@ pub fn run() -> Result<()> {
                 crate::activation::Orchestrator::new(&config, &registry, &mut fd3);
 
             // Run activation
-            match orchestrator.activate(&path) {
+            match orchestrator.activate(&path, use_default) {
                 Ok(()) => Ok(()),
                 Err(e) => {
                     // Print main error message
@@ -213,6 +223,29 @@ pub fn run() -> Result<()> {
                         "Version files: {}",
                         config.version_files.join(", ")
                     ));
+                    crate::output::info(&format!(
+                        "Use default version: {}",
+                        if config.use_default {
+                            "enabled"
+                        } else {
+                            "disabled"
+                        }
+                    ));
+
+                    // Try to show the default version from available plugins
+                    let registry = crate::plugins::PluginRegistry::new(&config.plugins);
+                    for plugin in registry.plugins() {
+                        if let Ok(true) = plugin.is_available() {
+                            if let Ok(Some(default_version)) = plugin.default_version() {
+                                crate::output::info(&format!(
+                                    "Default version ({}): {}",
+                                    plugin.name(),
+                                    default_version
+                                ));
+                                break; // Only show first plugin's default
+                            }
+                        }
+                    }
                 }
                 Err(e) => {
                     crate::output::error(&format!("Error loading config: {e}"));

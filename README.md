@@ -6,12 +6,13 @@
 
 > Automatic Node.js version switching for cd - 2-3x faster than avn
 
-**xvn** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file.
+**xvn** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file. It automatically returns to your default version when you leave.
 
 ## Features
 
 - 🚀 **Fast**: <100ms activation time (2-3x faster than avn)
 - 🔌 **Compatible**: Works with nvm, fnm, and n
+- 🔄 **Smart**: Automatically returns to default version when leaving projects
 - 🤖 **Auto-install**: Prompts to install missing versions
 - ⚙️  **Configurable**: Customize behavior via `~/.xvnrc`
 - 🔒 **Safe**: Written in Rust with checksum verification
@@ -91,6 +92,30 @@ Just `cd` into a directory with a version file:
 
 ```bash
 cd ~/my-project  # xvn automatically switches Node.js version
+cd ..            # xvn switches back to your default Node.js version
+```
+
+### Automatic Default Version
+
+When you leave a project directory (one with a `.nvmrc` or other version file), **xvn automatically switches back to your default Node.js version**. This ensures you're always on your preferred version when not in a project.
+
+**For nvm users:**
+- xvn uses your `default` alias: `nvm alias default 20.11.0`
+- Check your default: `nvm version default`
+
+**For fnm users:**
+- xvn uses fnm's default version
+- Check your default: `fnm default`
+
+**Configuration:**
+```yaml
+# In ~/.xvnrc
+use_default: true  # (default: true)
+```
+
+Disable this behavior if you prefer manual version switching:
+```bash
+xvn set use-default  # Interactive toggle
 ```
 
 ### Supported Version Files
@@ -141,6 +166,9 @@ plugins:
 
 # Auto-install missing versions
 auto_install: prompt  # or 'always' or 'never'
+
+# Automatically switch to default version when leaving projects
+use_default: true  # or 'false' to disable
 
 # Silent mode (no output)
 silent: false
