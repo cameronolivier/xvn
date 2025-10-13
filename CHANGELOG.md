@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2025-10-13
+
+### Fixed
+
+- **Homebrew Installation Shell Integration**
+  - Release artifacts now include `lib/xvn.sh` shell integration script
+  - Homebrew formula installs shell script to `$(brew --prefix xvn)/lib/xvn.sh`
+  - Shell integration automatically detects and sources from correct location:
+    - npm: `$XVN_DIR/current/lib/xvn.sh`
+    - Homebrew: `$(brew --prefix xvn)/lib/xvn.sh`
+  - Fixed issue where default version switching didn't work for Homebrew installations
+
+### Technical Details
+
+- Files modified: `.github/workflows/build.yml`, `src/setup/profile_modification.rs`, `Formula/xvn.rb` (homebrew-xvn repo)
+- Build workflow now packages shell script with binaries
+- Profile modification code tries npm location first, then Homebrew
+- All shell integration features now work correctly for both installation methods
+
 ## [1.6.0] - 2025-10-13
 
 ### Added - Automatic Default Version Return
