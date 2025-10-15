@@ -1,10 +1,10 @@
-# xvn - Extreme Version Switcher
+# XVN - Automatic Node Version Switcher
 
 [![CI](https://github.com/olvrcc/xvn/workflows/Test/badge.svg)](https://github.com/olvrcc/xvn/actions)
 [![npm version](https://badge.fury.io/js/@olvrcc%2Fxvn.svg)](https://www.npmjs.com/package/@olvrcc/xvn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> Automatic Node.js version switching for cd - 2-3x faster than avn
+> Automatic Node.js version switching written in Rust, with a loving tip-of-the-hat to [avn](https://github.com/wbyoung/avn)
 
 **xvn** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file. It automatically returns to your default version when you leave.
 
