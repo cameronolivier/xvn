@@ -4,108 +4,54 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**xvn** is a Rust-based reimagining of automatic Node.js version switching, designed to be 2-3x faster than its predecessor (avn). The project is currently in the planning/design phase with no implementation yet.
+**xvn** is a Rust-based automatic Node.js version switcher that activates on `cd`, designed to be 2-3x faster than its predecessor (avn).
 
 **Key Characteristics:**
-- Target language: Rust (for performance, safety, zero runtime dependencies)
-- Distribution: npm with pre-compiled binaries
-- Target platforms: Linux (x64/arm64), macOS (x64/arm64), future Windows support
-- Architecture: Modular plugin system for version managers (nvm, fnm, n, etc.)
+- Language: Rust (for performance, safety, zero runtime dependencies)
+- Distribution: npm with pre-compiled binaries + Homebrew tap
+- Platforms: Linux (x64/arm64), macOS (x64/arm64)
+- Architecture: Modular plugin system for version managers (nvm, fnm)
+- Version: 1.6.1 (MVP released, actively maintained)
 
 ## Project Status
 
-**Current Phase:** Planning/Design (Pre-v0.1.0)
-- Comprehensive project specification complete (PROJECT_SPEC.md)
-- Detailed architecture document complete (ARCHITECTURE.md)
-- Phased project plan complete (PROJECT_PLAN.md)
-- No code implementation exists yet
+**Current Phase:** Production (v1.6.1)
+- MVP complete and published to npm (@olvrcc/xvn)
+- Homebrew tap available (olvrcc/xvn)
+- CI/CD with GitHub Actions for releases
+- Active user base with ongoing enhancements
 
 ## Documentation Structure
 
-The project documentation is organized hierarchically for easy navigation:
+- **[README.md](./README.md)** - User-facing documentation, installation, and usage
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System design and architectural decisions
+- **[docs/MIGRATION.md](./docs/MIGRATION.md)** - Migration guide for upgrading from older versions
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
+- **[spec/](./spec/)** - Historical planning documents and milestone specifications (reference)
 
-### High-Level Documents (in `docs/`)
+## Current Features (v1.6.1)
 
-1. **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - High-level system design and architectural principles
-   - Architectural philosophy and key decisions
-   - System architecture overview and component responsibilities
-   - Core design principles (performance, modularity, error handling, testability)
-   - Security, performance, and testing architecture
-   - Technology stack and deployment strategy
-   - **Milestone Overview section** with architectural focus for each milestone
+✅ **Implemented:**
+- Core CLI with `activate`, `status`, `setup`, `uninstall`, `set` commands
+- Configuration via `~/.xvnrc` and `./.xvn.yaml`
+- Version file detection: `.nvmrc`, `.node-version`, `package.json`
+- Plugin system with nvm and fnm support
+- Shell integration (bash/zsh via chpwd hooks)
+- FD:3 protocol for parent shell communication
+- Auto-install prompts for missing versions
+- Automatic return to default version when leaving projects
+- Semver range support in `package.json` `engines.node`
+- npm distribution with pre-compiled binaries
+- Homebrew tap (olvrcc/xvn)
+- CI/CD with GitHub Actions
+- Comprehensive test suite (>85% coverage)
 
-### Project Specifications (in `spec/`)
-
-1. **[spec/PROJECT_SPEC.md](./spec/PROJECT_SPEC.md)** - Original avn specification (reference)
-   - Detailed specification based on the original avn project
-   - Complete system architecture and component breakdown
-   - Historical context and design rationale
-
-2. **[spec/PROJECT_PLAN.md](./spec/PROJECT_PLAN.md)** - Project strategy and roadmap
-   - Project vision, goals, and success criteria
-   - Technical strategy and distribution approach
-   - Phase overview (MVP, Enhanced, Advanced)
-   - Risk analysis and mitigation strategies
-   - Release strategy and success metrics
-   - **Milestone Summary section** with goals and deliverables for each milestone
-
-3. **[spec/PROGRESS.md](./spec/PROGRESS.md)** - High-level milestone progress tracking
-   - Phase 1, 2, 3 milestone checkboxes
-   - Links to detailed tasks for each milestone
-   - Current status and next actions
-
-### Milestone Specifications (in `spec/milestone-N/`)
-
-Each milestone has a dedicated directory containing:
-
-1. **[spec/milestone-1/](./spec/milestone-1/)** Core Infrastructure (Weeks 1-2)
-   - [PLAN.md](./spec/milestone-1/PLAN.md) - Architecture and implementation plan
-   - [TASKS.md](./spec/milestone-1/TASKS.md) - Detailed task checklist
-
-2. **[spec/milestone-2/](./spec/milestone-2/)** Plugin System (Weeks 3-4)
-   - [PLAN.md](./spec/milestone-2/PLAN.md) - Plugin trait, nvm/fnm implementation
-   - [TASKS.md](./spec/milestone-2/TASKS.md) - Plugin development tasks
-
-3. **[spec/milestone-3/](./spec/milestone-3/)** Shell Integration (Weeks 5-6)
-   - [PLAN.md](./spec/milestone-3/PLAN.md) - Shell hooks, FD:3 protocol
-   - [TASKS.md](./spec/milestone-3/TASKS.md) - Shell integration tasks
-
-4. **[spec/milestone-4/](./spec/milestone-4/)** Version Activation (Weeks 7-8)
-   - [PLAN.md](./spec/milestone-4/PLAN.md) - Activation orchestration
-   - [TASKS.md](./spec/milestone-4/TASKS.md) - Activation and auto-install tasks
-
-5. **[spec/milestone-5/](./spec/milestone-5/)** Testing & Polish (Weeks 9-10)
-   - [PLAN.md](./spec/milestone-5/PLAN.md) - Test strategy and documentation
-   - [TASKS.md](./spec/milestone-5/TASKS.md) - Testing and quality tasks
-
-6. **[spec/milestone-6/](./spec/milestone-6/)** Release Preparation (Weeks 11-12)
-   - [PLAN.md](./spec/milestone-6/PLAN.md) - CI/CD and distribution
-   - [TASKS.md](./spec/milestone-6/TASKS.md) - Release and beta testing tasks
-
-### Configuration Files
-
-- **package.json** - npm package metadata (minimal, pre-implementation)
-
-## Development Phases
-
-### Phase 1: MVP (v0.1.0 - v1.0.0) - 8-12 weeks
-1. **Milestone 1:** Core Infrastructure - CLI, config, version file detection
-2. **Milestone 2:** Plugin System - Plugin trait, nvm/fnm plugins
-3. **Milestone 3:** Shell Integration - bash/zsh hooks, setup command
-4. **Milestone 4:** Version Activation - Activate command, auto-install prompts
-5. **Milestone 5:** Testing & Polish - Comprehensive tests, benchmarks, docs
-6. **Milestone 6:** Release Preparation - CI/CD, binary builds, npm packaging
-
-### Phase 2: Enhanced Features (v1.1.0 - v1.5.0)
-- package.json "engines.node" support
+⏳ **Potential Future Enhancements:**
+- Additional version managers (n, asdf, volta)
 - Daemon mode for <10ms activation
 - Windows/PowerShell support
-- Additional version managers (n, asdf, volta)
-- Performance optimization (PGO, LTO)
-
-### Phase 3: Advanced Capabilities (v2.0.0+)
-- Shell plugin system (fish, nushell)
-- Advanced features (doctor, which, list, exec commands)
+- Additional shells (fish, nushell)
+- Advanced commands (doctor, which, list, exec)
 
 ## Core Architecture Concepts
 
@@ -133,46 +79,53 @@ Each milestone has a dedicated directory containing:
 - `.xvn.yaml` - Project-level configuration overrides
 - `.nvmrc` / `.node-version` - Node.js version specification files
 
-## Testing Strategy
-
-### Test Coverage Requirements
-- Unit tests: >85% line coverage
-- Integration tests with mock plugins
-- Shell integration tests (bash, zsh)
-- Performance benchmarks with regression detection
-
-### Test Tools (Planned)
-- `cargo test` - Rust unit tests
-- `cargo tarpaulin` - Code coverage
-- `cargo bench` - Performance benchmarks
-- shellcheck - Shell script validation
 
 ## Common Development Commands
-
-**Note:** Project is in planning phase. These commands will be relevant once implementation begins:
 
 ```bash
 # Development
 cargo build                    # Build debug binary
 cargo build --release          # Build optimized binary
 cargo test                     # Run unit tests
-cargo test --all-features      # Run all tests
-cargo bench                    # Run benchmarks
+cargo install --path .         # Install locally for testing
 
 # Code Quality
-cargo clippy                   # Rust linter
+cargo clippy -- -D warnings    # Rust linter (strict)
 cargo fmt                      # Format code
-cargo tarpaulin --out Lcov     # Generate coverage report
+npm run check                  # Run fmt, clippy, and tests together
+npm run lint                   # Run clippy only
 
-# Installation (once implemented)
-npm install -g xvn            # Install from npm
-xvn setup                     # Configure shell integration
-xvn --version                 # Check version
-xvn activate <path>           # Manually activate version
+# Testing
+cargo test                     # Run all tests
+cargo test --test integration  # Run integration tests only
+cargo test <test_name>         # Run specific test
+./scripts/coverage.sh          # Generate code coverage report
 
-# Development Tools
-cargo watch -x test           # Auto-run tests on changes
-cargo audit                   # Security vulnerability check
+# Local Installation for Development
+npm run dev                    # Build and install locally (cargo install --path .)
+npm run setup                  # Build, install locally, and run xvn setup
+
+# Version Management
+./scripts/bump-version.sh <major|minor|patch>  # Bump version in all files
+./scripts/version.sh           # Display current version
+
+# Release Process
+npm run release:download       # Download release artifacts from GitHub Actions
+npm run release:extract        # Extract binaries from archives
+npm run release:pack           # Create npm package tarball
+npm run release:verify         # Verify package contents
+npm publish                    # Publish to npm (requires auth)
+
+# Homebrew Tap
+./scripts/setup-homebrew-tap.sh  # Create/update Homebrew formula
+
+# User Commands
+xvn setup                      # Configure shell integration
+xvn activate [path]            # Manually activate version
+xvn status                     # Show config and last activation time
+xvn set <key>                  # Interactive config setting
+xvn uninstall                  # Remove xvn completely
+xvn --version                  # Check version
 ```
 
 ## Important Design Decisions
@@ -184,36 +137,173 @@ cargo audit                   # Security vulnerability check
 5. **Auto-install with prompts** - UX improvement over avn (prompts to install missing versions)
 6. **Modular shell integration** - Future-ready for additional shell support
 
-## File Structure (Planned)
+## Code Architecture
+
+### Module Structure
 
 ```
-xvn/
-├── src/
-│   ├── main.rs              # CLI entry point
-│   ├── config.rs            # Configuration parsing
-│   ├── plugins/             # Plugin system
-│   │   ├── mod.rs           # Plugin trait and loader
-│   │   ├── nvm.rs           # nvm plugin
-│   │   └── fnm.rs           # fnm plugin
-│   ├── shell/               # Shell integration
-│   │   ├── mod.rs           # Shell abstraction
-│   │   └── hooks.rs         # chpwd hooks
-│   └── version.rs           # Version file detection
-├── tests/                   # Integration tests
-├── shell/
-│   └── xvn.sh               # Shell hook script
-├── Cargo.toml               # Rust project manifest
-├── package.json             # npm package manifest
-└── install.js               # npm postinstall binary download
+src/
+├── main.rs                  # CLI entry point (minimal)
+├── lib.rs                   # Library exports
+├── cli.rs                   # Command-line interface using clap
+├── error.rs                 # Error types and XvnError
+├── output.rs                # Terminal output formatting
+│
+├── activation/              # Version activation orchestration
+│   ├── mod.rs               # Main activation logic
+│   ├── orchestrator.rs      # Coordinates plugins and shell
+│   ├── errors.rs            # Activation-specific errors
+│   └── user_prompt.rs       # Interactive prompts for auto-install
+│
+├── commands/                # CLI subcommands
+│   ├── mod.rs               # Command dispatching
+│   ├── set.rs               # Interactive config setting
+│   └── uninstall.rs         # Clean removal
+│
+├── config/                  # Configuration management
+│   ├── mod.rs               # Config API
+│   ├── schema.rs            # Config struct and defaults
+│   └── loader.rs            # YAML parsing and merging
+│
+├── init/                    # Setup wizard
+│   ├── mod.rs               # Setup command
+│   ├── wizard.rs            # Interactive setup flow
+│   ├── detection.rs         # Detect shell, version managers
+│   ├── validation.rs        # Validate installation
+│   └── prompts.rs           # User prompts
+│
+├── plugins/                 # Version manager plugins
+│   ├── mod.rs               # Plugin exports
+│   ├── trait_def.rs         # VersionManagerPlugin trait
+│   ├── registry.rs          # Plugin loading and priority
+│   ├── nvm.rs               # nvm implementation
+│   ├── fnm.rs               # fnm implementation
+│   └── mock.rs              # Test mock plugin
+│
+├── setup/                   # Shell profile modification
+│   ├── mod.rs               # Setup logic
+│   ├── installer.rs         # Binary installation
+│   ├── shell_detection.rs   # Detect shell type
+│   └── profile_modification.rs  # Modify .bashrc/.zshrc
+│
+├── shell/                   # Shell communication
+│   ├── mod.rs               # Shell abstraction
+│   ├── fd3.rs               # File descriptor 3 protocol
+│   └── json_writer.rs       # JSON output for --json flag
+│
+└── version_file/            # Version file detection
+    ├── mod.rs               # Main finder logic
+    ├── finder.rs            # Walk directory tree
+    ├── package_json.rs      # Parse package.json engines
+    └── semver.rs            # Semver range resolution
+
+tests/                       # Integration tests
+├── integration.rs           # End-to-end tests
+├── config_test.rs           # Config loading tests
+├── plugin_test.rs           # Plugin system tests
+├── version_file_test.rs     # Version file detection tests
+├── shell_integration.rs     # Shell hook tests
+└── security_test.rs         # Security validations
+
+shell/
+└── xvn.sh                   # Shell hook script (bash/zsh)
+
+scripts/                     # Release and dev scripts
+├── bump-version.sh          # Bump version across files
+├── version.sh               # Display current version
+├── download-artifacts.sh    # Download CI build artifacts
+├── extract-binaries.sh      # Extract release binaries
+└── setup-homebrew-tap.sh    # Create Homebrew formula
 ```
 
-## Key Constraints
+### Key Components
 
-- **No backward compatibility with avn** - Clean slate implementation
-- **Not a version manager replacement** - Requires nvm/fnm/n to be installed
-- **Unix-only initially** - Windows support in Phase 2
-- **Shell-specific** - bash/zsh only in Phase 1
+**Activation Flow:**
+1. `cli.rs` parses command (`activate`, `status`, etc.)
+2. `activation/orchestrator.rs` coordinates the activation:
+   - `version_file/finder.rs` walks up directory tree to find `.nvmrc`, etc.
+   - `version_file/package_json.rs` parses `engines.node` if needed
+   - `plugins/registry.rs` loads plugins in priority order
+   - Each plugin attempts to resolve the version
+   - If missing, `activation/user_prompt.rs` prompts to install
+3. `shell/fd3.rs` writes activation command to file descriptor 3
+4. Parent shell executes the command
 
-## Task Tracking
+**Shell Integration:**
+- `shell/xvn.sh` hooks into `chpwd` (bash/zsh)
+- Triggers `xvn activate` on directory change
+- Uses FD:3 protocol to modify parent shell environment
+- Handles idempotency (doesn't re-activate same version)
 
-Tasks are tracked in `/docs/tasks/<branch-name>.md` using the conventional commit format. Update task lists as work progresses with checkmarks for completed items.
+**Plugin System:**
+- `plugins/trait_def.rs` defines `VersionManagerPlugin` trait
+- Built-in plugins: `nvm.rs`, `fnm.rs` (compiled into binary)
+- Registry loads plugins in priority order from config
+- Each plugin checks if the version manager is installed
+- Plugins generate shell commands for activation
+
+**Configuration:**
+- `config/loader.rs` reads `~/.xvnrc` and `./.xvn.yaml`
+- Project config overrides global config
+- YAML format with validation
+- Interactive editing via `xvn set` command
+
+## Important Constraints & Conventions
+
+- **Central installation:** xvn installs to `~/.xvn/bin` to remain available across Node.js version changes
+- **Not a version manager:** xvn requires nvm/fnm to be installed; it's a switcher, not a manager
+- **Platform support:** Linux and macOS only (x64/arm64); Windows not supported
+- **Shell support:** bash and zsh only (via chpwd hooks)
+- **File descriptor 3 protocol:** Child process communicates shell commands to parent via FD:3
+- **Conventional commits:** Always use conventional commit format (feat:, fix:, chore:, etc.)
+- **No `any` types:** Never use `any` in TypeScript; always provide correct types (comment if impossible)
+- **Commit after changes:** Always commit after every change with file list in message
+- **Add before commit:** Always `git add` all files before committing
+
+## Release Process
+
+1. **Version bump:** Use `./scripts/bump-version.sh <major|minor|patch>` to update version in all files
+2. **Git tag:** Create annotated git tag matching version (e.g., `v1.6.1`)
+3. **Push tag:** `git push --tags` triggers GitHub Actions CI/CD
+4. **CI builds:** GitHub Actions builds binaries for all platforms
+5. **Download artifacts:** `npm run release:download` to get binaries
+6. **Extract binaries:** `npm run release:extract` to prepare for packaging
+7. **npm publish:** `npm publish` to release to npm registry
+8. **Homebrew:** `./scripts/setup-homebrew-tap.sh` to update Homebrew formula
+
+## Testing Strategy
+
+### Unit Tests
+- Located in `tests/` directory
+- Run with `cargo test`
+- Use `tempfile` for filesystem tests
+- Mock plugins available in `src/plugins/mock.rs`
+
+### Integration Tests
+- `tests/integration.rs` for end-to-end scenarios
+- Test shell hook integration
+- Validate version file detection across directory trees
+
+### Test Coverage
+- Target: >85% line coverage
+- Generate reports: `./scripts/coverage.sh`
+- Uses `cargo tarpaulin`
+
+## Dependencies
+
+**Core:**
+- `clap` - CLI argument parsing with derive macros
+- `serde` + `serde_yaml` - Config serialization
+- `anyhow` + `thiserror` - Error handling
+- `semver` - Semantic version parsing
+- `dirs` - Cross-platform directory locations
+
+**User Interaction:**
+- `inquire` - Interactive prompts
+- `owo-colors` - Terminal colors
+- `log` + `env_logger` - Debugging
+
+**Dev:**
+- `tempfile` - Temporary files in tests
+- `assert_cmd` - CLI testing
+- `predicates` - Test assertions
