@@ -1,6 +1,6 @@
 {
   "name": "@olvrcc/xvn",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Automatic project Node version switching",
   "main": "install.js",
   "bin": {
