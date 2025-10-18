@@ -44,9 +44,9 @@ impl SetupInstaller {
         Ok(default)
     }
 
-    /// Installs or updates xvn shell integration.
+    /// Installs or updates anvs shell integration.
     pub fn install(&self) -> Result<()> {
-        info!("Setting up xvn shell integration for {}", self.shell.name());
+        info!("Setting up anvs shell integration for {}", self.shell.name());
 
         let profile = self.find_profile()?;
         profile_modification::add_to_profile(&profile)?;
@@ -65,13 +65,13 @@ impl SetupInstaller {
         println!("  Shell:   {}", self.shell.name());
         println!("  Profile: {}", profile.display());
         println!();
-        crate::output::info("To start using xvn:");
+        crate::output::info("To start using anvs:");
         println!("  1. Restart your shell, or run:");
         println!("       source {}", profile.display());
         println!("  2. Navigate to a project with a .nvmrc file");
         println!();
         crate::output::info("For more information:");
-        println!("  xvn --help");
+        println!("  anvs --help");
         println!();
 
         Ok(())

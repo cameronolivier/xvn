@@ -1,6 +1,9 @@
-//! xvn - Extreme Version Switcher for Node.js
+//! ANVS - Automatic Node Version Switcher
 //!
 //! Fast, modular automatic Node.js version switching.
+//!
+//! ANVS automatically switches Node.js versions when you change directories,
+//! reading from `.nvmrc`, `.node-version`, or `package.json` files.
 
 pub mod activation;
 pub mod cli;

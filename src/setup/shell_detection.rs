@@ -33,7 +33,7 @@ impl Shell {
             "bash" => Ok(Self::Bash),
             "zsh" => Ok(Self::Zsh),
             _ => anyhow::bail!(
-                "Unsupported shell: {shell_name}. xvn currently supports bash and zsh."
+                "Unsupported shell: {shell_name}. anvs currently supports bash and zsh."
             ),
         }
     }
