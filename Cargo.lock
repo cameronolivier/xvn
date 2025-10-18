@@ -71,6 +71,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "anvs"
+version = "2.0.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "chrono",
+ "clap",
+ "dirs",
+ "env_logger",
+ "inquire",
+ "libc",
+ "log",
+ "owo-colors",
+ "predicates",
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "shell-escape",
+ "tempfile",
+ "thiserror",
+ "which",
+]
+
+[[package]]
 name = "anyhow"
 version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1421,28 +1446,3 @@ name = "wit-bindgen"
 version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f17a85883d4e6d00e8a97c586de764dabcc06133f7f1d55dce5cdc070ad7fe59"
-
-[[package]]
-name = "xvn"
-version = "1.7.0"
-dependencies = [
- "anyhow",
- "assert_cmd",
- "chrono",
- "clap",
- "dirs",
- "env_logger",
- "inquire",
- "libc",
- "log",
- "owo-colors",
- "predicates",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "shell-escape",
- "tempfile",
- "thiserror",
- "which",
-]

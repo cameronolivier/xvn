@@ -1,13 +1,13 @@
 [package]
-name = "xvn"
-version = "1.7.0"
+name = "anvs"
+version = "2.0.0"
 edition = "2021"
 authors = ["cameronolivier@gmail.com"]
-description = "Extreme Version Switcher for Node.js"
+description = "Automatic Node Version Switcher for Node.js"
 license = "MIT"
 
 [[bin]]
-name = "xvn"
+name = "anvs"
 path = "src/main.rs"
 
 [dependencies]

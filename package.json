@@ -1,10 +1,10 @@
 {
-  "name": "@olvrcc/xvn",
-  "version": "1.7.0",
-  "description": "Automatic project Node version switching",
+  "name": "anvs",
+  "version": "2.0.0",
+  "description": "Automatic Node Version Switcher",
   "main": "install.js",
   "bin": {
-    "xvn": "bin/xvn"
+    "anvs": "bin/anvs"
   },
   "scripts": {
     "postinstall": "node install.js",
@@ -34,12 +34,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olvrcc/xvn.git"
+    "url": "git+https://github.com/olvrcc/anvs.git"
   },
   "bugs": {
-    "url": "https://github.com/olvrcc/xvn/issues"
+    "url": "https://github.com/olvrcc/anvs/issues"
   },
-  "homepage": "https://github.com/olvrcc/xvn#readme",
+  "homepage": "https://github.com/olvrcc/anvs#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
