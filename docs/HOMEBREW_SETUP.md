@@ -1,6 +1,6 @@
 # Homebrew Distribution Setup Guide
 
-This guide walks you through setting up Homebrew distribution for xvn.
+This guide walks you through setting up Homebrew distribution for anvs.
 
 ## Prerequisites
 
@@ -16,25 +16,25 @@ This guide walks you through setting up Homebrew distribution for xvn.
 
 ```bash
 # Create the tap repository
-gh repo create cameronolivier/homebrew-xvn \
+gh repo create cameronolivier/homebrew-anvs \
   --public \
-  --description "Homebrew tap for xvn (Extreme Version Switcher for Node.js)" \
+  --description "Homebrew tap for anvs (Automatic Node Version Switcher)" \
   --clone
 
 # Navigate to the repository
-cd homebrew-xvn
+cd homebrew-anvs
 
 # Create initial README
 cat > README.md << 'EOF'
-# Homebrew Tap for xvn
+# Homebrew Tap for anvs
 
-Official Homebrew tap for [xvn](https://github.com/cameronolivier/xvn) - Extreme Version Switcher for Node.js.
+Official Homebrew tap for [anvs](https://github.com/olvrcc/anvs) - Automatic Node Version Switcher.
 
 ## Installation
 
 ```bash
-brew tap cameronolivier/xvn
-brew install xvn
+brew tap olvrcc/anvs
+brew install anvs
 ```
 
 ## Setup
@@ -42,7 +42,7 @@ brew install xvn
 After installation, run:
 
 ```bash
-xvn setup
+anvs setup
 ```
 
 Then restart your shell.
@@ -54,7 +54,7 @@ Then restart your shell.
 
 ## Documentation
 
-See the main [xvn repository](https://github.com/cameronolivier/xvn) for full documentation.
+See the main [anvs repository](https://github.com/olvrcc/anvs) for full documentation.
 EOF
 
 # Commit and push
@@ -62,7 +62,7 @@ git add README.md
 git commit -m "docs: initial README for homebrew tap"
 git push
 
-# Go back to xvn directory
+# Go back to anvs directory
 cd ..
 ```
 
@@ -82,14 +82,14 @@ gh auth refresh -h github.com -s repo
 # 6. Copy the token
 ```
 
-### Step 3: Add Token as Secret to xvn Repository
+### Step 3: Add Token as Secret to anvs Repository
 
 ```bash
 # Add the secret (will prompt for token value)
-gh secret set HOMEBREW_TAP_TOKEN -R cameronolivier/xvn
+gh secret set HOMEBREW_TAP_TOKEN -R olvrcc/anvs
 
 # Verify it was added
-gh secret list -R cameronolivier/xvn
+gh secret list -R olvrcc/anvs
 ```
 
 ---
@@ -99,10 +99,10 @@ gh secret list -R cameronolivier/xvn
 ### Why Use an Organization?
 
 - ✅ **FREE** for public repositories
-- ✅ More professional branding (@olvrcc/xvn)
+- ✅ More professional branding (olvrcc/anvs)
 - ✅ Better for multiple projects
 - ✅ Easier to add collaborators later
-- ✅ Matches your npm package scope (@olvrcc/xvn)
+- ✅ Matches your npm package (anvs)
 
 ### Step 1: Create GitHub Organization
 
@@ -120,12 +120,12 @@ gh secret list -R cameronolivier/xvn
 # gh org create olvrcc
 ```
 
-### Step 2: Transfer xvn Repository to Organization (Optional)
+### Step 2: Transfer anvs Repository to Organization (Optional)
 
-If you want to move the main xvn repo to the org:
+If you want to move the main anvs repo to the org:
 
 ```bash
-# Go to: https://github.com/cameronolivier/xvn/settings
+# Go to: https://github.com/cameronolivier/anvs/settings
 # Scroll to "Danger Zone"
 # Click "Transfer ownership"
 # Enter: olvrcc
@@ -138,25 +138,25 @@ If you want to move the main xvn repo to the org:
 
 ```bash
 # Create the tap repository under the org
-gh repo create olvrcc/homebrew-xvn \
+gh repo create olvrcc/homebrew-anvs \
   --public \
-  --description "Homebrew tap for xvn (Extreme Version Switcher for Node.js)" \
+  --description "Homebrew tap for anvs (Automatic Node Version Switcher)" \
   --clone
 
 # Navigate to the repository
-cd homebrew-xvn
+cd homebrew-anvs
 
 # Create initial README
 cat > README.md << 'EOF'
-# Homebrew Tap for xvn
+# Homebrew Tap for anvs
 
-Official Homebrew tap for [xvn](https://github.com/cameronolivier/xvn) - Extreme Version Switcher for Node.js.
+Official Homebrew tap for [anvs](https://github.com/olvrcc/anvs) - Automatic Node Version Switcher.
 
 ## Installation
 
 ```bash
-brew tap olvrcc/xvn
-brew install xvn
+brew tap olvrcc/anvs
+brew install anvs
 ```
 
 ## Setup
@@ -164,7 +164,7 @@ brew install xvn
 After installation, run:
 
 ```bash
-xvn setup
+anvs setup
 ```
 
 Then restart your shell.
@@ -176,7 +176,7 @@ Then restart your shell.
 
 ## Documentation
 
-See the main [xvn repository](https://github.com/cameronolivier/xvn) for full documentation.
+See the main [anvs repository](https://github.com/olvrcc/anvs) for full documentation.
 EOF
 
 # Commit and push
@@ -184,7 +184,7 @@ git add README.md
 git commit -m "docs: initial README for homebrew tap"
 git push
 
-# Go back to xvn directory
+# Go back to anvs directory
 cd ..
 ```
 
@@ -198,7 +198,7 @@ cd ..
 # 4. Expiration: 90 days (or custom)
 # 5. Resource owner: olvrcc
 # 6. Repository access: "Only select repositories"
-# 7. Select: olvrcc/homebrew-xvn
+# 7. Select: olvrcc/homebrew-anvs
 # 8. Permissions:
 #    - Contents: Read and write
 #    - Metadata: Read-only (automatic)
@@ -209,19 +209,19 @@ cd ..
 gh auth refresh -h github.com -s repo
 ```
 
-### Step 5: Add Token as Secret to xvn Repository
+### Step 5: Add Token as Secret to anvs Repository
 
 ```bash
-# If xvn is still under cameronolivier:
-gh secret set HOMEBREW_TAP_TOKEN -R cameronolivier/xvn
+# If anvs is still under cameronolivier:
+gh secret set HOMEBREW_TAP_TOKEN -R cameronolivier/anvs
 
-# If you transferred xvn to olvrcc:
-gh secret set HOMEBREW_TAP_TOKEN -R olvrcc/xvn
+# If you transferred anvs to olvrcc:
+gh secret set HOMEBREW_TAP_TOKEN -R olvrcc/anvs
 
 # Verify it was added
-gh secret list -R cameronolivier/xvn
+gh secret list -R cameronolivier/anvs
 # or
-gh secret list -R olvrcc/xvn
+gh secret list -R olvrcc/anvs
 ```
 
 ---
@@ -232,12 +232,12 @@ After setup, verify everything is ready:
 
 ```bash
 # 1. Check tap repository exists
-gh repo view olvrcc/homebrew-xvn
+gh repo view olvrcc/homebrew-anvs
 # or
-gh repo view cameronolivier/homebrew-xvn
+gh repo view cameronolivier/homebrew-anvs
 
-# 2. Check secret is added to xvn repository
-gh secret list -R cameronolivier/xvn
+# 2. Check secret is added to anvs repository
+gh secret list -R olvrcc/anvs
 # Should show: HOMEBREW_TAP_TOKEN
 
 # 3. Check Homebrew is installed
@@ -253,8 +253,8 @@ gh auth status
 
 Once setup is complete:
 
-1. ✅ Create Homebrew formula (`homebrew/xvn.rb`)
-2. ✅ Calculate SHA256 checksums for v1.4.1 binaries
+1. ✅ Create Homebrew formula (`homebrew/anvs.rb`)
+2. ✅ Calculate SHA256 checksums for v2.0.0 binaries
 3. ✅ Test formula locally
 4. ✅ Copy formula to tap repository
 5. ✅ Test tap installation

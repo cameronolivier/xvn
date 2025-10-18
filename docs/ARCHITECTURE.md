@@ -1,9 +1,9 @@
-# XVN Architecture Documentation
+# ANVS Architecture Documentation
 
-**Project:** xvn - Extreme Version Switcher for Node.js
-**Version:** 1.0.0
-**Date:** October 1, 2025
-**Status:** Design Phase
+**Project:** anvs - Automatic Node Version Switcher
+**Version:** 2.0.0
+**Date:** October 19, 2025
+**Status:** Production
 
 ---
 
@@ -24,7 +24,7 @@
 
 ## Executive Summary
 
-**xvn** is a high-performance, Rust-based automatic Node.js version switcher designed to be 2-3x faster than existing solutions while maintaining simplicity and reliability.
+**anvs** is a high-performance, Rust-based automatic Node.js version switcher designed to be 2-3x faster than existing solutions while maintaining simplicity and reliability.
 
 ### Architectural Philosophy
 
@@ -79,18 +79,18 @@
                          │ sources on startup
                          ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                       ~/.xvn/bin/xvn.sh                                   │
+│                       ~/.anvs/bin/anvs.sh                                 │
 │  ROLE: Shell Integration Layer                                           │
 │  - Hook into shell directory change events                               │
 │  - Search for version files up directory tree                            │
 │  - Track active version file (prevent redundant activations)             │
-│  - Invoke xvn binary when version file changes                           │
+│  - Invoke anvs binary when version file changes                          │
 │  - Evaluate commands returned via file descriptor #3                     │
 └────────────────────────┬─────────────────────────────────────────────────┘
                          │ spawns when version file found/changed
                          ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                         xvn (Rust binary)                                 │
+│                         anvs (Rust binary)                                │
 │  ROLE: Core Orchestration & Logic                                        │
 │  MODULES:                                                                 │
 │  - CLI: Parse arguments, dispatch to handlers                            │
@@ -104,14 +104,14 @@
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                    PLUGIN SYSTEM                                          │
 │  Built-in: nvm, fnm (compiled into binary)                               │
-│  Future: Dynamic loading from ~/.xvn/plugins/                            │
+│  Future: Dynamic loading from ~/.anvs/plugins/                           │
 │  Interface: VersionManagerPlugin trait                                   │
 └────────────────────────┬─────────────────────────────────────────────────┘
                          │ returns shell commands
                          ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
 │  FILE DESCRIPTOR #3 PROTOCOL                                              │
-│  - xvn writes shell commands to fd:3                                     │
+│  - anvs writes shell commands to fd:3                                    │
 │  - Shell captures and evaluates commands                                 │
 │  - Allows child process to modify parent shell environment               │
 └────────────────────────┬─────────────────────────────────────────────────┘
@@ -119,8 +119,8 @@
                          ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                    VERSION MANAGERS                                       │
-│  External tools: nvm, fnm, n (not part of xvn)                          │
-│  xvn orchestrates, doesn't replace them                                  │
+│  External tools: nvm, fnm, n (not part of anvs)                         │
+│  anvs orchestrates, doesn't replace them                                 │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -128,8 +128,8 @@
 
 | Component | Responsibility | Complexity |
 |-----------|---------------|------------|
-| **Shell Hook (xvn.sh)** | Directory change detection, version file search | Low |
-| **xvn Core (Rust)** | Orchestration, configuration, activation logic | Medium |
+| **Shell Hook (anvs.sh)** | Directory change detection, version file search | Low |
+| **anvs Core (Rust)** | Orchestration, configuration, activation logic | Medium |
 | **Plugin System** | Version manager abstraction, command generation | Low-Medium |
 | **Version Managers** | Actual Node.js installation/switching | High (external) |
 
@@ -205,7 +205,7 @@
 
 **2. Configuration Module**
 - Purpose: Load, parse, merge configuration
-- Format: YAML (user: ~/.xvnrc, project: .xvn.yaml)
+- Format: YAML (user: ~/.anvsrc, project: .anvs.yaml)
 - Precedence: Environment vars > Project config > User config > Defaults
 
 **3. Version File Module**
@@ -217,7 +217,7 @@
 - Purpose: Load, manage, invoke version manager plugins
 - Interface: `VersionManagerPlugin` trait
 - Built-in: nvm, fnm (compiled into binary)
-- Future: Dynamic loading from ~/.xvn/plugins/
+- Future: Dynamic loading from ~/.anvs/plugins/
 
 **5. Activation Module**
 - Purpose: Orchestrate version activation flow
@@ -233,8 +233,8 @@
 - Responsibilities:
   - Detect shell (bash/zsh)
   - Modify shell profile (idempotent)
-  - Install xvn.sh hook script
-  - Create default ~/.xvnrc
+  - Install anvs.sh hook script
+  - Create default ~/.anvsrc
 
 ---
 
@@ -244,11 +244,11 @@
 
 ```
 1. User: cd ~/project
-2. Shell hook triggered (__xvn_chpwd)
+2. Shell hook triggered (__anvs_chpwd)
 3. Find version file: ~/project/.nvmrc
-4. Compare to XVN_ACTIVE_FILE (different? continue)
-5. Execute: xvn activate ~/project/.nvmrc
-6. xvn binary:
+4. Compare to ANVS_ACTIVE_FILE (different? continue)
+5. Execute: anvs activate ~/project/.nvmrc
+6. anvs binary:
    - Load config (user + project)
    - Read version file: "18.20.0"
    - Load plugins: [nvm, fnm]
@@ -263,7 +263,7 @@
 7. Shell captures fd:3 commands
 8. Shell evaluates: nvm install && nvm use
 9. nvm downloads, installs, activates
-10. Update XVN_ACTIVE_FILE
+10. Update ANVS_ACTIVE_FILE
 11. Success! Node.js 18.20.0 active
 
 Total time: ~50-85ms (without install)
@@ -276,7 +276,7 @@ Total time: ~50-85ms (without install)
 ### Threat Model
 
 **Assumptions:**
-- User trusts xvn binary
+- User trusts anvs binary
 - User trusts version managers (nvm, fnm)
 - Attacker may control version files in cloned repos
 
@@ -302,7 +302,7 @@ Total time: ~50-85ms (without install)
 **4. Principle of Least Privilege**
 - Run with user permissions only (no sudo)
 - Only modify user's shell environment
-- Only write to ~/.xvn/ (user-owned)
+- Only write to ~/.anvs/ (user-owned)
 
 ---
 
@@ -374,7 +374,7 @@ Total time: ~50-85ms (without install)
 - Community can add new shells
 
 **2. Dynamic Plugin Loading (Phase 2)**
-- Load plugins from ~/.xvn/plugins/*.so
+- Load plugins from ~/.anvs/plugins/*.so
 - IPC-based for security (separate processes)
 
 **3. Daemon Mode (Phase 2)**
@@ -433,38 +433,38 @@ panic = "abort"
 ### npm Package Structure
 
 ```
-xvn/
+anvs/
 ├── package.json
 ├── install.js           # Postinstall: download binary
-├── bin/xvn              # Wrapper script
+├── bin/anvs             # Wrapper script
 ├── native/              # Pre-compiled binaries
-│   ├── xvn-linux-x64
-│   ├── xvn-linux-arm64
-│   ├── xvn-darwin-x64
-│   └── xvn-darwin-arm64
-└── shell/xvn.sh         # Shell integration
+│   ├── anvs-linux-x64
+│   ├── anvs-linux-arm64
+│   ├── anvs-darwin-x64
+│   └── anvs-darwin-arm64
+└── shell/anvs.sh        # Shell integration
 ```
 
 ### Installation Flow
 
-1. User: `npm install -g xvn`
+1. User: `npm install -g anvs`
 2. Postinstall downloads correct binary from GitHub Releases
 3. Verifies checksum, extracts to native/
-4. npm creates symlink: `/usr/local/bin/xvn`
-5. User: `xvn setup` (installs hooks, creates config)
+4. npm creates symlink: `/usr/local/bin/anvs`
+5. User: `anvs setup` (installs hooks, creates config)
 6. User restarts terminal
-7. xvn active!
+7. anvs active!
 
 ---
 
 ## File Descriptor #3 Protocol
 
-**The Innovation:** Allows child process (xvn) to modify parent shell environment.
+**The Innovation:** Allows child process (anvs) to modify parent shell environment.
 
 **How it works:**
-1. Shell opens FD:3 before spawning xvn
-2. xvn writes shell commands to FD:3
-3. Shell captures FD:3 output: `commands=$(xvn activate ... 3>&1 1>&2)`
+1. Shell opens FD:3 before spawning anvs
+2. anvs writes shell commands to FD:3
+3. Shell captures FD:3 output: `commands=$(anvs activate ... 3>&1 1>&2)`
 4. Shell evaluates: `eval "$commands"`
 
 **Benefits:**
@@ -498,9 +498,9 @@ xvn/
 
 **Architectural Focus:** Shell Hooks & IPC
 
-- **Modules:** xvn.sh shell script, FD:3 protocol, Setup command, Profile modification
+- **Modules:** anvs.sh shell script, FD:3 protocol, Setup command, Profile modification
 - **Key Decisions:** chpwd_functions for directory change hooks, FD:3 for command passing
-- **Architecture:** Shell (xvn.sh) ↔ Rust binary (fd:3) ↔ Version manager (eval)
+- **Architecture:** Shell (anvs.sh) ↔ Rust binary (fd:3) ↔ Version manager (eval)
 - **Success:** Shell hook triggers on cd, commands executed in parent shell, setup idempotent
 
 ### Milestone 4: Version Activation & Auto-Install (Weeks 7-8)
@@ -547,4 +547,4 @@ For detailed implementation specifications for each milestone, see:
 
 **END OF ARCHITECTURE.md**
 
-This document provides the high-level architectural foundation for xvn. Implementation details for specific features are documented in milestone-specific files.
+This document provides the high-level architectural foundation for anvs. Implementation details for specific features are documented in milestone-specific files.

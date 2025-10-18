@@ -1,4 +1,221 @@
-# Migration Guide: Upgrading to xvn v1.2+
+# Migration Guide
+
+## Migrating from xvn to anvs (v1.x → v2.0)
+
+**IMPORTANT**: This is a breaking change. The project has been renamed from `xvn` to `anvs`.
+
+### Why the Rename?
+
+- **Better package name**: `anvs` is available unnamespaced on npm (vs `@olvrcc/xvn`)
+- **Clearer purpose**: "Automatic Node Version Switcher" immediately communicates what the tool does
+- **Improved discoverability**: Easier to find and remember
+- **Tribute to avn**: Pays homage to the original project while being distinct
+
+### What Changed
+
+| Component | Old (xvn) | New (anvs) |
+|-----------|-----------|------------|
+| npm package | `@olvrcc/xvn` | `anvs` |
+| Binary name | `xvn` | `anvs` |
+| Install directory | `~/.xvn/` | `~/.anvs/` |
+| User config | `~/.xvnrc` | `~/.anvsrc` |
+| Project config | `.xvn.yaml` | `.anvs.yaml` |
+| Shell script | `shell/xvn.sh` | `shell/anvs.sh` |
+| Environment vars | `XVN_*` | `ANVS_*` |
+| Repository | `github.com/olvrcc/xvn` | `github.com/olvrcc/anvs` |
+| Homebrew tap | `olvrcc/xvn` | `olvrcc/anvs` |
+
+### Migration Steps
+
+#### Step 1: Backup Your Configuration
+
+```bash
+# Backup your xvn config (optional but recommended)
+cp ~/.xvnrc ~/.xvnrc.backup
+
+# Backup project-level config files if you use them
+find . -name ".xvn.yaml" -exec cp {} {}.backup \;
+```
+
+#### Step 2: Uninstall Old xvn
+
+```bash
+# Option 1: Use xvn's uninstall command (recommended)
+xvn uninstall
+
+# Option 2: Manual uninstall
+npm uninstall -g @olvrcc/xvn
+
+# Remove shell integration from ~/.bashrc or ~/.zshrc
+# Look for and remove lines like:
+# [ -s "$HOME/.xvn/bin/xvn.sh" ] && . "$HOME/.xvn/bin/xvn.sh"
+
+# Optionally remove old installation directory
+rm -rf ~/.xvn
+```
+
+#### Step 3: Install New anvs
+
+```bash
+# Via npm (recommended)
+npm install -g anvs
+
+# Or via Homebrew
+brew install olvrcc/anvs/anvs
+
+# Run setup to configure shell integration
+anvs setup
+```
+
+#### Step 4: Migrate Configuration
+
+**Option A: Copy your old config** (if you had custom settings):
+```bash
+# Copy contents from backup to new config file
+cp ~/.xvnrc.backup ~/.anvsrc
+
+# Or manually edit
+nano ~/.anvsrc
+```
+
+**Option B: Start fresh** (if you used defaults):
+```bash
+# anvs will create a default config on first run
+# Customize with:
+anvs set config.default_version
+anvs set plugins.priority
+```
+
+**Project-level config files**:
+```bash
+# Rename .xvn.yaml files to .anvs.yaml in your projects
+# In each project directory:
+mv .xvn.yaml .anvs.yaml
+
+# Or use find to batch rename:
+find ~/projects -name ".xvn.yaml" -execdir mv {} .anvs.yaml \;
+```
+
+#### Step 5: Reload Shell
+
+```bash
+# Reload your shell configuration
+source ~/.bashrc  # or source ~/.zshrc
+
+# Verify anvs is loaded
+which anvs
+# Should show: /Users/yourusername/.anvs/bin/anvs
+```
+
+#### Step 6: Verify Installation
+
+```bash
+# Check version
+anvs --version
+# Should show: anvs 2.0.0
+
+# Check status
+anvs status
+
+# Test activation in a project with .nvmrc
+cd your-project
+# Should auto-activate the Node.js version
+```
+
+### Troubleshooting Migration
+
+#### Shell integration not working
+
+```bash
+# Check if shell script is sourced
+grep -i "anvs" ~/.bashrc ~/.zshrc
+
+# Should see line like:
+# [ -s "$HOME/.anvs/bin/anvs.sh" ] && . "$HOME/.anvs/bin/anvs.sh"
+
+# If missing, run setup again
+anvs setup
+```
+
+#### Old xvn references remain in shell
+
+```bash
+# Check for and remove old xvn references
+grep -i "xvn" ~/.bashrc ~/.zshrc
+
+# Manually remove any lines containing .xvn
+# Then reload shell
+source ~/.bashrc  # or source ~/.zshrc
+```
+
+#### Config not loading
+
+```bash
+# Verify config file exists
+ls -la ~/.anvsrc
+
+# Check config syntax
+cat ~/.anvsrc
+
+# Test with explicit config path
+ANVS_DEBUG=1 anvs status
+```
+
+#### Both xvn and anvs installed
+
+```bash
+# Check what's in your PATH
+which xvn
+which anvs
+
+# If both present, make sure anvs takes precedence
+# Or fully uninstall xvn:
+npm uninstall -g @olvrcc/xvn
+rm -rf ~/.xvn
+```
+
+### Rollback (If Needed)
+
+If you need to go back to xvn:
+
+```bash
+# Uninstall anvs
+anvs uninstall
+npm uninstall -g anvs
+
+# Reinstall old xvn
+npm install -g @olvrcc/xvn@1.7.0
+xvn setup
+
+# Restore backup config
+cp ~/.xvnrc.backup ~/.xvnrc
+```
+
+### FAQ
+
+**Q: Will my old xvn installation stop working?**
+A: No, existing installations continue to work. However, xvn won't receive updates.
+
+**Q: Can I keep both xvn and anvs installed?**
+A: Not recommended. They use similar shell hooks and may conflict. Choose one.
+
+**Q: Do I need to update my project's .nvmrc files?**
+A: No, .nvmrc files remain unchanged. anvs reads the same version files as xvn.
+
+**Q: What about my nvm/fnm installation?**
+A: No changes needed. anvs works with your existing version manager.
+
+**Q: Is there an automatic migration script?**
+A: Not currently. Manual migration ensures you understand the changes.
+
+**Q: Where can I get help?**
+A: Open an issue at https://github.com/olvrcc/anvs/issues
+
+---
+
+## Upgrading to xvn v1.2+ (Historical)
+
+*Note: The section below is for historical reference only. For current migrations, see the xvn→anvs section above.*
 
 This guide explains how to migrate from an older version of `xvn` (v1.1.x and below) to the new version-independent installation (v1.2.0 and above).
 
