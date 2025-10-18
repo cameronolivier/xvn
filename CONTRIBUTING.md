@@ -1,6 +1,6 @@
-# Contributing to xvn
+# Contributing to anvs
 
-Thank you for your interest in contributing to xvn!
+Thank you for your interest in contributing to anvs!
 
 ## Quick Start
 
@@ -16,8 +16,8 @@ Thank you for your interest in contributing to xvn!
 
 ```bash
 # Clone the repository
-git clone https://github.com/cameronolivier/xvn.git
-cd xvn
+git clone https://github.com/olvrcc/anvs.git
+cd anvs
 
 # Install and set up for development
 make dev
@@ -39,7 +39,7 @@ cargo test
 cargo install --path .
 
 # Set up shell integration
-xvn setup
+anvs setup
 ```
 
 **Option 3: Using npm scripts**
@@ -95,7 +95,7 @@ make install
 cargo install --path .
 
 # Set up shell integration
-xvn setup
+anvs setup
 
 # Test it
 cd /path/to/project-with-nvmrc
@@ -146,7 +146,7 @@ We use [conventional commits](https://www.conventionalcommits.org/) for clear co
 ## Project Structure
 
 ```
-xvn/
+anvs/
 ├── src/
 │   ├── main.rs              # Entry point
 │   ├── cli.rs               # CLI parsing
@@ -157,10 +157,10 @@ xvn/
 │   ├── version_file/        # Version file detection
 │   └── setup/               # Setup command
 ├── tests/                   # Integration tests
-├── shell/xvn.sh            # Shell hook script
-├── install.js              # npm postinstall script
-├── bin/xvn                 # npm bin wrapper
-└── Makefile                # Development commands
+├── shell/anvs.sh            # Shell hook script
+├── install.js               # npm postinstall script
+├── bin/anvs                 # npm bin wrapper
+└── Makefile                 # Development commands
 ```
 
 ## Testing Guidelines
@@ -177,27 +177,27 @@ Only maintainers can create releases. The process is:
 
 ```bash
 # Bump version
-make version-patch   # Bug fixes (0.6.1 -> 0.6.2)
-make version-minor   # New features (0.6.1 -> 0.7.0)
-make version-major   # Breaking changes (0.6.1 -> 1.0.0)
+make version-patch   # Bug fixes (2.0.0 -> 2.0.1)
+make version-minor   # New features (2.0.0 -> 2.1.0)
+make version-major   # Breaking changes (2.0.0 -> 3.0.0)
 
 # Push
 git push && git push --tags
 
 # Wait for CI to build binaries
 # Then publish to npm
-npm publish --access public
+npm publish
 ```
 
 ## Getting Help
 
-- **Issues:** [GitHub Issues](https://github.com/cameronolivier/xvn/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/cameronolivier/xvn/discussions)
+- **Issues:** [GitHub Issues](https://github.com/olvrcc/anvs/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/olvrcc/anvs/discussions)
 - **Documentation:** [Architecture docs](./docs/ARCHITECTURE.md)
 
 ## Code of Conduct
 
-Be respectful and constructive. We want xvn to be a welcoming project for everyone.
+Be respectful and constructive. We want anvs to be a welcoming project for everyone.
 
 ## License
 

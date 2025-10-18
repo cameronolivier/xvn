@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-10-19
+
+### ⚠️ BREAKING CHANGES
+
+**Project Renamed: xvn → anvs**
+
+This is a major breaking change. The project has been renamed from `xvn` to `anvs` (Automatic Node Version Switcher).
+
+**What Changed:**
+- Package name: `@olvrcc/xvn` → `anvs` (unnamespaced on npm)
+- Binary name: `xvn` → `anvs`
+- Install directory: `~/.xvn/` → `~/.anvs/`
+- Config files: `~/.xvnrc` → `~/.anvsrc`, `.xvn.yaml` → `.anvs.yaml`
+- Repository: `github.com/olvrcc/xvn` → `github.com/olvrcc/anvs`
+- Homebrew tap: `olvrcc/xvn` → `olvrcc/anvs`
+
+**Migration Required:**
+Existing users must manually migrate. See [docs/MIGRATION.md](./docs/MIGRATION.md) for step-by-step instructions.
+
+**Quick migration:**
+```bash
+# Uninstall old version
+xvn uninstall
+npm uninstall -g @olvrcc/xvn
+
+# Install new version
+npm install -g anvs
+anvs setup
+
+# Migrate config (if you had custom settings)
+mv ~/.xvnrc ~/.anvsrc
+# In project directories: rename .xvn.yaml → .anvs.yaml
+```
+
+**Why the rename:**
+- Better package name (unnamespaced on npm)
+- Clearer purpose ("Automatic Node Version Switcher")
+- Improved discoverability
+- Tribute to the original `avn` project
+
+### Changed
+- Renamed all binaries, scripts, and configuration files
+- Updated all documentation and examples
+- Updated GitHub repository and Homebrew tap
+- Updated npm package to unnamespaced `anvs`
+
+### Migration Guide
+- See [docs/MIGRATION.md](./docs/MIGRATION.md)
+- Old `@olvrcc/xvn@1.7.0` package will remain available but deprecated
+- No automatic migration path - manual migration required
+
+---
+
 ## [1.7.0] - 2025-10-18
 
 ### ⚠️ Deprecation Notice

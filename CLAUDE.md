@@ -4,20 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**xvn** is a Rust-based automatic Node.js version switcher that activates on `cd`, designed to be 2-3x faster than its predecessor (avn).
+**anvs** is a Rust-based automatic Node.js version switcher that activates on `cd`, designed to be 2-3x faster than its predecessor (avn).
 
 **Key Characteristics:**
 - Language: Rust (for performance, safety, zero runtime dependencies)
 - Distribution: npm with pre-compiled binaries + Homebrew tap
 - Platforms: Linux (x64/arm64), macOS (x64/arm64)
 - Architecture: Modular plugin system for version managers (nvm, fnm)
-- Version: 1.6.1 (MVP released, actively maintained)
+- Version: 2.0.0 (Project renamed from xvn to anvs)
 
 ## Project Status
 
-**Current Phase:** Production (v1.6.1)
-- MVP complete and published to npm (@olvrcc/xvn)
-- Homebrew tap available (olvrcc/xvn)
+**Current Phase:** Production (v2.0.0)
+- Project renamed from xvn to anvs (Automatic Node Version Switcher)
+- MVP complete and published to npm (anvs)
+- Homebrew tap available (olvrcc/anvs)
 - CI/CD with GitHub Actions for releases
 - Active user base with ongoing enhancements
 
@@ -25,15 +26,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **[README.md](./README.md)** - User-facing documentation, installation, and usage
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System design and architectural decisions
-- **[docs/MIGRATION.md](./docs/MIGRATION.md)** - Migration guide for upgrading from older versions
+- **[docs/MIGRATION.md](./docs/MIGRATION.md)** - Migration guide for upgrading from older versions (including xvn to anvs)
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines
 - **[spec/](./spec/)** - Historical planning documents and milestone specifications (reference)
 
-## Current Features (v1.6.1)
+## Current Features (v2.0.0)
 
 ✅ **Implemented:**
 - Core CLI with `activate`, `status`, `setup`, `uninstall`, `set` commands
-- Configuration via `~/.xvnrc` and `./.xvn.yaml`
+- Configuration via `~/.anvsrc` and `./.anvs.yaml`
 - Version file detection: `.nvmrc`, `.node-version`, `package.json`
 - Plugin system with nvm and fnm support
 - Shell integration (bash/zsh via chpwd hooks)
@@ -42,7 +43,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Automatic return to default version when leaving projects
 - Semver range support in `package.json` `engines.node`
 - npm distribution with pre-compiled binaries
-- Homebrew tap (olvrcc/xvn)
+- Homebrew tap (olvrcc/anvs)
 - CI/CD with GitHub Actions
 - Comprehensive test suite (>85% coverage)
 
@@ -58,7 +59,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Plugin System
 - **VersionManagerPlugin trait** - Interface for version manager plugins
 - Built-in plugins compiled into binary (nvm, fnm)
-- Dynamic plugin loading from `~/.xvn/plugins/`
+- Dynamic plugin loading from `~/.anvs/plugins/`
 - Plugin priority ordering via configuration
 
 ### Shell Integration
@@ -75,8 +76,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Configuration Files
 
-- `~/.xvnrc` - User-level configuration (YAML)
-- `.xvn.yaml` - Project-level configuration overrides
+- `~/.anvsrc` - User-level configuration (YAML)
+- `.anvs.yaml` - Project-level configuration overrides
 - `.nvmrc` / `.node-version` - Node.js version specification files
 
 
@@ -103,7 +104,7 @@ cargo test <test_name>         # Run specific test
 
 # Local Installation for Development
 npm run dev                    # Build and install locally (cargo install --path .)
-npm run setup                  # Build, install locally, and run xvn setup
+npm run setup                  # Build, install locally, and run anvs setup
 
 # Version Management
 ./scripts/bump-version.sh <major|minor|patch>  # Bump version in all files
@@ -120,12 +121,12 @@ npm publish                    # Publish to npm (requires auth)
 ./scripts/setup-homebrew-tap.sh  # Create/update Homebrew formula
 
 # User Commands
-xvn setup                      # Configure shell integration
-xvn activate [path]            # Manually activate version
-xvn status                     # Show config and last activation time
-xvn set <key>                  # Interactive config setting
-xvn uninstall                  # Remove xvn completely
-xvn --version                  # Check version
+anvs setup                      # Configure shell integration
+anvs activate [path]            # Manually activate version
+anvs status                     # Show config and last activation time
+anvs set <key>                  # Interactive config setting
+anvs uninstall                  # Remove anvs completely
+anvs --version                  # Check version
 ```
 
 ## Important Design Decisions
@@ -146,7 +147,7 @@ src/
 ├── main.rs                  # CLI entry point (minimal)
 ├── lib.rs                   # Library exports
 ├── cli.rs                   # Command-line interface using clap
-├── error.rs                 # Error types and XvnError
+├── error.rs                 # Error types and AnvsError
 ├── output.rs                # Terminal output formatting
 │
 ├── activation/              # Version activation orchestration
@@ -206,7 +207,7 @@ tests/                       # Integration tests
 └── security_test.rs         # Security validations
 
 shell/
-└── xvn.sh                   # Shell hook script (bash/zsh)
+└── anvs.sh                  # Shell hook script (bash/zsh)
 
 scripts/                     # Release and dev scripts
 ├── bump-version.sh          # Bump version across files
@@ -230,8 +231,8 @@ scripts/                     # Release and dev scripts
 4. Parent shell executes the command
 
 **Shell Integration:**
-- `shell/xvn.sh` hooks into `chpwd` (bash/zsh)
-- Triggers `xvn activate` on directory change
+- `shell/anvs.sh` hooks into `chpwd` (bash/zsh)
+- Triggers `anvs activate` on directory change
 - Uses FD:3 protocol to modify parent shell environment
 - Handles idempotency (doesn't re-activate same version)
 
@@ -243,15 +244,15 @@ scripts/                     # Release and dev scripts
 - Plugins generate shell commands for activation
 
 **Configuration:**
-- `config/loader.rs` reads `~/.xvnrc` and `./.xvn.yaml`
+- `config/loader.rs` reads `~/.anvsrc` and `./.anvs.yaml`
 - Project config overrides global config
 - YAML format with validation
-- Interactive editing via `xvn set` command
+- Interactive editing via `anvs set` command
 
 ## Important Constraints & Conventions
 
-- **Central installation:** xvn installs to `~/.xvn/bin` to remain available across Node.js version changes
-- **Not a version manager:** xvn requires nvm/fnm to be installed; it's a switcher, not a manager
+- **Central installation:** anvs installs to `~/.anvs/bin` to remain available across Node.js version changes
+- **Not a version manager:** anvs requires nvm/fnm to be installed; it's a switcher, not a manager
 - **Platform support:** Linux and macOS only (x64/arm64); Windows not supported
 - **Shell support:** bash and zsh only (via chpwd hooks)
 - **File descriptor 3 protocol:** Child process communicates shell commands to parent via FD:3
@@ -263,7 +264,7 @@ scripts/                     # Release and dev scripts
 ## Release Process
 
 1. **Version bump:** Use `./scripts/bump-version.sh <major|minor|patch>` to update version in all files
-2. **Git tag:** Create annotated git tag matching version (e.g., `v1.6.1`)
+2. **Git tag:** Create annotated git tag matching version (e.g., `v2.0.0`)
 3. **Push tag:** `git push --tags` triggers GitHub Actions CI/CD
 4. **CI builds:** GitHub Actions builds binaries for all platforms
 5. **Download artifacts:** `npm run release:download` to get binaries
