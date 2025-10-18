@@ -5,7 +5,7 @@ use tempfile::TempDir;
 #[test]
 fn test_config_with_empty_file() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(&config_path, "").unwrap();
 
     let content = fs::read_to_string(&config_path).unwrap();
@@ -22,7 +22,7 @@ fn test_config_with_empty_file() {
 #[test]
 fn test_config_with_invalid_yaml() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(&config_path, "invalid: [unclosed").unwrap();
 
     let content = fs::read_to_string(&config_path).unwrap();
@@ -35,7 +35,7 @@ fn test_config_with_invalid_yaml() {
 #[test]
 fn test_config_with_unknown_fields() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(
         &config_path,
         r#"
@@ -92,7 +92,7 @@ fn test_config_default_values() {
 #[test]
 fn test_config_plugin_priority_custom() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(
         &config_path,
         r#"
@@ -122,7 +122,7 @@ fn test_config_plugin_priority_default() {
 #[test]
 fn test_config_with_comments() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(
         &config_path,
         r#"
@@ -150,28 +150,28 @@ fn test_config_auto_install_options() {
     let temp = TempDir::new().unwrap();
 
     // Test auto_install: always
-    let config_path = temp.path().join(".xvnrc1");
+    let config_path = temp.path().join(".anvsrc1");
     fs::write(&config_path, "auto_install: always").unwrap();
     let content = fs::read_to_string(&config_path).unwrap();
     let config: Config = serde_yaml::from_str(&content).unwrap();
     assert_eq!(config.auto_install, AutoInstallMode::Always);
 
     // Test auto_install: never
-    let config_path = temp.path().join(".xvnrc2");
+    let config_path = temp.path().join(".anvsrc2");
     fs::write(&config_path, "auto_install: never").unwrap();
     let content = fs::read_to_string(&config_path).unwrap();
     let config: Config = serde_yaml::from_str(&content).unwrap();
     assert_eq!(config.auto_install, AutoInstallMode::Never);
 
     // Test auto_install: prompt
-    let config_path = temp.path().join(".xvnrc3");
+    let config_path = temp.path().join(".anvsrc3");
     fs::write(&config_path, "auto_install: prompt").unwrap();
     let content = fs::read_to_string(&config_path).unwrap();
     let config: Config = serde_yaml::from_str(&content).unwrap();
     assert_eq!(config.auto_install, AutoInstallMode::Prompt);
 
     // Test auto_install not specified (defaults to Prompt)
-    let config_path = temp.path().join(".xvnrc4");
+    let config_path = temp.path().join(".anvsrc4");
     fs::write(&config_path, "plugins: [nvm]").unwrap();
     let content = fs::read_to_string(&config_path).unwrap();
     let config: Config = serde_yaml::from_str(&content).unwrap();
@@ -206,7 +206,7 @@ fn test_config_validation() {
 #[test]
 fn test_config_version_files_custom() {
     let temp = TempDir::new().unwrap();
-    let config_path = temp.path().join(".xvnrc");
+    let config_path = temp.path().join(".anvsrc");
     fs::write(
         &config_path,
         r#"

@@ -1,4 +1,4 @@
-// Integration tests for xvn
+// Integration tests for anvs
 // These tests verify multi-component interactions
 
 mod activation_scenarios {
@@ -251,7 +251,7 @@ mod auto_install_flows {
     fn test_auto_install_config_serialization() {
         // Test that auto_install modes serialize/deserialize correctly
         let temp = TempDir::new().unwrap();
-        let config_path = temp.path().join(".xvnrc");
+        let config_path = temp.path().join(".anvsrc");
 
         // Write config with auto_install
         std::fs::write(

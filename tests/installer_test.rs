@@ -13,8 +13,8 @@ fn test_installer_creation() {
 fn test_config_file_structure() {
     // Test that default config structure is valid YAML
     // This validates the string literal used in create_default_config()
-    let default_config = r#"# xvn configuration file
-# See https://github.com/cameronolivier/xvn for documentation
+    let default_config = r#"# anvs configuration file
+# See https://github.com/olvrcc/anvs for documentation
 
 # Version files to search for (in priority order)
 version_files:

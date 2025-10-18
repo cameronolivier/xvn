@@ -1,11 +1,9 @@
 use anvs::error::AnvsError;
 use std::path::PathBuf;
 
-type XvnError = AnvsError;
-
 #[test]
 fn test_no_version_file_error() {
-    let error = XvnError::NoVersionFile {
+    let error = AnvsError::NoVersionFile {
         path: PathBuf::from("/tmp/test"),
     };
 
@@ -16,7 +14,7 @@ fn test_no_version_file_error() {
 
 #[test]
 fn test_config_error() {
-    let error = XvnError::ConfigError {
+    let error = AnvsError::ConfigError {
         message: "invalid plugin name".to_string(),
     };
 
@@ -27,7 +25,7 @@ fn test_config_error() {
 
 #[test]
 fn test_plugin_error() {
-    let error = XvnError::PluginError {
+    let error = AnvsError::PluginError {
         plugin: "nvm".to_string(),
         message: "not found".to_string(),
     };
@@ -41,13 +39,13 @@ fn test_plugin_error() {
 fn test_error_display_user_friendly() {
     // Test that error messages are user-friendly and actionable
     let errors = vec![
-        XvnError::NoVersionFile {
+        AnvsError::NoVersionFile {
             path: PathBuf::from("/project"),
         },
-        XvnError::ConfigError {
+        AnvsError::ConfigError {
             message: "no plugins configured".to_string(),
         },
-        XvnError::NoPluginAvailable {
+        AnvsError::NoPluginAvailable {
             plugins: "nvm, fnm".to_string(),
         },
     ];
@@ -65,9 +63,9 @@ fn test_error_display_user_friendly() {
 #[test]
 fn test_error_from_io_error() {
     let io_error = std::io::Error::new(std::io::ErrorKind::NotFound, "file not found");
-    let xvn_error: XvnError = io_error.into();
+    let anvs_error: AnvsError = io_error.into();
 
-    let message = xvn_error.to_string();
+    let message = anvs_error.to_string();
     assert!(message.contains("IO error"));
 }
 
@@ -76,15 +74,15 @@ fn test_error_from_yaml_parse_error() {
     // Create invalid YAML
     let invalid_yaml = "invalid: [unclosed";
     let yaml_error = serde_yaml::from_str::<serde_yaml::Value>(invalid_yaml).unwrap_err();
-    let xvn_error: XvnError = yaml_error.into();
+    let anvs_error: AnvsError = yaml_error.into();
 
-    let message = xvn_error.to_string();
+    let message = anvs_error.to_string();
     assert!(message.contains("YAML parsing error"));
 }
 
 #[test]
 fn test_error_no_plugin_available() {
-    let error = XvnError::NoPluginAvailable {
+    let error = AnvsError::NoPluginAvailable {
         plugins: "nvm, fnm, n".to_string(),
     };
 
@@ -95,7 +93,7 @@ fn test_error_no_plugin_available() {
 
 #[test]
 fn test_error_version_file_empty() {
-    let error = XvnError::VersionFileEmpty {
+    let error = AnvsError::VersionFileEmpty {
         path: PathBuf::from("/project/.nvmrc"),
     };
 
@@ -107,7 +105,7 @@ fn test_error_version_file_empty() {
 #[test]
 fn test_error_version_file_unreadable() {
     let io_error = std::io::Error::new(std::io::ErrorKind::PermissionDenied, "permission denied");
-    let error = XvnError::VersionFileUnreadable {
+    let error = AnvsError::VersionFileUnreadable {
         path: PathBuf::from("/project/.nvmrc"),
         source: io_error,
     };
@@ -121,7 +119,7 @@ fn test_error_version_file_unreadable() {
 fn test_error_chain_preservation() {
     // Test that error chains are preserved (for debugging)
     let io_error = std::io::Error::new(std::io::ErrorKind::NotFound, "file not found");
-    let error = XvnError::VersionFileUnreadable {
+    let error = AnvsError::VersionFileUnreadable {
         path: PathBuf::from("/test/.nvmrc"),
         source: io_error,
     };
@@ -133,7 +131,7 @@ fn test_error_chain_preservation() {
 
 #[test]
 fn test_error_debug_format() {
-    let error = XvnError::PluginError {
+    let error = AnvsError::PluginError {
         plugin: "nvm".to_string(),
         message: "execution failed".to_string(),
     };
@@ -158,7 +156,7 @@ fn test_error_result_type_alias() {
 #[test]
 fn test_error_result_type_alias_with_error() {
     fn returns_error() -> anvs::error::Result<String> {
-        Err(XvnError::ConfigError {
+        Err(AnvsError::ConfigError {
             message: "test error".to_string(),
         })
     }
@@ -169,7 +167,7 @@ fn test_error_result_type_alias_with_error() {
 
 #[test]
 fn test_error_no_version_file_with_special_path() {
-    let error = XvnError::NoVersionFile {
+    let error = AnvsError::NoVersionFile {
         path: PathBuf::from("/path/with spaces/and-special_chars"),
     };
 
@@ -180,7 +178,7 @@ fn test_error_no_version_file_with_special_path() {
 
 #[test]
 fn test_error_plugin_error_with_multiline_message() {
-    let error = XvnError::PluginError {
+    let error = AnvsError::PluginError {
         plugin: "nvm".to_string(),
         message: "line 1\nline 2\nline 3".to_string(),
     };
@@ -193,7 +191,7 @@ fn test_error_plugin_error_with_multiline_message() {
 
 #[test]
 fn test_error_config_error_with_empty_message() {
-    let error = XvnError::ConfigError {
+    let error = AnvsError::ConfigError {
         message: String::new(),
     };
 
@@ -204,7 +202,7 @@ fn test_error_config_error_with_empty_message() {
 
 #[test]
 fn test_error_implements_std_error_trait() {
-    let error = XvnError::PluginError {
+    let error = AnvsError::PluginError {
         plugin: "nvm".to_string(),
         message: "test".to_string(),
     };
@@ -215,10 +213,10 @@ fn test_error_implements_std_error_trait() {
 
 #[test]
 fn test_error_can_be_converted_with_anyhow() {
-    let xvn_error = XvnError::ConfigError {
+    let anvs_error = AnvsError::ConfigError {
         message: "test".to_string(),
     };
 
     // Should be able to convert to anyhow::Error
-    let _anyhow_error: anyhow::Error = xvn_error.into();
+    let _anyhow_error: anyhow::Error = anvs_error.into();
 }
