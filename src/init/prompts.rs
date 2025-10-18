@@ -80,7 +80,7 @@ pub fn prompt_plugins() -> Result<Vec<String>> {
     if detected.is_empty() {
         output::warning("No version managers detected!");
         println!();
-        println!("  xvn requires a version manager to be installed:");
+        println!("  anvs requires a version manager to be installed:");
         println!("  • nvm: https://github.com/nvm-sh/nvm");
         println!("  • fnm: https://github.com/Schniz/fnm");
         println!("  • n: https://github.com/tj/n");
@@ -221,7 +221,7 @@ pub fn prompt_version_files() -> Result<Vec<String>> {
     println!();
 
     println!(
-        "    {} Which files should xvn check?",
+        "    {} Which files should anvs check?",
         "Configure:".dimmed()
     );
     println!();

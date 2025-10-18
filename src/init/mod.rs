@@ -1,4 +1,4 @@
-//! Interactive setup wizard for xvn
+//! Interactive setup wizard for anvs
 //!
 //! This module provides an interactive configuration wizard that guides
 //! users through initial setup with auto-detection, validation, and

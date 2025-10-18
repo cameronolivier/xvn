@@ -1,4 +1,4 @@
-//! Uninstall command - removes all xvn installations and configuration
+//! Uninstall command - removes all anvs installations and configuration
 
 use crate::installation_detector::InstallationDetector;
 use crate::output;
@@ -8,20 +8,20 @@ use inquire::Confirm;
 use owo_colors::OwoColorize;
 use std::fs;
 
-/// Uninstall xvn completely
+/// Uninstall anvs completely
 pub fn uninstall(force: bool) -> Result<()> {
     println!();
-    output::warning("⚠️  xvn Uninstall");
+    output::warning("⚠️  ANVS Uninstall");
     println!();
 
     // Detect all installations
     let installations = InstallationDetector::detect_all();
 
     if installations.is_empty() {
-        output::info("No external xvn installations detected.");
+        output::info("No external anvs installations detected.");
         println!();
     } else {
-        output::info("Detected xvn installations:");
+        output::info("Detected anvs installations:");
         for (method, path) in &installations {
             output::info(&format!(
                 "  • {} at {}",
@@ -34,8 +34,8 @@ pub fn uninstall(force: bool) -> Result<()> {
 
     // Show what will be removed
     output::info("This will remove:");
-    output::info("  • ~/.xvn directory (all versions and binaries)");
-    output::info("  • ~/.xvnrc configuration file");
+    output::info("  • ~/.anvs directory (all versions and binaries)");
+    output::info("  • ~/.anvsrc configuration file");
     output::info("  • Shell integration from .bashrc and .zshrc");
 
     if !installations.is_empty() {
@@ -50,7 +50,7 @@ pub fn uninstall(force: bool) -> Result<()> {
 
     // Confirm unless --force
     if !force {
-        let confirmed = Confirm::new("Are you sure you want to uninstall xvn?")
+        let confirmed = Confirm::new("Are you sure you want to uninstall anvs?")
             .with_default(false)
             .with_help_message("This action cannot be undone")
             .prompt()
@@ -91,25 +91,25 @@ pub fn uninstall(force: bool) -> Result<()> {
         }
     }
 
-    // 2. Remove ~/.xvnrc
+    // 2. Remove ~/.anvsrc
     if let Ok(home) =
         dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))
     {
-        let config_path = home.join(".xvnrc");
+        let config_path = home.join(".anvsrc");
         if config_path.exists() {
-            fs::remove_file(&config_path).context("Failed to remove ~/.xvnrc")?;
-            removed_items.push("~/.xvnrc configuration".to_string());
+            fs::remove_file(&config_path).context("Failed to remove ~/.anvsrc")?;
+            removed_items.push("~/.anvsrc configuration".to_string());
         }
     }
 
-    // 3. Remove ~/.xvn directory
+    // 3. Remove ~/.anvs directory
     if let Ok(home) =
         dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))
     {
-        let xvn_dir = home.join(".xvn");
-        if xvn_dir.exists() {
-            fs::remove_dir_all(&xvn_dir).context("Failed to remove ~/.xvn directory")?;
-            removed_items.push("~/.xvn directory".to_string());
+        let anvs_dir = home.join(".anvs");
+        if anvs_dir.exists() {
+            fs::remove_dir_all(&anvs_dir).context("Failed to remove ~/.anvs directory")?;
+            removed_items.push("~/.anvs directory".to_string());
         }
     }
 
@@ -119,7 +119,7 @@ pub fn uninstall(force: bool) -> Result<()> {
     // Print success message
     println!();
     if removed_items.is_empty() {
-        output::info("No xvn files found to remove.");
+        output::info("No anvs files found to remove.");
     } else {
         output::success("✓ Successfully removed:");
         for item in removed_items {
