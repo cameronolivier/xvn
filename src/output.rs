@@ -1,8 +1,8 @@
 /// Output formatting with colors and branding
 use owo_colors::OwoColorize;
 
-/// Branding prefix for all xvn output
-const BRAND: &str = "xvn";
+/// Branding prefix for all anvs output
+const BRAND: &str = "anvs";
 const TAGLINE: &str = "automatic node version switching";
 
 /// Print branded header message

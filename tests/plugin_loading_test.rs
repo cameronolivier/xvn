@@ -1,7 +1,7 @@
 // Additional plugin loading and registry tests
 
+use anvs::plugins::{MockPlugin, PluginRegistry, VersionManagerPlugin};
 use std::sync::Arc;
-use xvn::plugins::{MockPlugin, PluginRegistry, VersionManagerPlugin};
 
 #[test]
 fn test_registry_loads_nvm_plugin() {

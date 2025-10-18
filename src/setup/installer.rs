@@ -46,7 +46,10 @@ impl SetupInstaller {
 
     /// Installs or updates anvs shell integration.
     pub fn install(&self) -> Result<()> {
-        info!("Setting up anvs shell integration for {}", self.shell.name());
+        info!(
+            "Setting up anvs shell integration for {}",
+            self.shell.name()
+        );
 
         let profile = self.find_profile()?;
         profile_modification::add_to_profile(&profile)?;

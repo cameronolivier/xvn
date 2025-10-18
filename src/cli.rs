@@ -5,26 +5,26 @@ use std::path::PathBuf;
 
 /// Automatic Node.js version switching for cd
 #[derive(Parser, Debug)]
-#[command(name = "xvn")]
+#[command(name = "anvs")]
 #[command(
-    about = "Automatic Node.js version switching",
+    about = "ANVS - Automatic Node Version Switcher for Node.js",
     long_about = r#"
-xvn automatically switches your Node.js version when you cd into a directory
-with a .nvmrc or .node-version file. When you leave a project directory, xvn
+anvs automatically switches your Node.js version when you cd into a directory
+with a .nvmrc or .node-version file. When you leave a project directory, anvs
 automatically returns to your default Node.js version.
 
-After installation, run 'xvn init' to configure your shell with an interactive
-wizard, or 'xvn init --quick' for automatic setup with sensible defaults.
+After installation, run 'anvs init' to configure your shell with an interactive
+wizard, or 'anvs init --quick' for automatic setup with sensible defaults.
 
 Examples:
-  xvn init               Interactive setup wizard (recommended)
-  xvn init --quick       Quick setup with defaults
-  xvn activate           Manually activate for current directory
-  xvn status             Show configuration and test activation
-  xvn set                Change configuration settings
-  xvn uninstall          Completely remove xvn
+  anvs init               Interactive setup wizard (recommended)
+  anvs init --quick       Quick setup with defaults
+  anvs activate           Manually activate for current directory
+  anvs status             Show configuration and test activation
+  anvs set                Change configuration settings
+  anvs uninstall          Completely remove anvs
 
-For more information, visit: https://github.com/olvrcc/xvn
+For more information, visit: https://github.com/olvrcc/anvs
 "#
 )]
 #[command(version)]
@@ -39,13 +39,13 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Initialize xvn with interactive configuration wizard
+    /// Initialize anvs with interactive configuration wizard
     ///
     /// This command guides you through initial setup with auto-detection
     /// and configuration of shell integration, version managers, and preferences.
     ///
-    /// For quick setup with defaults: xvn init --quick
-    /// For automation/CI: xvn init --non-interactive
+    /// For quick setup with defaults: anvs init --quick
+    /// For automation/CI: anvs init --non-interactive
     Init {
         /// Skip wizard and use sensible defaults
         #[arg(short, long)]
@@ -66,8 +66,8 @@ pub enum Commands {
 
     /// Set up shell integration (alias for 'init' for compatibility)
     ///
-    /// This is an alias for 'xvn init' for backward compatibility.
-    /// Use 'xvn init' for the full interactive wizard.
+    /// This is an alias for 'anvs init' for backward compatibility.
+    /// Use 'anvs init' for the full interactive wizard.
     #[clap(hide = true)] // Hide from main help but still works
     Setup {
         /// Shell to configure (bash, zsh, or auto-detect)
@@ -81,7 +81,7 @@ pub enum Commands {
 
     /// Manually activate Node.js version for a directory
     ///
-    /// Normally xvn activates automatically on cd (after running setup).
+    /// Normally anvs activates automatically on cd (after running setup).
     /// Use this command to manually activate for the current directory,
     /// or to test activation before setting up the shell hook.
     Activate {
@@ -91,7 +91,7 @@ pub enum Commands {
 
         /// Use default version if no version file found
         ///
-        /// When enabled, xvn will switch to the version manager's default
+        /// When enabled, anvs will switch to the version manager's default
         /// version (e.g., `nvm version default`) if no .nvmrc file is found.
         /// This is used internally by the shell hook when leaving project
         /// directories.
@@ -113,26 +113,26 @@ pub enum Commands {
     /// Easily update individual settings without re-running the full init wizard.
     ///
     /// Examples:
-    ///   xvn set                    Choose setting from menu
-    ///   xvn set auto-install       Change auto-install mode
-    ///   xvn set plugins            Change version manager plugins
-    ///   xvn set version-files      Change version file priority
+    ///   anvs set                    Choose setting from menu
+    ///   anvs set auto-install       Change auto-install mode
+    ///   anvs set plugins            Change version manager plugins
+    ///   anvs set version-files      Change version file priority
     Set {
         /// Setting to change (auto-install, plugins, version-files)
         setting: Option<String>,
     },
 
-    /// Uninstall xvn completely
+    /// Uninstall anvs completely
     ///
-    /// Removes all xvn installations, configuration files, and shell integration.
+    /// Removes all anvs installations, configuration files, and shell integration.
     /// This command detects all installation methods (npm, Homebrew, Cargo) and
     /// provides instructions for complete removal.
     ///
     /// WARNING: This will remove:
-    ///   - ~/.xvn directory (all versions and binaries)
-    ///   - ~/.xvnrc configuration file
+    ///   - ~/.anvs directory (all versions and binaries)
+    ///   - ~/.anvsrc configuration file
     ///   - Shell integration from .bashrc/.zshrc
-    ///   - All installed xvn packages (npm, Homebrew, Cargo)
+    ///   - All installed anvs packages (npm, Homebrew, Cargo)
     Uninstall {
         /// Skip confirmation prompt
         #[arg(short, long)]
@@ -176,8 +176,8 @@ pub fn run() -> Result<()> {
             // Check for installation conflicts and show warning if flagged
             if crate::installation_detector::InstallationDetector::should_warn() {
                 eprintln!();
-                crate::output::warning("⚠️  Multiple xvn installations detected!");
-                crate::output::info("Run 'xvn init' to see details and resolve conflicts.");
+                crate::output::warning("⚠️  Multiple anvs installations detected!");
+                crate::output::info("Run 'anvs init' to see details and resolve conflicts.");
                 eprintln!();
             }
 
@@ -264,7 +264,7 @@ pub fn run() -> Result<()> {
         }
         None => {
             // No subcommand provided - show help
-            Cli::parse_from(["xvn", "--help"]);
+            Cli::parse_from(["anvs", "--help"]);
             Ok(())
         }
     }

@@ -2,11 +2,11 @@
 // These tests verify multi-component interactions
 
 mod activation_scenarios {
+    use anvs::plugins::{MockPlugin, VersionManagerPlugin};
+    use anvs::version_file::VersionFile;
     use std::fs;
     use std::sync::Arc;
     use tempfile::TempDir;
-    use xvn::plugins::{MockPlugin, VersionManagerPlugin};
-    use xvn::version_file::VersionFile;
 
     #[test]
     fn test_e2e_simple_activation() {
@@ -96,8 +96,8 @@ mod activation_scenarios {
 }
 
 mod plugin_fallback {
+    use anvs::plugins::{MockPlugin, VersionManagerPlugin};
     use std::sync::Arc;
-    use xvn::plugins::{MockPlugin, VersionManagerPlugin};
 
     #[test]
     fn test_fallback_first_unavailable() {
@@ -178,10 +178,10 @@ mod plugin_fallback {
 // Note: Most auto-install logic is thoroughly tested in orchestrator unit tests
 // These tests verify the E2E integration behavior with the plugin system
 mod auto_install_flows {
+    use anvs::config::{AutoInstallMode, Config};
+    use anvs::plugins::{MockPlugin, VersionManagerPlugin};
     use std::sync::Arc;
     use tempfile::TempDir;
-    use xvn::config::{AutoInstallMode, Config};
-    use xvn::plugins::{MockPlugin, VersionManagerPlugin};
 
     #[test]
     fn test_config_with_auto_install_modes() {
@@ -237,7 +237,7 @@ mod auto_install_flows {
         let unavailable = MockPlugin::new("unavailable").with_availability(false);
         let available = MockPlugin::new("available").with_availability(true);
 
-        let plugins: Vec<Arc<dyn xvn::plugins::VersionManagerPlugin>> =
+        let plugins: Vec<Arc<dyn anvs::plugins::VersionManagerPlugin>> =
             vec![Arc::new(unavailable), Arc::new(available)];
 
         // Find first available plugin
@@ -281,9 +281,9 @@ auto_install: always
 
 // Config file parsing tests
 mod config_file_parsing {
+    use anvs::config::{AutoInstallMode, Config};
     use std::fs;
     use tempfile::TempDir;
-    use xvn::config::{AutoInstallMode, Config};
 
     #[test]
     fn test_config_file_validation() {

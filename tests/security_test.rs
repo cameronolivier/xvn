@@ -1,4 +1,4 @@
-use xvn::plugins::{FnmPlugin, NvmPlugin, VersionManagerPlugin};
+use anvs::plugins::{FnmPlugin, NvmPlugin, VersionManagerPlugin};
 
 #[test]
 fn test_nvm_shell_escaping() {

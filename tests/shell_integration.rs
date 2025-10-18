@@ -1,10 +1,10 @@
 use std::process::Command;
 
 #[test]
-fn test_xvn_sh_passes_shellcheck() {
-    // Validate xvn.sh with shellcheck
+fn test_anvs_sh_passes_shellcheck() {
+    // Validate anvs.sh with shellcheck
     let output = Command::new("shellcheck")
-        .args(["--shell=bash", "shell/xvn.sh"])
+        .args(["--shell=bash", "shell/anvs.sh"])
         .output();
 
     match output {
@@ -26,7 +26,7 @@ fn test_xvn_sh_passes_shellcheck() {
 fn test_shell_script_execution() {
     // Run the bash test script
     let output = Command::new("bash")
-        .arg("tests/shell/test_xvn_sh.sh")
+        .arg("tests/shell/test_anvs_sh.sh")
         .output()
         .expect("Failed to run shell test script");
 
@@ -40,9 +40,9 @@ fn test_shell_script_execution() {
 
 #[test]
 fn test_profile_detection_bash() {
+    use anvs::setup::Shell;
     use std::fs;
     use tempfile::TempDir;
-    use xvn::setup::Shell;
 
     let temp = TempDir::new().unwrap();
     let home = temp.path();
@@ -59,9 +59,9 @@ fn test_profile_detection_bash() {
 
 #[test]
 fn test_profile_detection_zsh() {
+    use anvs::setup::Shell;
     use std::fs;
     use tempfile::TempDir;
-    use xvn::setup::Shell;
 
     let temp = TempDir::new().unwrap();
     let home = temp.path();

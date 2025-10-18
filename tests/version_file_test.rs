@@ -1,10 +1,10 @@
 // Note: Most version file tests are in src/version_file/finder.rs
 // These are additional edge case tests to improve coverage
 
+use anvs::version_file::{VersionFile, VersionFileSource};
 use std::fs;
 use std::os::unix::fs::symlink;
 use tempfile::TempDir;
-use xvn::version_file::VersionFile;
 
 #[test]
 fn test_version_file_with_v_prefix_preserved() {
@@ -190,13 +190,13 @@ fn test_version_file_struct_equality() {
     let vf1 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
-        source: xvn::version_file::VersionFileSource::Nvmrc,
+        source: VersionFileSource::Nvmrc,
     };
 
     let vf2 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
-        source: xvn::version_file::VersionFileSource::Nvmrc,
+        source: VersionFileSource::Nvmrc,
     };
 
     // VersionFile implements PartialEq
@@ -212,7 +212,7 @@ fn test_version_file_struct_clone() {
     let vf1 = VersionFile {
         path: path.clone(),
         version: "18.20.0".to_string(),
-        source: xvn::version_file::VersionFileSource::Nvmrc,
+        source: VersionFileSource::Nvmrc,
     };
 
     // VersionFile implements Clone

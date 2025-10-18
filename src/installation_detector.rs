@@ -1,6 +1,6 @@
 //! Installation conflict detection
 //!
-//! Detects multiple xvn installations (npm, Homebrew, Cargo) and warns users
+//! Detects multiple anvs installations (npm, Homebrew, Cargo) and warns users
 //! to prevent conflicts.
 
 use std::path::PathBuf;
@@ -15,17 +15,17 @@ pub enum InstallMethod {
 impl InstallMethod {
     pub fn description(&self) -> &str {
         match self {
-            Self::Npm => "npm global package (@olvrcc/xvn)",
-            Self::Homebrew => "Homebrew (brew install xvn)",
-            Self::Cargo => "Cargo (cargo install)",
+            Self::Npm => "npm global package (@olvrcc/anvs)",
+            Self::Homebrew => "Homebrew (brew install anvs)",
+            Self::Cargo => "Cargo (cargo install anvs)",
         }
     }
 
     pub fn uninstall_command(&self) -> &str {
         match self {
-            Self::Npm => "npm uninstall -g @olvrcc/xvn",
-            Self::Homebrew => "brew uninstall xvn",
-            Self::Cargo => "cargo uninstall xvn",
+            Self::Npm => "npm uninstall -g @olvrcc/anvs",
+            Self::Homebrew => "brew uninstall anvs",
+            Self::Cargo => "cargo uninstall anvs",
         }
     }
 }
@@ -33,24 +33,24 @@ impl InstallMethod {
 pub struct InstallationDetector;
 
 impl InstallationDetector {
-    /// Detect all xvn installations in PATH
+    /// Detect all anvs installations in PATH
     pub fn detect_all() -> Vec<(InstallMethod, PathBuf)> {
         let mut installations = vec![];
 
-        // Get all xvn binaries in PATH
-        if let Ok(paths) = which::which_all("xvn") {
+        // Get all anvs binaries in PATH
+        if let Ok(paths) = which::which_all("anvs") {
             for path in paths {
                 let path_str = path.to_string_lossy();
 
                 // Skip our own symlink installation
-                if path_str.contains("/.xvn/bin/xvn") || path_str.contains("/.xvn/current/") {
+                if path_str.contains("/.anvs/bin/anvs") || path_str.contains("/.anvs/current/") {
                     continue;
                 }
 
                 // Detect installation method
                 if path_str.contains("node_modules") {
                     installations.push((InstallMethod::Npm, path));
-                } else if path_str.contains("/Cellar/xvn") || path_str.contains("/homebrew") {
+                } else if path_str.contains("/Cellar/anvs") || path_str.contains("/homebrew") {
                     installations.push((InstallMethod::Homebrew, path));
                 } else if path_str.contains("/.cargo/bin") {
                     installations.push((InstallMethod::Cargo, path));
@@ -70,7 +70,7 @@ impl InstallationDetector {
     fn conflict_file_path() -> anyhow::Result<PathBuf> {
         let home = dirs::home_dir()
             .ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))?;
-        Ok(home.join(".xvn").join("conflict_warning"))
+        Ok(home.join(".anvs").join("conflict_warning"))
     }
 
     /// Mark that conflicts exist (create warning file)
@@ -110,28 +110,31 @@ mod tests {
     fn test_install_method_descriptions() {
         assert_eq!(
             InstallMethod::Npm.description(),
-            "npm global package (@olvrcc/xvn)"
+            "npm global package (@olvrcc/anvs)"
         );
         assert_eq!(
             InstallMethod::Homebrew.description(),
-            "Homebrew (brew install xvn)"
+            "Homebrew (brew install anvs)"
         );
-        assert_eq!(InstallMethod::Cargo.description(), "Cargo (cargo install)");
+        assert_eq!(
+            InstallMethod::Cargo.description(),
+            "Cargo (cargo install anvs)"
+        );
     }
 
     #[test]
     fn test_uninstall_commands() {
         assert_eq!(
             InstallMethod::Npm.uninstall_command(),
-            "npm uninstall -g @olvrcc/xvn"
+            "npm uninstall -g @olvrcc/anvs"
         );
         assert_eq!(
             InstallMethod::Homebrew.uninstall_command(),
-            "brew uninstall xvn"
+            "brew uninstall anvs"
         );
         assert_eq!(
             InstallMethod::Cargo.uninstall_command(),
-            "cargo uninstall xvn"
+            "cargo uninstall anvs"
         );
     }
 }

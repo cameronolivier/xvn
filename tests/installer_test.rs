@@ -1,6 +1,6 @@
 // Tests for setup/installer module
 
-use xvn::setup::installer::SetupInstaller;
+use anvs::setup::installer::SetupInstaller;
 
 #[test]
 fn test_installer_creation() {

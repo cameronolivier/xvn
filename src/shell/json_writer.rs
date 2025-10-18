@@ -75,7 +75,7 @@ impl JsonCommandWriter {
     /// Writes commands in format:
     /// ```text
     /// __ANVS_COMMANDS_START__
-/// {"commands":["cmd1","cmd2"]}
+    /// {"commands":["cmd1","cmd2"]}
     /// __ANVS_COMMANDS_END__
     /// ```
     pub fn write(self) -> Result<()> {

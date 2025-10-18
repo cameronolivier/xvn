@@ -18,7 +18,7 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
     /// Example: nvm returns [".nvmrc"], fnm might return [".nvmrc", ".node-version"]
     ///
     /// **Note**: In Milestone 2, this method is not actively used by the activation
-    /// logic. It's provided for future features (e.g., `xvn doctor` to suggest
+    /// logic. It's provided for future features (e.g., `anvs doctor` to suggest
     /// plugins based on version files found).
     fn version_files(&self) -> Vec<&str>;
 
@@ -105,7 +105,7 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
 
     /// Gets the default Node.js version configured for this version manager
     ///
-    /// This is used when xvn needs to switch back to a "default" version,
+    /// This is used when anvs needs to switch back to a "default" version,
     /// such as when leaving a project directory that has a .nvmrc file.
     ///
     /// For nvm: returns the version aliased as "default" (via `nvm version default`)

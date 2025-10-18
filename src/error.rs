@@ -3,7 +3,7 @@ use thiserror::Error;
 
 /// Main error type for anvs
 #[derive(Debug, Error)]
-pub enum XvnError {
+pub enum AnvsError {
     /// No version file found in directory tree
     #[error("no version file found in {path} or parent directories")]
     NoVersionFile { path: PathBuf },
@@ -42,7 +42,4 @@ pub enum XvnError {
 }
 
 /// Result type alias for anvs operations
-pub type Result<T> = std::result::Result<T, XvnError>;
-
-/// Temporary alias while transitioning from the old XvnError name.
-pub type AnvsError = XvnError;
+pub type Result<T> = std::result::Result<T, AnvsError>;

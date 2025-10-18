@@ -1,6 +1,6 @@
+use anvs::config::{AutoInstallMode, Config};
 use std::fs;
 use tempfile::TempDir;
-use xvn::config::{AutoInstallMode, Config};
 
 #[test]
 fn test_config_with_empty_file() {

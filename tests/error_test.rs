@@ -1,5 +1,7 @@
+use anvs::error::AnvsError;
 use std::path::PathBuf;
-use xvn::error::XvnError;
+
+type XvnError = AnvsError;
 
 #[test]
 fn test_no_version_file_error() {
@@ -144,7 +146,7 @@ fn test_error_debug_format() {
 #[test]
 fn test_error_result_type_alias() {
     // Test that Result<T> type alias works correctly
-    fn returns_result() -> xvn::error::Result<String> {
+    fn returns_result() -> anvs::error::Result<String> {
         Ok("success".to_string())
     }
 
@@ -155,7 +157,7 @@ fn test_error_result_type_alias() {
 
 #[test]
 fn test_error_result_type_alias_with_error() {
-    fn returns_error() -> xvn::error::Result<String> {
+    fn returns_error() -> anvs::error::Result<String> {
         Err(XvnError::ConfigError {
             message: "test error".to_string(),
         })

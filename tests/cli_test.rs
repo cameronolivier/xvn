@@ -3,16 +3,16 @@ use predicates::prelude::*;
 
 #[test]
 fn test_version_flag() {
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     cmd.arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("xvn 1.7.0"));
+        .stdout(predicate::str::contains("anvs 2.0.0"));
 }
 
 #[test]
 fn test_help_flag() {
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     cmd.arg("--help")
         .assert()
         .success()
@@ -25,7 +25,7 @@ fn test_help_flag() {
 fn test_setup_command() {
     // Note: This test can't actually run setup as it would modify the real shell
     // Instead, we just verify that the command exists and has proper help text
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     cmd.arg("setup")
         .arg("--help")
         .assert()
@@ -47,7 +47,7 @@ fn test_activate_command() {
     // - Succeed and prompt to install the version (if a version manager is available)
     // - Fail with "no version manager plugins available" (if no version managers installed)
     // We just verify the command runs and processes the version file correctly.
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     let output = cmd.arg("activate").arg(temp_dir.path()).output().unwrap();
 
     // The command should either succeed with install prompt, or fail with helpful error
@@ -67,7 +67,7 @@ fn test_activate_command() {
 
 #[test]
 fn test_status_command() {
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     cmd.arg("status")
         .assert()
         .success()
@@ -77,7 +77,7 @@ fn test_status_command() {
 
 #[test]
 fn test_no_command_shows_help() {
-    let mut cmd = Command::cargo_bin("xvn").unwrap();
+    let mut cmd = Command::cargo_bin("anvs").unwrap();
     cmd.assert()
         .success()
         .stdout(predicate::str::contains("Usage:"));
