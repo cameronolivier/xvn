@@ -1,14 +1,17 @@
-# XVN Project Progress Tracking
+# ANVS Project Progress Tracking
 
 **Branch:** main
 **Created:** October 1, 2025
-**Status:** Planning Phase Complete
+**Updated:** October 19, 2025 (Project renamed from xvn to anvs)
+**Status:** Production (v2.0.0)
 
 ---
 
 ## Overview
 
-This document tracks high-level milestone completion for xvn (Extreme Version Switcher for Node.js). Detailed tasks for each milestone are in their respective `TASKS.md` files.
+This document tracks high-level milestone completion for anvs (Automatic Node Version Switcher). Detailed tasks for each milestone are in their respective `TASKS.md` files.
+
+**Note:** Milestones 1-11 were completed under the original "xvn" name. Milestone 12 renamed the project to "anvs".
 
 ---
 
@@ -74,21 +77,21 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
 
 - [ ] **Milestone 9: Homebrew Distribution** (v1.1.0)
   - Homebrew formula creation
-  - Custom tap (olvrcc/homebrew-xvn)
+  - Custom tap (olvrcc/homebrew-anvs)
   - Automated formula updates via GitHub Actions
   - macOS x64/arm64 support
   - See [milestone-9/PLAN.md](./milestone-9/PLAN.md) and [TASKS.md](./milestone-9/TASKS.md)
 
 - [x] **Milestone 10: Version-Independent Installation** (v1.2.0 → v1.3.0) ✅ **COMPLETE**
-  - Install binary to `~/.xvn/versions/v{VERSION}/bin/xvn`
-  - Create symlinks: `~/.xvn/bin/xvn` and `~/.xvn/current`
-  - Setup command adds `export PATH="$HOME/.xvn/bin:$PATH"` to shell profile
+  - Install binary to `~/.anvs/versions/v{VERSION}/bin/anvs`
+  - Create symlinks: `~/.anvs/bin/anvs` and `~/.anvs/current`
+  - Setup command adds `export PATH="$HOME/.anvs/bin:$PATH"` to shell profile
   - Automatic uninstall script (v1.3.0)
-  - xvn remains available after switching Node.js versions
+  - anvs remains available after switching Node.js versions
   - See [milestone-10/PLAN.md](./milestone-10/PLAN.md) and [TASKS.md](./milestone-10/TASKS.md)
 
 - [x] **Milestone 11: Interactive Configuration Updates** (v1.4.0) ✅ **COMPLETE**
-  - `xvn set` command for easy config updates
+  - `anvs set` command for easy config updates
   - Interactive prompts for auto-install, plugins, version-files settings
   - Show current values before modification
   - Config file saved with timestamps
@@ -132,10 +135,10 @@ This document tracks high-level milestone completion for xvn (Extreme Version Sw
   - Nushell plugin
 
 - [ ] **Milestone 13: Advanced Features** (v2.1.0+)
-  - `xvn doctor` - Health check command
-  - `xvn which` - Show active version and why
-  - `xvn list` - List installed versions
-  - `xvn exec <cmd>` - Run command with specific version
+  - `anvs doctor` - Health check command
+  - `anvs which` - Show active version and why
+  - `anvs list` - List installed versions
+  - `anvs exec <cmd>` - Run command with specific version
   - Shell completions (bash, zsh, fish)
   - Self-update mechanism
 

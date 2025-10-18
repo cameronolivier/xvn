@@ -1,10 +1,30 @@
-# xvn Roadmap
+# ANVS Roadmap
 
-This document outlines the development roadmap for xvn, including completed milestones, current work, and future plans. We welcome community contributions!
+This document outlines the development roadmap for anvs, including completed milestones, current work, and future plans. We welcome community contributions!
 
-## Current Version: v1.2.0
+## Current Version: v2.0.0
 
 **Status:** Production-ready for macOS and Linux (bash/zsh)
+
+---
+
+## v2.0.0 - Project Rename (Completed - 2025-10-19)
+
+### Breaking Changes
+- [x] Rename project from xvn to anvs
+- [x] Update npm package to unnamespaced `anvs`
+- [x] Update Homebrew tap (olvrcc/anvs)
+- [x] Update all documentation
+- [x] Create comprehensive migration guide
+- [x] Deprecate old `@olvrcc/xvn` package
+
+### Impact
+- **Package name**: `@olvrcc/xvn` → `anvs`
+- **Binary name**: `xvn` → `anvs`
+- **Install directory**: `~/.xvn/` → `~/.anvs/`
+- **Config files**: `~/.xvnrc` → `~/.anvsrc`
+
+See [Migration Guide](./docs/MIGRATION.md) for upgrade instructions.
 
 ---
 
@@ -18,12 +38,12 @@ This document outlines the development roadmap for xvn, including completed mile
 - ✅ **M4:** Version Activation - Activation orchestration, auto-install
 - ✅ **M5:** Testing & Polish - 89 passing tests, 57.93% coverage
 - ✅ **M6:** Release Preparation - CI/CD, npm distribution
-- ✅ **M7:** Interactive Setup Wizard - `xvn init` command
+- ✅ **M7:** Interactive Setup Wizard - `anvs init` command
 - ✅ **M8:** package.json Support - Semver range resolution
 
 ### Phase 2: Stability & Features (v1.1.0 - v1.5.0)
 
-- ✅ **M10: Version-Independent Installation (v1.2.0)** - Critical bootstrap fix to ensure `xvn` is always available by installing to `~/.xvn`.
+- ✅ **M10: Version-Independent Installation (v1.2.0)** - Critical bootstrap fix to ensure `anvs` is always available by installing to `~/.anvs`.
 
 ---
 
@@ -33,8 +53,8 @@ This document outlines the development roadmap for xvn, including completed mile
 **Status:** Planned
 **Help Wanted:** macOS developers
 
-- [ ] Create Homebrew formula for xvn
-- [ ] Set up custom tap: `olvrcc/homebrew-xvn`
+- [ ] Create Homebrew formula for anvs
+- [ ] Set up custom tap: `olvrcc/homebrew-anvs`
 - [ ] Automated formula updates via GitHub Actions
 - [ ] Support for macOS x64 and ARM64
 
@@ -50,7 +70,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 **✅ Completed:**
 - Windows binary compilation setup (x86_64, ARM64)
-- PowerShell hook script (`shell/xvn.ps1`)
+- PowerShell hook script (`shell/anvs.ps1`)
 - JSON command protocol implementation
 - GitHub Actions Windows CI
 
@@ -66,7 +86,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 ##### M11.5: PowerShell Profile Modification
 - [ ] Add PowerShell profile detection
-- [ ] Update `xvn setup` command for Windows
+- [ ] Update `anvs setup` command for Windows
 
 **Skills Needed:** Rust, PowerShell, Windows development
 
@@ -81,7 +101,7 @@ This document outlines the development roadmap for xvn, including completed mile
 ---
 
 ##### M11.7: npm Package for Windows
-- [ ] Create `bin/xvn.cmd` wrapper script for Windows
+- [ ] Create `bin/anvs.cmd` wrapper script for Windows
 - [ ] Test npm install on Windows
 
 **Skills Needed:** Node.js, Windows batch scripting
@@ -148,10 +168,10 @@ This document outlines the development roadmap for xvn, including completed mile
 - [ ] Elvish plugin
 
 ### Advanced Features (v2.1.0+)
-- [ ] `xvn doctor` - Health check command
-- [ ] `xvn which` - Show active version and why
-- [ ] `xvn list` - List installed versions
-- [ ] `xvn exec <cmd>` - Run command with specific version
+- [ ] `anvs doctor` - Health check command
+- [ ] `anvs which` - Show active version and why
+- [ ] `anvs list` - List installed versions
+- [ ] `anvs exec <cmd>` - Run command with specific version
 - [ ] Shell completions (bash, zsh, fish)
 - [ ] Self-update mechanism
 
@@ -172,7 +192,7 @@ This document outlines the development roadmap for xvn, including completed mile
 
 **High Priority:**
 - ⭐ **Windows testing** - We need Windows developers to test and validate
-- ⭐ **Homebrew formula** - macOS users would benefit from `brew install xvn`
+- ⭐ **Homebrew formula** - macOS users would benefit from `brew install anvs`
 - ⭐ **Additional version manager plugins** - Expand compatibility
 
 See the relevant milestone specs in the `spec/` directory for details.

@@ -4,9 +4,9 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-**xvn** is a high-performance Rust-based automatic Node.js version switcher designed to be 2-3x faster than existing solutions like avn. It automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc` or `.node-version` file.
+**anvs** is a high-performance Rust-based automatic Node.js version switcher designed to be 2-3x faster than existing solutions like avn. It automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc` or `.node-version` file.
 
-**Current Status:** Implementation phase (v0.6.1) - The project has moved beyond the planning phase and has a working Rust implementation with core functionality.
+**Current Status:** Production (v2.0.0) - The project is production-ready with full functionality for macOS and Linux.
 
 ## Build and Development Commands
 
@@ -30,8 +30,8 @@ make fmt               # Format code
 make fmt-check         # Check code formatting
 
 # Installation testing
-make install           # Install xvn to ~/.cargo/bin
-make uninstall         # Remove xvn from ~/.cargo/bin
+make install           # Install anvs to ~/.cargo/bin
+make uninstall         # Remove anvs from ~/.cargo/bin
 
 # Release management
 make version-patch     # Bump patch version (0.6.1 -> 0.6.2)
@@ -70,9 +70,9 @@ RUST_LOG=debug cargo test -- --nocapture
 
 ### Core Components and Responsibilities
 
-1. **Shell Integration (`shell/xvn.sh`)** - Bash/zsh hooks that detect directory changes and trigger version switching
+1. **Shell Integration (`shell/anvs.sh`)** - Bash/zsh hooks that detect directory changes and trigger version switching
 2. **CLI Module (`src/cli.rs`)** - Command-line interface using clap for setup, activate, and status commands
-3. **Config System (`src/config.rs`)** - YAML-based configuration loading from `~/.xvnrc` and `.xvn.yaml`
+3. **Config System (`src/config.rs`)** - YAML-based configuration loading from `~/.anvsrc` and `.anvs.yaml`
 4. **Plugin System (`src/plugins/`)** - Modular version manager support (nvm, fnm) via trait-based plugins
 5. **Activation Orchestrator (`src/activation.rs`)** - Coordinates version detection, plugin matching, and command generation
 6. **Version File Detection (`src/version_file.rs`)** - Searches directory tree for `.nvmrc` and `.node-version` files
@@ -95,7 +95,7 @@ Built-in plugins (nvm, fnm) are compiled into the binary for performance. Future
 
 ### File Descriptor #3 Protocol
 
-xvn uses a sophisticated IPC mechanism where the child process (xvn binary) writes shell commands to file descriptor 3, which the parent shell captures and evaluates. This allows xvn to modify the parent shell environment without requiring `eval` or `source` commands.
+anvs uses a sophisticated IPC mechanism where the child process (anvs binary) writes shell commands to file descriptor 3, which the parent shell captures and evaluates. This allows anvs to modify the parent shell environment without requiring `eval` or `source` commands.
 
 ## Performance Targets and Benchmarks
 
@@ -108,8 +108,8 @@ Performance testing is integrated into the test suite with benchmarks using the 
 ## Configuration Management
 
 ### Configuration Hierarchy (highest precedence first)
-1. Project-level: `.xvn.yaml` in project root
-2. User-level: `~/.xvnrc`
+1. Project-level: `.anvs.yaml` in project root
+2. User-level: `~/.anvsrc`
 3. Built-in defaults
 
 ### Configuration Options
@@ -125,7 +125,7 @@ The project follows a strict error handling philosophy:
 - **Warnings:** Show to user but not fatal (version not installed)
 - **Fatal errors:** Show detailed message with actionable hints, exit cleanly
 
-All errors implement the `XvnError` trait with helpful context and hints for resolution.
+All errors implement the `AnvsError` trait with helpful context and hints for resolution.
 
 ## Testing Strategy
 

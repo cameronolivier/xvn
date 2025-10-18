@@ -2,11 +2,11 @@
 
 ## Project Structure & Module Organization
 - `src/` hosts the Rust CLI: keep entrypoints in `main.rs`/`cli.rs`, while feature logic lives under `config/`, `activation/`, `plugins/`, `shell/`, and `setup/`.
-- `tests/` contains integration coverage; add scenario fixtures beside the test modules. Use `shell/xvn.sh` for shell hook updates and `scripts/` for automation helpers (coverage, version bumps, artifact handling).
+- `tests/` contains integration coverage; add scenario fixtures beside the test modules. Use `shell/anvs.sh` for shell hook updates and `scripts/` for automation helpers (coverage, version bumps, artifact handling).
 - `docs/` and `spec/` capture architecture notes and phased plans—refresh them when workflows shift. Packaging assets reside in `bin/`, `native/`, `install.js`, and the `homebrew*/` directories.
 
 ## Build, Test, and Development Commands
-- `make dev` installs the binary locally and runs `xvn setup` for shell integration.
+- `make dev` installs the binary locally and runs `anvs setup` for shell integration.
 - `cargo run -- ARGS` or `make run` executes the CLI quickly for manual testing.
 - `make build` / `make release` produce debug and optimized binaries under `target/`.
 - `make test`, `make test-watch`, and `npm test` exercise the Rust suites; `./scripts/coverage.sh` emits coverage reports.
