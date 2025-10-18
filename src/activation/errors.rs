@@ -41,7 +41,7 @@ pub enum ActivationError {
 
     /// Configuration error
     #[error("configuration error")]
-    ConfigError(#[from] crate::error::XvnError),
+    ConfigError(#[from] crate::error::AnvsError),
 
     /// I/O error
     #[error("I/O error")]
@@ -69,7 +69,7 @@ impl ActivationError {
                  Check file permissions and format."
             )),
             Self::ConfigError(_) => Some(
-                "Run 'xvn setup' to create a default configuration, or check ~/.xvnrc syntax."
+                "Run 'anvs setup' to create a default configuration, or check ~/.anvsrc syntax."
                     .to_string(),
             ),
             _ => None,

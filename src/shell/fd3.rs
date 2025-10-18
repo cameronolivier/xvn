@@ -5,11 +5,11 @@ use std::os::unix::io::RawFd;
 /// Writer for shell commands via file descriptor #3
 ///
 /// This struct handles the file descriptor #3 protocol, which allows
-/// a child process (xvn) to send commands to the parent shell for execution.
+/// a child process (anvs) to send commands to the parent shell for execution.
 ///
 /// # Protocol
-/// - The shell opens FD:3 when invoking xvn: `xvn activate <path> 3>&1 1>&2 2>&3`
-/// - xvn writes commands to FD:3
+/// - The shell opens FD:3 when invoking anvs: `anvs activate <path> 3>&1 1>&2 2>&3`
+/// - anvs writes commands to FD:3
 /// - The shell captures FD:3 output and evaluates it: `eval "$commands"`
 ///
 /// # Safety

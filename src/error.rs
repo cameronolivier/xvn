@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use thiserror::Error;
 
-/// Main error type for xvn
+/// Main error type for anvs
 #[derive(Debug, Error)]
 pub enum XvnError {
     /// No version file found in directory tree
@@ -41,5 +41,8 @@ pub enum XvnError {
     Yaml(#[from] serde_yaml::Error),
 }
 
-/// Result type alias for xvn operations
+/// Result type alias for anvs operations
 pub type Result<T> = std::result::Result<T, XvnError>;
+
+/// Temporary alias while transitioning from the old XvnError name.
+pub type AnvsError = XvnError;

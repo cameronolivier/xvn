@@ -8,9 +8,9 @@ use std::io::{self, Write};
 /// which is an alternative to the Unix FD:3 protocol.
 ///
 /// # Protocol
-/// - xvn writes JSON-formatted commands to stdout wrapped in markers
+/// - anvs writes JSON-formatted commands to stdout wrapped in markers
 /// - PowerShell script parses the JSON and executes via Invoke-Expression
-/// - Format: `__XVN_COMMANDS_START__{json}__XVN_COMMANDS_END__`
+/// - Format: `__ANVS_COMMANDS_START__{json}__ANVS_COMMANDS_END__`
 ///
 /// # Safety
 /// PowerShell commands must be properly escaped to prevent command injection.
@@ -74,9 +74,9 @@ impl JsonCommandWriter {
     ///
     /// Writes commands in format:
     /// ```text
-    /// __XVN_COMMANDS_START__
-    /// {"commands":["cmd1","cmd2"]}
-    /// __XVN_COMMANDS_END__
+    /// __ANVS_COMMANDS_START__
+/// {"commands":["cmd1","cmd2"]}
+    /// __ANVS_COMMANDS_END__
     /// ```
     pub fn write(self) -> Result<()> {
         if self.commands.is_empty() {
@@ -89,9 +89,9 @@ impl JsonCommandWriter {
 
         let json = serde_json::to_string(&output)?;
 
-        println!("__XVN_COMMANDS_START__");
+        println!("__ANVS_COMMANDS_START__");
         println!("{json}");
-        println!("__XVN_COMMANDS_END__");
+        println!("__ANVS_COMMANDS_END__");
 
         io::stdout().flush()?;
 
