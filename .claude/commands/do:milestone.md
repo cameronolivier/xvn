@@ -1,5 +1,9 @@
 ---
-description: Milestone number (1-6) to implement following PLAN.md
+description: Implement a complete milestone following PLAN.md
+args:
+  - name: N
+    description: Milestone number (1-6)
+    required: true
 tags: [project, implementation]
 ---
 
