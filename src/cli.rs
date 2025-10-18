@@ -255,11 +255,11 @@ pub fn run() -> Result<()> {
             Ok(())
         }
         Some(Commands::Set { setting }) => {
-            info!("Running set command for setting: {:?}", setting);
+            info!("Running set command for setting: {setting:?}");
             crate::commands::set::set_config(setting)
         }
         Some(Commands::Uninstall { force }) => {
-            info!("Running uninstall command (force: {})", force);
+            info!("Running uninstall command (force: {force})");
             crate::commands::uninstall::uninstall(force)
         }
         None => {

@@ -303,7 +303,7 @@ impl<'a> Orchestrator<'a> {
                     );
 
                     // Activate the default version
-                    return self.activate_existing_version(&plugin, &version);
+                    return self.activate_existing_version(plugin, &version);
                 }
                 Ok(None) => {
                     debug!("Plugin {} has no default version configured", plugin.name());
@@ -808,7 +808,10 @@ mod tests {
 
         // Activate with use_default=true
         let result = orchestrator.activate(temp_dir.path(), true);
-        assert!(result.is_ok(), "Should activate default version successfully");
+        assert!(
+            result.is_ok(),
+            "Should activate default version successfully"
+        );
     }
 
     #[test]
@@ -878,7 +881,10 @@ mod tests {
 
         // Activate with use_default=true
         let result = orchestrator.activate(temp_dir.path(), true);
-        assert!(result.is_ok(), "Should not error when no default configured");
+        assert!(
+            result.is_ok(),
+            "Should not error when no default configured"
+        );
     }
 
     #[test]

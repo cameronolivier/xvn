@@ -23,7 +23,11 @@ pub fn uninstall(force: bool) -> Result<()> {
     } else {
         output::info("Detected xvn installations:");
         for (method, path) in &installations {
-            output::info(&format!("  • {} at {}", method.description(), path.display()));
+            output::info(&format!(
+                "  • {} at {}",
+                method.description(),
+                path.display()
+            ));
         }
         println!();
     }
@@ -63,23 +67,24 @@ pub fn uninstall(force: bool) -> Result<()> {
     let mut removed_items = Vec::new();
 
     // 1. Remove shell integration
-    if let Ok(home) = dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory")) {
-        let shells = vec![
-            (home.join(".bashrc"), "bash"),
-            (home.join(".zshrc"), "zsh"),
-        ];
+    if let Ok(home) =
+        dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))
+    {
+        let shells = vec![(home.join(".bashrc"), "bash"), (home.join(".zshrc"), "zsh")];
 
         for (profile_path, shell_name) in shells {
             if profile_path.exists() {
                 match profile_modification::remove_from_profile(&profile_path) {
                     Ok(true) => {
-                        removed_items.push(format!("Shell integration from {}", shell_name));
+                        removed_items.push(format!("Shell integration from {shell_name}"));
                     }
                     Ok(false) => {
                         // Not present, skip
                     }
                     Err(e) => {
-                        output::warning(&format!("Warning: Could not remove from {}: {}", shell_name, e));
+                        output::warning(&format!(
+                            "Warning: Could not remove from {shell_name}: {e}"
+                        ));
                     }
                 }
             }
@@ -87,21 +92,23 @@ pub fn uninstall(force: bool) -> Result<()> {
     }
 
     // 2. Remove ~/.xvnrc
-    if let Ok(home) = dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory")) {
+    if let Ok(home) =
+        dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))
+    {
         let config_path = home.join(".xvnrc");
         if config_path.exists() {
-            fs::remove_file(&config_path)
-                .context("Failed to remove ~/.xvnrc")?;
+            fs::remove_file(&config_path).context("Failed to remove ~/.xvnrc")?;
             removed_items.push("~/.xvnrc configuration".to_string());
         }
     }
 
     // 3. Remove ~/.xvn directory
-    if let Ok(home) = dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory")) {
+    if let Ok(home) =
+        dirs::home_dir().ok_or_else(|| anyhow::anyhow!("Could not determine home directory"))
+    {
         let xvn_dir = home.join(".xvn");
         if xvn_dir.exists() {
-            fs::remove_dir_all(&xvn_dir)
-                .context("Failed to remove ~/.xvn directory")?;
+            fs::remove_dir_all(&xvn_dir).context("Failed to remove ~/.xvn directory")?;
             removed_items.push("~/.xvn directory".to_string());
         }
     }
@@ -116,7 +123,7 @@ pub fn uninstall(force: bool) -> Result<()> {
     } else {
         output::success("✓ Successfully removed:");
         for item in removed_items {
-            output::info(&format!("  • {}", item));
+            output::info(&format!("  • {item}"));
         }
     }
 
@@ -151,10 +158,7 @@ pub fn uninstall(force: bool) -> Result<()> {
                 output::info(&format!("Running: {}", cmd.cyan()));
 
                 // Execute the uninstall command
-                let result = std::process::Command::new("sh")
-                    .arg("-c")
-                    .arg(cmd)
-                    .status();
+                let result = std::process::Command::new("sh").arg("-c").arg(cmd).status();
 
                 match result {
                     Ok(status) if status.success() => {
@@ -174,7 +178,7 @@ pub fn uninstall(force: bool) -> Result<()> {
                             method.description(),
                             e
                         ));
-                        output::info(&format!("Please run manually: {}", cmd));
+                        output::info(&format!("Please run manually: {cmd}"));
                     }
                 }
             }

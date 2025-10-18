@@ -42,7 +42,7 @@ pub fn set_config(setting: Option<String>) -> Result<()> {
         "version-files" => set_version_files(&mut config)?,
         "use-default" => set_use_default(&mut config)?,
         _ => {
-            output::error(&format!("Unknown setting: {}", setting));
+            output::error(&format!("Unknown setting: {setting}"));
             output::info("Available settings: auto-install, plugins, version-files, use-default");
             return Ok(());
         }
@@ -51,7 +51,7 @@ pub fn set_config(setting: Option<String>) -> Result<()> {
     // Save config
     save_config(&config, &config_file)?;
 
-    output::success(&format!("Configuration updated: {}", setting));
+    output::success(&format!("Configuration updated: {setting}"));
     output::info(&format!("Config saved to: {}", config_file.display()));
 
     Ok(())
@@ -69,7 +69,7 @@ fn set_auto_install(config: &mut Config) -> Result<()> {
     );
     println!();
 
-    let options = vec![
+    let options = [
         ("prompt", "Ask each time (recommended)"),
         ("always", "Install automatically"),
         ("never", "Never install, show error"),
@@ -108,7 +108,7 @@ fn set_plugins(config: &mut Config) -> Result<()> {
     println!("  Current: {}", config.plugins.join(", ").yellow());
     println!();
 
-    let all_plugins = vec![
+    let all_plugins = [
         ("nvm", "Node Version Manager"),
         ("fnm", "Fast Node Manager"),
         ("n", "Node version management"),
@@ -162,7 +162,7 @@ fn set_version_files(config: &mut Config) -> Result<()> {
     println!("  Current: {}", config.version_files.join(", ").yellow());
     println!();
 
-    let all_files = vec![
+    let all_files = [
         (".nvmrc", "nvm version file"),
         (".node-version", "Universal Node version file"),
         ("package.json", "npm package.json engines.node"),
@@ -216,7 +216,7 @@ fn set_use_default(config: &mut Config) -> Result<()> {
     } else {
         "disabled".red().to_string()
     };
-    println!("  Current: {}", status_text);
+    println!("  Current: {status_text}");
     println!();
     println!("  When enabled, xvn automatically switches to your version manager's");
     println!("  default Node.js version when you leave a project directory.");
@@ -265,7 +265,7 @@ fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
         config
             .plugins
             .iter()
-            .map(|p| format!("  - {}", p))
+            .map(|p| format!("  - {p}"))
             .collect::<Vec<_>>()
             .join("\n"),
         match config.auto_install {
@@ -276,7 +276,7 @@ fn save_config(config: &Config, path: &PathBuf) -> Result<()> {
         config
             .version_files
             .iter()
-            .map(|f| format!("  - {}", f))
+            .map(|f| format!("  - {f}"))
             .collect::<Vec<_>>()
             .join("\n"),
         config.use_default,

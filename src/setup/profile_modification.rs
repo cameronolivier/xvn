@@ -122,7 +122,7 @@ fi
 
     #[test]
     fn test_remove_block() {
-        let content = format!("some content before{}and some after", OLD_SETUP_BLOCK);
+        let content = format!("some content before{OLD_SETUP_BLOCK}and some after");
         let cleaned = remove_xvn_block(&content);
         assert!(!cleaned.contains(XVN_MARKER_START));
         assert!(cleaned.contains("some content before"));

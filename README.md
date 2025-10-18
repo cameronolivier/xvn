@@ -1,3 +1,10 @@
+> **⚠️ DEPRECATION NOTICE**: This package has been renamed to [`anvs`](https://www.npmjs.com/package/anvs) (Automatic Node Version Switcher).
+> Please install the new package: `npm install -g anvs`
+> See [README.DEPRECATION.md](./README.DEPRECATION.md) for migration instructions.
+> This package will continue to work but won't receive updates.
+
+---
+
 # XVN - Automatic Node Version Switcher
 
 [![CI](https://github.com/olvrcc/xvn/workflows/Test/badge.svg)](https://github.com/olvrcc/xvn/actions)
@@ -85,6 +92,17 @@ cargo install --git https://github.com/olvrcc/xvn --force
 ### Upgrading from v1.1.x
 
 If you are upgrading from an older version of `xvn`, the installation process has changed. Please follow our **[Migration Guide](./docs/MIGRATION.md)** to upgrade your existing installation.
+
+## Migration to ANVS
+
+This project has been renamed to **anvs**. For migration instructions, see [README.DEPRECATION.md](./README.DEPRECATION.md).
+
+**Quick migration**:
+```bash
+xvn uninstall
+npm install -g anvs
+anvs setup
+```
 
 ## Usage
 

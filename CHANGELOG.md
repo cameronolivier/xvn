@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2025-10-18
+
+### ⚠️ Deprecation Notice
+
+This is the final release of `xvn` before the project is renamed to `anvs` (Automatic Node Version Switcher).
+
+**What's happening:**
+- Project is being renamed to `anvs` for better npm namespace and clarity
+- New package will be published as `anvs` (unnamespaced)
+- This version (`@olvrcc/xvn@1.7.0`) will continue to work indefinitely
+- No new features will be added to `xvn`; future development on `anvs`
+
+**For users:**
+- See [README.DEPRECATION.md](./README.DEPRECATION.md) for full migration guide
+- Install new package: `npm install -g anvs`
+- Your current installation will keep working
+
+### Documentation
+- Added deprecation notice to README.md
+- Created README.DEPRECATION.md with migration guide
+- Updated package metadata to indicate deprecation
+
 ## [1.6.1] - 2025-10-13
 
 ### Fixed
