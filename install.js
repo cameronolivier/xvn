@@ -4,7 +4,7 @@ const { copyFileSync, chmodSync, existsSync, mkdirSync, readdirSync, rmSync, sta
 const { join } = require('path');
 const os = require('os');
 
-const XVN_DIR = join(os.homedir(), '.xvn');
+const ANVS_DIR = join(os.homedir(), '.anvs');
 const VERSION = require('./package.json').version;
 
 function getPlatform() {
@@ -25,7 +25,7 @@ function getPlatform() {
 }
 
 function cleanupOldVersions() {
-    const versionsDir = join(XVN_DIR, 'versions');
+    const versionsDir = join(ANVS_DIR, 'versions');
     if (!existsSync(versionsDir)) {
         return;
     }
@@ -50,13 +50,13 @@ function cleanupOldVersions() {
 
 async function install() {
   try {
-    const isUpgrade = existsSync(XVN_DIR);
-    console.log(isUpgrade ? 'Upgrading xvn...' : 'Installing xvn...');
+    const isUpgrade = existsSync(ANVS_DIR);
+    console.log(isUpgrade ? 'Upgrading anvs...' : 'Installing anvs...');
 
-    const versionDir = join(XVN_DIR, 'versions', `v${VERSION}`);
+    const versionDir = join(ANVS_DIR, 'versions', `v${VERSION}`);
     const binDir = join(versionDir, 'bin');
     const libDir = join(versionDir, 'lib');
-    const globalBinDir = join(XVN_DIR, 'bin');
+    const globalBinDir = join(ANVS_DIR, 'bin');
 
     // 1. Create directory structure
     mkdirSync(binDir, { recursive: true });
@@ -65,26 +65,26 @@ async function install() {
 
     // 2. Download and install binary
     const platform = getPlatform();
-    const sourceBinary = join(__dirname, 'native', platform, 'xvn');
+    const sourceBinary = join(__dirname, 'native', platform, 'anvs');
     if (!existsSync(sourceBinary)) {
       throw new Error(`Binary not found for platform: ${platform}`);
     }
-    const destBinary = join(binDir, 'xvn');
+    const destBinary = join(binDir, 'anvs');
     copyFileSync(sourceBinary, destBinary);
     chmodSync(destBinary, 0o755);
 
     // 3. Copy shell integration scripts
-    copyFileSync(join(__dirname, 'shell', 'xvn.sh'), join(libDir, 'xvn.sh'));
-    copyFileSync(join(__dirname, 'shell', 'xvn.ps1'), join(libDir, 'xvn.ps1'));
+    copyFileSync(join(__dirname, 'shell', 'anvs.sh'), join(libDir, 'anvs.sh'));
+    copyFileSync(join(__dirname, 'shell', 'anvs.ps1'), join(libDir, 'anvs.ps1'));
 
     // 4. Create/update symlinks
-    const binSymlink = join(globalBinDir, 'xvn');
+    const binSymlink = join(globalBinDir, 'anvs');
     if (existsSync(binSymlink) || statSync(binSymlink, { throwIfNoEntry: false })?.isSymbolicLink()) {
         unlinkSync(binSymlink);
     }
     symlinkSync(destBinary, binSymlink, 'file');
 
-    const currentSymlink = join(XVN_DIR, 'current');
+    const currentSymlink = join(ANVS_DIR, 'current');
     if (existsSync(currentSymlink) || statSync(currentSymlink, { throwIfNoEntry: false })?.isSymbolicLink()) {
         unlinkSync(currentSymlink);
     }
@@ -93,23 +93,23 @@ async function install() {
     // 5. Clean up old versions
     cleanupOldVersions();
 
-    console.log(`✓ xvn v${VERSION} installed successfully to ${versionDir}`);
+    console.log(`✓ anvs v${VERSION} installed successfully to ${versionDir}`);
     console.log('');
     if (!isUpgrade) {
-        console.log("To complete the installation, you need to add xvn to your shell's PATH.");
+        console.log("To complete the installation, you need to add anvs to your shell's PATH.");
         console.log("Run the following command to get started:");
         console.log('');
-        console.log('  xvn setup');
+        console.log('  anvs setup');
         console.log('');
         console.log('Or, you can manually add the following to your shell profile (e.g., ~/.zshrc, ~/.bashrc):');
-        console.log('  export PATH="$HOME/.xvn/bin:$PATH"');
+        console.log('  export PATH="$HOME/.anvs/bin:$PATH"');
     } else {
         console.log("Your shell configuration might need to be updated.");
-        console.log("Run 'xvn setup' to ensure your shell is correctly configured.");
+        console.log("Run 'anvs setup' to ensure your shell is correctly configured.");
     }
 
   } catch (error) {
-    console.error('Failed to install xvn:', error.message);
+    console.error('Failed to install anvs:', error.message);
     process.exit(1);
   }
 }

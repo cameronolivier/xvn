@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Wrapper script for anvs npm package
+# This script is a temporary entrypoint to allow users to run `anvs setup`.
+# After setup, the `anvs` command in the user's PATH should be the one
+# from ~/.anvs/bin.
+
+# The actual binary is installed by the postinstall script to ~/.anvs/bin/anvs
+ANVS_BINARY="$HOME/.anvs/bin/anvs"
+
+if [ ! -f "$ANVS_BINARY" ]; then
+  echo "Error: anvs binary not found at $ANVS_BINARY"
+  echo "It seems the installation may have failed. Please try reinstalling:"
+  echo "  npm install -g anvs"
+  exit 1
+fi
+
+# Execute the native binary, passing all arguments
+exec "$ANVS_BINARY" "$@"
