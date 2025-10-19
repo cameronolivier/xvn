@@ -7,36 +7,36 @@ const TAGLINE: &str = "automatic node version switching";
 
 /// Print branded header message
 pub fn print_header() {
-    println!("{} - {}", BRAND.bright_cyan().bold(), TAGLINE.dimmed());
+    println!("{} - {}", BRAND.truecolor(50, 205, 50).bold(), TAGLINE.dimmed());
 }
 
 /// Print success message with green checkmark
 pub fn success(msg: &str) {
-    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!("{}", msg.green());
 }
 
 /// Print info message
 pub fn info(msg: &str) {
-    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!("{}", msg);
 }
 
 /// Print warning message with yellow color
 pub fn warning(msg: &str) {
-    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!("{}", msg.yellow());
 }
 
 /// Print error message with red color
 pub fn error(msg: &str) {
-    eprintln!("{}", format!("{BRAND}:").bright_cyan());
+    eprintln!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     eprintln!("{}", msg.red().bold());
 }
 
 /// Print version switch success
 pub fn switched(version: &str, plugin: &str) {
-    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!(
         "{} {}",
         "✓".green().bold(),
@@ -46,7 +46,7 @@ pub fn switched(version: &str, plugin: &str) {
 
 /// Print installing message
 pub fn installing(version: &str, plugin: &str) {
-    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!("{}", format!("Installing Node.js {version} using {plugin}...").cyan());
 }
 
@@ -66,7 +66,7 @@ pub fn version_mismatch(required: &str, current: Option<&str>) {
 pub fn install_prompt(version: &str, plugin: &str) -> String {
     format!(
         "{} Node.js {} is not installed. Install it using {}?",
-        format!("{BRAND}:").bright_cyan(),
+        format!("{BRAND}:").truecolor(50, 205, 50),
         version,
         plugin
     )
