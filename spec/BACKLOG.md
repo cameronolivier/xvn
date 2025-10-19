@@ -5,6 +5,5 @@
 - [x] Alias the 'setup' command to 'init' and remove all specific 'setup functionality' - it should only be an alias
 - [x] Change the `anvs:` when the switching runs to: "Automatic Node Version Switcher <new line>✓ Switched to..."
 - [x] Change the color of "Automatic Node Version Switcher" in the CLI to a better brand color
-- [ ] Clean up the wizard - it needs to be tighter. ideally we have a better interface.
+- [x] (Converted to a Milestone - [13])Clean up the wizard - it needs to be tighter. ideally we have a better interface.
   → Planned in Milestone 13: Wizard Redesign (see spec/milestone-13-wizard-redesign/SPEC.md)
-
