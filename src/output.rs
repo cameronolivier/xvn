@@ -17,6 +17,11 @@ pub fn print_header() {
     );
 }
 
+/// Print a brand message with custom text
+pub fn brand(msg: &str) {
+    println!("{}", msg.truecolor(50, 205, 50).bold());
+}
+
 /// Print success message with green checkmark
 pub fn success(msg: &str) {
     println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));

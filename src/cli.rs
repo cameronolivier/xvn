@@ -51,6 +51,10 @@ pub enum Commands {
         #[arg(short, long)]
         quick: bool,
 
+        /// Advanced setup with full customization
+        #[arg(long)]
+        advanced: bool,
+
         /// Force overwrite existing configuration
         #[arg(short, long)]
         force: bool,
@@ -151,16 +155,17 @@ pub fn run() -> Result<()> {
     match cli.command {
         Some(Commands::Init {
             quick,
+            advanced,
             force,
             shell,
             non_interactive,
         }) => {
-            info!("Running init command (quick: {quick}, force: {force}, non_interactive: {non_interactive})");
+            info!("Running init command (quick: {quick}, advanced: {advanced}, force: {force}, non_interactive: {non_interactive})");
 
             // TODO: Handle shell parameter when provided
             let _ = shell; // Silence unused warning for now
 
-            crate::init::init(quick, non_interactive, force)
+            crate::init::init(quick, advanced, non_interactive, force)
         }
 
         Some(Commands::Setup { shell, force }) => {
@@ -168,7 +173,7 @@ pub fn run() -> Result<()> {
             info!("Running setup command (redirecting to init)");
             let _ = shell; // Silence unused warning for now
 
-            crate::init::init(true, false, force)
+            crate::init::init(true, false, false, force)
         }
         Some(Commands::Activate { path, use_default }) => {
             info!("Running activate command for path: {path:?} (use_default: {use_default})");

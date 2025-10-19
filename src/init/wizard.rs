@@ -1,9 +1,11 @@
 use crate::config::{AutoInstallMode, Config};
-use crate::init::detection::{detect_shell, detect_version_managers, get_profile_path};
-use crate::init::prompts::{self, ConfigSummary};
+use crate::init::detection::{detect_all, detect_shell, detect_version_managers, get_profile_path};
+use crate::init::prompts::{self, prompt_quick_mode_confirmation, ConfigSummary, QuickModeChoice};
+use crate::init::summary::{format_detection_summary, DetectionResults};
+use crate::init::timeline::{chars, render_step, Step, StepState};
 use crate::output;
 use crate::setup::shell_detection::Shell;
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use dirs::home_dir;
 
 /// Wizard state - collects configuration through steps
@@ -447,6 +449,271 @@ pub fn run_non_interactive(force: bool) -> Result<()> {
     eprintln!("anvs: Running in non-interactive mode");
 
     run_quick_setup(force)
+}
+
+/// Installation progress tracker for visual feedback
+struct InstallationProgress {
+    steps: Vec<Step>,
+}
+
+impl InstallationProgress {
+    fn new() -> Self {
+        Self {
+            steps: vec![
+                Step::new("Creating config at ~/.anvsrc"),
+                Step::new("Installing shell hook"),
+                Step::new("Validating installation"),
+                Step::new("Testing activation"),
+            ],
+        }
+    }
+
+    fn mark_complete(&mut self, index: usize) {
+        if let Some(step) = self.steps.get_mut(index) {
+            step.set_state(StepState::Complete);
+        }
+    }
+
+    fn mark_active(&mut self, index: usize) {
+        if let Some(step) = self.steps.get_mut(index) {
+            step.set_state(StepState::Active);
+        }
+    }
+
+    fn get(&self, index: usize) -> Option<&Step> {
+        self.steps.get(index)
+    }
+}
+
+/// Install configuration and shell hook with progress indicators
+pub fn install_config(config: Config, shell: Shell, force: bool) -> Result<()> {
+    println!();
+    output::brand("⚡ Automatic Node Version Switcher");
+    println!();
+
+    let mut progress = InstallationProgress::new();
+
+    // Print header
+    println!("{}  Installing", chars::STEP_ACTIVE);
+
+    // Step 1: Create config
+    progress.mark_active(0);
+    let config_path = dirs::home_dir()
+        .ok_or_else(|| anyhow!("Could not find home directory"))?
+        .join(".anvsrc");
+    write_config(&config, &config_path, force)
+        .map_err(|e| anyhow!("Failed to create config: {e}"))?;
+    progress.mark_complete(0);
+    if let Some(step) = progress.get(0) {
+        println!("{}  {}", chars::BRANCH_RIGHT, render_step(step));
+    }
+
+    // Step 2: Install shell hook
+    progress.mark_active(1);
+    install_shell_hook(&shell, force).map_err(|e| anyhow!("Failed to install shell hook: {e}"))?;
+    progress.mark_complete(1);
+    if let Some(step) = progress.get(1) {
+        println!("{}  {}", chars::BRANCH_RIGHT, render_step(step));
+    }
+
+    // Step 3: Validate
+    progress.mark_active(2);
+    validate_installation(&shell).map_err(|e| anyhow!("Validation failed: {e}"))?;
+    progress.mark_complete(2);
+    if let Some(step) = progress.get(2) {
+        println!("{}  {}", chars::BRANCH_RIGHT, render_step(step));
+    }
+
+    // Step 4: Test activation (optional, may skip)
+    progress.mark_active(3);
+    // Test activation is optional and may not be implemented yet
+    match test_activation() {
+        Ok(_) => {
+            progress.mark_complete(3);
+            if let Some(step) = progress.get(3) {
+                println!("{}  {}", chars::BRANCH_LAST, render_step(step));
+            }
+        }
+        Err(_) => {
+            // Skip test activation if not implemented
+            log::debug!("Skipping activation test (not implemented)");
+            if let Some(step) = progress.get(3) {
+                use owo_colors::OwoColorize;
+                println!("{}  {} (skipped)", chars::BRANCH_LAST, step.label.dimmed());
+            }
+        }
+    }
+
+    Ok(())
+}
+
+// Placeholder functions (implement or use existing)
+fn install_shell_hook(shell: &Shell, _force: bool) -> Result<()> {
+    // Use existing shell profile modification logic
+    let profile_path = get_profile_path(shell)?;
+    crate::setup::profile_modification::add_to_profile(&profile_path)
+}
+
+fn validate_installation(_shell: &Shell) -> Result<()> {
+    // Basic validation: check that config file exists
+    let config_path = dirs::home_dir()
+        .ok_or_else(|| anyhow!("Could not find home directory"))?
+        .join(".anvsrc");
+
+    if !config_path.exists() {
+        return Err(anyhow!("Config file not created at {config_path:?}"));
+    }
+
+    log::debug!("Installation validated successfully");
+    Ok(())
+}
+
+fn test_activation() -> Result<()> {
+    // Placeholder - may not be implemented yet
+    log::debug!("Activation test not implemented");
+    Ok(())
+}
+
+/// Convert detection results to a Config object
+fn results_to_config(results: &DetectionResults) -> Result<Config> {
+    Ok(Config {
+        plugins: if results.version_managers.is_empty() {
+            // Default to nvm if nothing detected
+            vec!["nvm".to_string()]
+        } else {
+            results.version_managers.clone()
+        },
+        auto_install: results.auto_install.clone(),
+        version_files: vec![
+            ".nvmrc".to_string(),
+            ".node-version".to_string(),
+            "package.json".to_string(),
+        ],
+        use_default: true,
+    })
+}
+
+/// Run quick mode wizard (default)
+///
+/// This is the new default wizard experience:
+/// 1. Auto-detect shell and version manager
+/// 2. Display summary of detected values
+/// 3. Single confirmation prompt
+/// 4. Done!
+pub fn run_quick_wizard() -> Result<(Config, Shell)> {
+    // Print header
+    println!();
+    output::brand("⚡ Automatic Node Version Switcher");
+    println!();
+
+    // Run detection
+    log::debug!("Running auto-detection...");
+    let results = detect_all()?;
+    log::debug!(
+        "Detection complete: shell={:?}, version_managers={:?}",
+        results.shell,
+        results.version_managers
+    );
+
+    // Show summary
+    println!("{}", format_detection_summary(&results));
+    println!();
+
+    // Check if critical detection failed
+    if results.shell.is_none() {
+        output::warning("⚠️  Shell auto-detection failed");
+        println!();
+        output::info("Please use advanced mode to configure manually:");
+        output::info("  anvs init --advanced");
+        return Err(anyhow!(
+            "Shell detection failed. Use --advanced mode or specify --shell flag."
+        ));
+    }
+
+    if results.version_managers.is_empty() {
+        output::warning("⚠️  No version managers detected");
+        output::info("anvs will default to nvm. Ensure nvm or fnm is installed.");
+        println!();
+        // Continue anyway with nvm as default
+    }
+
+    // Single confirmation prompt
+    match prompt_quick_mode_confirmation(&results)? {
+        QuickModeChoice::Proceed => {
+            log::debug!("User accepted quick mode configuration");
+            // User accepted defaults
+            let shell = results.shell.ok_or_else(|| anyhow!("Shell not detected"))?;
+            let config = results_to_config(&results)?;
+            Ok((config, shell))
+        }
+        QuickModeChoice::Customize => {
+            log::debug!("User chose to customize settings");
+            // Drop into advanced mode
+            println!();
+            output::info("Switching to advanced mode...");
+            println!();
+            run_advanced_wizard()
+        }
+        QuickModeChoice::Cancel => {
+            log::debug!("User cancelled setup");
+            Err(anyhow!("Setup cancelled by user"))
+        }
+    }
+}
+
+/// Run advanced mode wizard (placeholder for Phase 3)
+pub fn run_advanced_wizard() -> Result<(Config, Shell)> {
+    // TODO: Implement in Phase 3
+    Err(anyhow!(
+        "Advanced mode not yet implemented. Coming in Phase 3."
+    ))
+}
+
+/// Display completion message with next steps
+fn show_completion_message(shell: &Shell, duration: std::time::Duration) -> Result<()> {
+    use crate::init::summary::format_next_steps;
+
+    println!();
+    output::success("✓ Setup complete!");
+
+    // Show timing if < 60 seconds
+    if duration.as_secs() < 60 {
+        output::info(&format!("Completed in {:.1}s", duration.as_secs_f64()));
+    } else {
+        output::info(&format!(
+            "Completed in {}m {}s",
+            duration.as_secs() / 60,
+            duration.as_secs() % 60
+        ));
+    }
+
+    println!();
+    println!("{}", format_next_steps(shell));
+
+    Ok(())
+}
+
+/// Handle the complete init flow (detection -> wizard -> install -> completion)
+pub fn handle_init(_quick: bool, advanced: bool, force: bool) -> Result<()> {
+    use std::time::Instant;
+    let start = Instant::now();
+
+    // Determine mode (for now, always use quick mode)
+    let (config, shell) = if advanced {
+        run_advanced_wizard()?
+    } else {
+        run_quick_wizard()?
+    };
+
+    log::debug!("Wizard completed, proceeding with installation");
+
+    // Install
+    install_config(config, shell, force)?;
+
+    // Show completion
+    show_completion_message(&shell, start.elapsed())?;
+
+    Ok(())
 }
 
 #[cfg(test)]

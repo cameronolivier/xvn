@@ -1,3 +1,5 @@
+use crate::config::AutoInstallMode;
+use crate::init::summary::DetectionResults;
 use crate::setup::shell_detection::Shell;
 use anyhow::{Context, Result};
 use std::env;
@@ -146,6 +148,46 @@ pub fn should_run_interactive(non_interactive_flag: bool) -> bool {
     !non_interactive_flag && is_interactive()
 }
 
+/// Run all detection steps and return comprehensive results
+pub fn detect_all() -> Result<DetectionResults> {
+    let mut results = DetectionResults::new();
+
+    // Detect shell
+    if let Ok(shell) = detect_shell() {
+        results.shell = Some(shell);
+        if let Ok(path) = get_shell_path(&shell) {
+            results.shell_path = Some(path);
+        }
+    }
+
+    // Detect version managers
+    results.version_managers = detect_version_managers_list()?;
+
+    // Set paths and defaults
+    results.config_path = get_config_path();
+    results.auto_install = AutoInstallMode::Prompt; // Default
+
+    Ok(results)
+}
+
+/// Get the path to the shell binary
+fn get_shell_path(_shell: &Shell) -> Result<String> {
+    env::var("SHELL").map_err(|e| anyhow::anyhow!("Failed to get shell path: {e}"))
+}
+
+/// Get the configuration file path
+fn get_config_path() -> String {
+    dirs::home_dir()
+        .map(|h| h.join(".anvsrc").display().to_string())
+        .unwrap_or_else(|| "~/.anvsrc".to_string())
+}
+
+/// Detect version managers and return list of names
+fn detect_version_managers_list() -> Result<Vec<String>> {
+    let managers = detect_version_managers();
+    Ok(managers.iter().map(|m| m.name.clone()).collect())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -184,5 +226,19 @@ mod tests {
 
         // When flag is false, depends on TTY
         // (Can't reliably test this in CI)
+    }
+
+    #[test]
+    fn test_detect_all_returns_results() {
+        let results = detect_all();
+        // Should not panic, may or may not detect shell
+        assert!(results.is_ok());
+    }
+
+    #[test]
+    fn test_get_config_path_not_empty() {
+        let path = get_config_path();
+        assert!(!path.is_empty());
+        assert!(path.contains(".anvsrc"));
     }
 }
