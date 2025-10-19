@@ -7,7 +7,7 @@ fn test_version_flag() {
     cmd.arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("anvs 2.0.0"));
+        .stdout(predicate::str::contains("anvs 2.1.0"));
 }
 
 #[test]
