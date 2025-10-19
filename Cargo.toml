@@ -1,6 +1,6 @@
 [package]
 name = "anvs"
-version = "2.1.0"
+version = "2.1.1"
 edition = "2021"
 authors = ["cameronolivier@gmail.com"]
 description = "Automatic Node Version Switcher for Node.js"
