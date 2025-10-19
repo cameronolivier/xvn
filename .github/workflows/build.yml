@@ -71,24 +71,24 @@ jobs:
         shell: bash
         run: |
           mkdir -p package/lib
-          cp target/${{ matrix.target }}/release/xvn package/
-          cp shell/xvn.sh package/lib/
+          cp target/${{ matrix.target }}/release/anvs package/
+          cp shell/anvs.sh package/lib/
           cd package
           if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            tar czf xvn-${{ matrix.target }}.tar.gz xvn.exe lib/
+            tar czf anvs-${{ matrix.target }}.tar.gz anvs.exe lib/
           else
-            tar czf xvn-${{ matrix.target }}.tar.gz xvn lib/
+            tar czf anvs-${{ matrix.target }}.tar.gz anvs lib/
           fi
-          shasum -a 256 xvn-${{ matrix.target }}.tar.gz > xvn-${{ matrix.target }}.tar.gz.sha256
-          mv xvn-${{ matrix.target }}.tar.gz* ../target/${{ matrix.target }}/release/
+          shasum -a 256 anvs-${{ matrix.target }}.tar.gz > anvs-${{ matrix.target }}.tar.gz.sha256
+          mv anvs-${{ matrix.target }}.tar.gz* ../target/${{ matrix.target }}/release/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: xvn-${{ matrix.target }}
+          name: anvs-${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/xvn-${{ matrix.target }}.tar.gz
-            target/${{ matrix.target }}/release/xvn-${{ matrix.target }}.tar.gz.sha256
+            target/${{ matrix.target }}/release/anvs-${{ matrix.target }}.tar.gz
+            target/${{ matrix.target }}/release/anvs-${{ matrix.target }}.tar.gz.sha256
 
   release:
     name: Create GitHub Release

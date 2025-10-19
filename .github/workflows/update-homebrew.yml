@@ -11,8 +11,8 @@ on:
         type: string
 
 env:
-  HOMEBREW_TAP_REPO: olvrcc/homebrew-xvn
-  HOMEBREW_FORMULA_PATH: Formula/xvn.rb
+  HOMEBREW_TAP_REPO: olvrcc/homebrew-anvs
+  HOMEBREW_FORMULA_PATH: Formula/anvs.rb
 
 jobs:
   update-formula:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout xvn repository
+      - name: Checkout anvs repository
         uses: actions/checkout@v4
 
       - name: Get release version
@@ -38,41 +38,41 @@ jobs:
 
       - name: Download macOS x64 binary
         run: |
-          curl -L -o xvn-x86_64.tar.gz \
-            "https://github.com/olvrcc/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-x86_64-apple-darwin.tar.gz"
+          curl -L -o anvs-x86_64.tar.gz \
+            "https://github.com/olvrcc/anvs/releases/download/${{ steps.version.outputs.version }}/anvs-x86_64-apple-darwin.tar.gz"
 
       - name: Download macOS arm64 binary
         run: |
-          curl -L -o xvn-aarch64.tar.gz \
-            "https://github.com/olvrcc/xvn/releases/download/${{ steps.version.outputs.version }}/xvn-aarch64-apple-darwin.tar.gz"
+          curl -L -o anvs-aarch64.tar.gz \
+            "https://github.com/olvrcc/anvs/releases/download/${{ steps.version.outputs.version }}/anvs-aarch64-apple-darwin.tar.gz"
 
       - name: Calculate SHA256 checksums
         id: checksums
         run: |
-          SHA256_X64=$(shasum -a 256 xvn-x86_64.tar.gz | awk '{print $1}')
-          SHA256_ARM64=$(shasum -a 256 xvn-aarch64.tar.gz | awk '{print $1}')
+          SHA256_X64=$(shasum -a 256 anvs-x86_64.tar.gz | awk '{print $1}')
+          SHA256_ARM64=$(shasum -a 256 anvs-aarch64.tar.gz | awk '{print $1}')
           echo "sha256_x64=$SHA256_X64" >> $GITHUB_OUTPUT
           echo "sha256_arm64=$SHA256_ARM64" >> $GITHUB_OUTPUT
           echo "x64 SHA256: $SHA256_X64"
           echo "arm64 SHA256: $SHA256_ARM64"
 
-      - name: Checkout homebrew-xvn tap
+      - name: Checkout homebrew-anvs tap
         uses: actions/checkout@v4
         with:
           repository: ${{ env.HOMEBREW_TAP_REPO }}
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-          path: homebrew-xvn
+          path: homebrew-anvs
 
       - name: Update formula
         run: |
-          cd homebrew-xvn
+          cd homebrew-anvs
 
           # Update version
           sed -i 's/version ".*"/version "${{ steps.version.outputs.version_number }}"/' ${{ env.HOMEBREW_FORMULA_PATH }}
 
           # Update URLs
-          sed -i "s|download/v[0-9.]\+/xvn-aarch64-apple-darwin.tar.gz|download/${{ steps.version.outputs.version }}/xvn-aarch64-apple-darwin.tar.gz|" ${{ env.HOMEBREW_FORMULA_PATH }}
-          sed -i "s|download/v[0-9.]\+/xvn-x86_64-apple-darwin.tar.gz|download/${{ steps.version.outputs.version }}/xvn-x86_64-apple-darwin.tar.gz|" ${{ env.HOMEBREW_FORMULA_PATH }}
+          sed -i "s|download/v[0-9.]\+/anvs-aarch64-apple-darwin.tar.gz|download/${{ steps.version.outputs.version }}/anvs-aarch64-apple-darwin.tar.gz|" ${{ env.HOMEBREW_FORMULA_PATH }}
+          sed -i "s|download/v[0-9.]\+/anvs-x86_64-apple-darwin.tar.gz|download/${{ steps.version.outputs.version }}/anvs-x86_64-apple-darwin.tar.gz|" ${{ env.HOMEBREW_FORMULA_PATH }}
 
           # Update SHA256 checksums
           # Find the arm64 section and update its sha256
@@ -97,7 +97,7 @@ jobs:
 
       - name: Commit and push
         run: |
-          cd homebrew-xvn
+          cd homebrew-anvs
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ${{ env.HOMEBREW_FORMULA_PATH }}
@@ -106,7 +106,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit - formula already up to date"
           else
-            git commit -m "chore: update xvn to ${{ steps.version.outputs.version }}"
+            git commit -m "chore: update anvs to ${{ steps.version.outputs.version }}"
             git push
             echo "Formula updated and pushed"
           fi
@@ -120,4 +120,4 @@ jobs:
           echo "arm64 SHA256: ${{ steps.checksums.outputs.sha256_arm64 }}"
           echo ""
           echo "Users can now install with:"
-          echo "  brew upgrade xvn"
+          echo "  brew upgrade anvs"
