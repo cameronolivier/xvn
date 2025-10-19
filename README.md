@@ -29,7 +29,7 @@
 npm install -g anvs
 
 # Step 2: Set up your shell
-anvs setup
+anvs init
 ```
 
 ### Option 2: Homebrew (macOS only)
@@ -42,7 +42,7 @@ brew tap olvrcc/anvs
 brew install anvs
 
 # Step 3: Set up your shell
-anvs setup
+anvs init
 ```
 
 ### Option 3: Cargo (Build from source)
@@ -52,7 +52,7 @@ anvs setup
 cargo install --git https://github.com/olvrcc/anvs
 
 # Set up your shell
-anvs setup
+anvs init
 ```
 
 ### Complete the Installation
@@ -90,7 +90,7 @@ If you're upgrading from `xvn` to `anvs`, see the [Migration Guide](docs/XVN_TO_
 ```bash
 xvn uninstall
 npm install -g anvs
-anvs setup
+anvs init
 ```
 
 For detailed instructions, troubleshooting, and configuration migration, see [docs/XVN_TO_ANVS_MIGRATION.md](docs/XVN_TO_ANVS_MIGRATION.md).
@@ -236,7 +236,7 @@ anvs uninstall --force
 
 ### `anvs: command not found`
 
-This can happen after installation if your shell hasn't been restarted. Make sure you have run `anvs setup` and restarted your shell.
+This can happen after installation if your shell hasn't been restarted. Make sure you have run `anvs init` and restarted your shell.
 
 Verify that `~/.anvs/bin` is in your `PATH`:
 
@@ -253,7 +253,7 @@ which anvs
 
 ### Shell hook not triggering
 
-Make sure you ran `anvs setup` and restarted your shell.
+Make sure you ran `anvs init` and restarted your shell.
 
 Verify the hook was added to your profile:
 
@@ -313,7 +313,7 @@ cargo test
 
 # Install locally for development
 cargo install --path .
-anvs setup
+anvs init
 ```
 
 ## Contributing
