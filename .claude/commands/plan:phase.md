@@ -6,22 +6,25 @@ args:
     required: true
 ---
 
-You are tasked with creating a comprehensive, step-by-step implementation plan for **Phase {{P}}** of **Milestone {{M}}** (the xvn → anvs rename).
+You are tasked with creating a comprehensive, step-by-step implementation plan for **Phase {{P}}** of **Milestone {{M}}**.
 
 ## Instructions
 
 1. **Parse the milestone and phase:**
    - Extract milestone number (M) and phase number (P) from "{{M:P}}"
-   - For milestone 12, the milestone directory is `spec/milestone-12-renaming-to-anvs/`
+   - Determine the milestone directory: `spec/milestone-{{M}}/` or `spec/milestone-{{M}}-<name>/`
+   - First check if there's a descriptive directory (e.g., `spec/milestone-12-renaming-to-anvs/`)
+   - If not found, use the numeric directory (e.g., `spec/milestone-1/`)
 
 2. **Read the context:**
-   - Read `spec/milestone-12-renaming-to-anvs/RENAME_PLAN.md` to understand the overall rename plan
-   - Read `spec/milestone-12-renaming-to-anvs/RENAME_PLAN_TASKS.md` to see the task checklist
-   - Look at `spec/milestone-12-renaming-to-anvs/phase-0.md` as a reference for the format and level of detail
-   - Identify which section of RENAME_PLAN.md corresponds to Phase {{P}}
+   - Locate the milestone directory using `ls -d spec/milestone-{{M}}*/`
+   - Read the main plan file (commonly named `PLAN.md`, `RENAME_PLAN.md`, `SPEC.md`, or similar)
+   - If a tasks file exists (e.g., `TASKS.md`, `RENAME_PLAN_TASKS.md`), read it to see the task checklist
+   - Look at existing `phase-*.md` files in the milestone directory as references for format and level of detail
+   - Identify which section of the plan corresponds to Phase {{P}}
 
 3. **Create the phase implementation plan:**
-   - Create a new file: `spec/milestone-12-renaming-to-anvs/phase-{{P}}.md`
+   - Create a new file: `spec/milestone-{{M}}*/phase-{{P}}.md` (in the identified milestone directory)
    - Structure the plan following the phase-0.md format
    - Include:
      - Phase status and metadata (version, duration estimate)
@@ -164,7 +167,7 @@ You are tasked with creating a comprehensive, step-by-step implementation plan f
 
 7. **Quality assurance:**
    - After creating the phase plan, review it to ensure:
-     - All tasks from RENAME_PLAN.md for this phase are covered
+     - All tasks from the milestone plan for this phase are covered
      - Task numbers match the phase (e.g., Phase 2 tasks are 2.1, 2.2, etc.)
      - Commands are accurate and tested
      - File paths are correct
@@ -172,10 +175,10 @@ You are tasked with creating a comprehensive, step-by-step implementation plan f
 
 ## Important Notes
 
-- Phase plans should be as detailed as phase-0.md - developers should be able to execute the phase using ONLY this document
+- Phase plans should be as detailed as existing phase files - developers should be able to execute the phase using ONLY this document
 - Include actual commands, file paths, and code examples
 - Make checklists granular enough to track progress
 - Consider edge cases and potential issues
 - Provide clear success criteria so developers know when they're done
 - Link to related documentation where helpful
-- For milestone 12 specifically, focus on the xvn → anvs rename changes
+- Focus on the specific goals and tasks for this milestone and phase
