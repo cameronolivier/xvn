@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2025-10-19
+
+### 🎨 Output Improvements
+
+- **Switching Message**: Changed "Switched to" to "Switching to" for accurate timing representation
+- **Cleaner Text**: Removed redundant "Node.js" and "(via nvm)" from version switch output
+- **Better Flow**: anvs initiates switch, version manager confirms completion
+
 ## [2.1.1] - 2025-10-19
 
 ### 🎨 Visual Improvements

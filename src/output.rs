@@ -60,7 +60,7 @@ pub fn switched(version: &str, plugin: &str) {
     println!(
         "{} {}",
         "✓".green().bold(),
-        format!("Switched to Node.js {version} (via {plugin})").truecolor(INFO_COLOR.0, INFO_COLOR.1, INFO_COLOR.2)
+        format!("Switching to {version}").truecolor(INFO_COLOR.0, INFO_COLOR.1, INFO_COLOR.2)
     );
 }
 
