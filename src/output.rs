@@ -12,29 +12,33 @@ pub fn print_header() {
 
 /// Print success message with green checkmark
 pub fn success(msg: &str) {
-    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg.green());
+    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", msg.green());
 }
 
 /// Print info message
 pub fn info(msg: &str) {
-    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg);
+    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", msg);
 }
 
 /// Print warning message with yellow color
 pub fn warning(msg: &str) {
-    println!("{} {}", format!("{BRAND}:").bright_cyan(), msg.yellow());
+    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", msg.yellow());
 }
 
 /// Print error message with red color
 pub fn error(msg: &str) {
-    eprintln!("{} {}", format!("{BRAND}:").bright_cyan(), msg.red().bold());
+    eprintln!("{}", format!("{BRAND}:").bright_cyan());
+    eprintln!("{}", msg.red().bold());
 }
 
 /// Print version switch success
 pub fn switched(version: &str, plugin: &str) {
+    println!("{}", format!("{BRAND}:").bright_cyan());
     println!(
-        "{} {} {}",
-        format!("{BRAND}:").bright_cyan(),
+        "{} {}",
         "✓".green().bold(),
         format!("Switched to Node.js {version} (via {plugin})").green()
     );
@@ -42,11 +46,8 @@ pub fn switched(version: &str, plugin: &str) {
 
 /// Print installing message
 pub fn installing(version: &str, plugin: &str) {
-    println!(
-        "{} {}",
-        format!("{BRAND}:").bright_cyan(),
-        format!("Installing Node.js {version} using {plugin}...").cyan()
-    );
+    println!("{}", format!("{BRAND}:").bright_cyan());
+    println!("{}", format!("Installing Node.js {version} using {plugin}...").cyan());
 }
 
 /// Print version mismatch warning
