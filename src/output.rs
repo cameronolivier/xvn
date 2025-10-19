@@ -2,7 +2,7 @@
 use owo_colors::OwoColorize;
 
 /// Branding prefix for all anvs output
-const BRAND: &str = "anvs";
+const BRAND: &str = "⚡ anvs";
 const TAGLINE: &str = "automatic node version switching";
 
 /// Print branded header message
