@@ -1,6 +1,29 @@
 # Migration Guide
 
-## Migrating from xvn to anvs (v1.x → v2.0)
+## Migrating from XVN to ANVS (v2.0.0)
+
+The project has been renamed from `xvn` to `anvs` in version 2.0.0. This is a **breaking change** that requires manual migration.
+
+### Quick Migration Steps
+
+1. Backup config: `cp ~/.xvnrc ~/.xvnrc.backup`
+2. Uninstall xvn: `xvn uninstall`
+3. Install anvs: `npm install -g anvs`
+4. Run setup: `anvs setup`
+5. Migrate config: Copy settings from `~/.xvnrc.backup` to `~/.anvsrc`
+6. Rename project configs: `mv .xvn.yaml .anvs.yaml`
+
+### Complete Migration Guide
+
+See [XVN_TO_ANVS_MIGRATION.md](./XVN_TO_ANVS_MIGRATION.md) for:
+- Detailed step-by-step instructions
+- Troubleshooting common issues
+- Automated migration script
+- FAQ
+
+---
+
+## Migrating from xvn to anvs (v1.x → v2.0) - Detailed Instructions
 
 **IMPORTANT**: This is a breaking change. The project has been renamed from `xvn` to `anvs`.
 
