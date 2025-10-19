@@ -1,13 +1,20 @@
 /// Output formatting with colors and branding
 use owo_colors::OwoColorize;
 
+/// Brand color (lime green)
+pub const BRAND_COLOR: owo_colors::Rgb = owo_colors::Rgb(50, 205, 50);
+
 /// Branding prefix for all anvs output
 const BRAND: &str = "⚡ Automatic Node Version Switcher";
 const TAGLINE: &str = "automatic node version switching";
 
 /// Print branded header message
 pub fn print_header() {
-    println!("{} - {}", BRAND.truecolor(50, 205, 50).bold(), TAGLINE.dimmed());
+    println!(
+        "{} - {}",
+        BRAND.truecolor(50, 205, 50).bold(),
+        TAGLINE.dimmed()
+    );
 }
 
 /// Print success message with green checkmark
@@ -19,7 +26,7 @@ pub fn success(msg: &str) {
 /// Print info message
 pub fn info(msg: &str) {
     println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
-    println!("{}", msg);
+    println!("{msg}");
 }
 
 /// Print warning message with yellow color
@@ -47,7 +54,10 @@ pub fn switched(version: &str, plugin: &str) {
 /// Print installing message
 pub fn installing(version: &str, plugin: &str) {
     println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
-    println!("{}", format!("Installing Node.js {version} using {plugin}...").cyan());
+    println!(
+        "{}",
+        format!("Installing Node.js {version} using {plugin}...").cyan()
+    );
 }
 
 /// Print version mismatch warning

@@ -1,10 +1,155 @@
 use crate::config::AutoInstallMode;
 use crate::init::detection::{detect_shell, detect_version_managers, get_profile_path};
+use crate::init::summary::DetectionResults;
 use crate::output;
 use crate::setup::shell_detection::Shell;
 use anyhow::Result;
 use inquire::{Confirm, MultiSelect, Select};
 use std::path::PathBuf;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum QuickModeChoice {
+    Proceed,
+    Customize,
+    Cancel,
+}
+
+/// Quick mode confirmation prompt
+pub fn prompt_quick_mode_confirmation(_results: &DetectionResults) -> Result<QuickModeChoice> {
+    let options = vec!["Yes, continue", "Customize settings", "Cancel"];
+
+    let choice = Select::new("Proceed with this configuration?", options).prompt()?;
+
+    match choice {
+        "Yes, continue" => Ok(QuickModeChoice::Proceed),
+        "Customize settings" => Ok(QuickModeChoice::Customize),
+        _ => Ok(QuickModeChoice::Cancel),
+    }
+}
+
+/// Shell selection prompt with inline detection
+pub fn prompt_shell_with_detection(detected: Option<&Shell>) -> Result<Shell> {
+    let message = if let Some(shell) = detected {
+        format!("Which shell? (detected: {})", shell.name())
+    } else {
+        "Which shell? (auto-detection failed)".to_string()
+    };
+
+    let mut options = vec![];
+
+    // Add detected shell first if available
+    if let Some(shell) = detected {
+        options.push(format!("{} (recommended)", shell.name()));
+    }
+
+    // Add other options
+    if detected.is_none() || !matches!(detected, Some(Shell::Zsh)) {
+        options.push("zsh".to_string());
+    }
+    if detected.is_none() || !matches!(detected, Some(Shell::Bash)) {
+        options.push("bash".to_string());
+    }
+
+    let selected = Select::new(&message, options)
+        .with_starting_cursor(0) // Pre-select first option
+        .prompt()?;
+
+    // Parse selection
+    if selected.contains("zsh") {
+        Ok(Shell::Zsh)
+    } else if selected.contains("bash") {
+        Ok(Shell::Bash)
+    } else if let Some(shell) = detected {
+        Ok(*shell)
+    } else {
+        Err(anyhow::anyhow!("Invalid shell selection"))
+    }
+}
+
+/// Version manager selection with detection
+pub fn prompt_version_manager_with_detection(detected: Vec<String>) -> Result<Vec<String>> {
+    let has_nvm = detected.contains(&"nvm".to_string());
+    let has_fnm = detected.contains(&"fnm".to_string());
+
+    let message = if !detected.is_empty() {
+        format!("Which version manager? (detected: {})", detected.join(", "))
+    } else {
+        "Which version manager?".to_string()
+    };
+
+    let mut options = vec![];
+
+    if has_nvm {
+        options.push("nvm (detected, recommended)");
+    } else {
+        options.push("nvm");
+    }
+
+    if has_fnm {
+        options.push("fnm (detected)");
+    } else {
+        options.push("fnm");
+    }
+
+    options.push("Multiple (advanced)");
+
+    let selected = Select::new(&message, options)
+        .with_starting_cursor(0)
+        .prompt()?;
+
+    if selected.contains("nvm") {
+        Ok(vec!["nvm".to_string()])
+    } else if selected.contains("fnm") {
+        Ok(vec!["fnm".to_string()])
+    } else {
+        prompt_multiple_version_managers(&detected)
+    }
+}
+
+fn prompt_multiple_version_managers(detected: &[String]) -> Result<Vec<String>> {
+    let options = vec!["nvm", "fnm"];
+
+    // Build default indices based on detected managers
+    let mut defaults = vec![];
+    for (idx, option) in options.iter().enumerate() {
+        if detected.iter().any(|d| d.as_str() == *option) {
+            defaults.push(idx);
+        }
+    }
+
+    let selected = MultiSelect::new("Select version managers:", options)
+        .with_default(&defaults)
+        .prompt()?;
+
+    if selected.is_empty() {
+        Err(anyhow::anyhow!(
+            "At least one version manager must be selected"
+        ))
+    } else {
+        Ok(selected.iter().map(|s| s.to_string()).collect())
+    }
+}
+
+/// Auto-install mode selection
+pub fn prompt_auto_install_compact() -> Result<AutoInstallMode> {
+    let options = vec![
+        "Prompt (recommended) - Ask before installing",
+        "Always - Install automatically",
+        "Never - Manual installation only",
+    ];
+
+    let selected = Select::new("Auto-install missing versions?", options)
+        .with_starting_cursor(0) // Default to Prompt
+        .prompt()?;
+
+    if selected.contains("Always") {
+        Ok(AutoInstallMode::Always)
+    } else if selected.contains("Never") {
+        Ok(AutoInstallMode::Never)
+    } else {
+        Ok(AutoInstallMode::Prompt)
+    }
+}
 
 /// Prompt user to select shell
 pub fn prompt_shell() -> Result<Shell> {

@@ -6,6 +6,8 @@
 
 pub mod detection;
 pub mod prompts;
+pub mod summary;
+pub mod timeline;
 pub mod validation;
 pub mod wizard;
 
