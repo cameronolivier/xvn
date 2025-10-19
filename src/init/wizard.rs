@@ -7,6 +7,7 @@ use crate::output;
 use crate::setup::shell_detection::Shell;
 use anyhow::{anyhow, Context, Result};
 use dirs::home_dir;
+use inquire;
 
 /// Wizard state - collects configuration through steps
 #[derive(Debug, Clone)]
@@ -661,12 +662,87 @@ pub fn run_quick_wizard() -> Result<(Config, Shell)> {
     }
 }
 
-/// Run advanced mode wizard (placeholder for Phase 3)
+/// Run advanced mode wizard (3-step customization flow)
+///
+/// This provides full customization with inline detection:
+/// 1. Shell selection (with detected value pre-selected)
+/// 2. Version manager selection (with detected values)
+/// 3. Auto-install behavior
 pub fn run_advanced_wizard() -> Result<(Config, Shell)> {
-    // TODO: Implement in Phase 3
-    Err(anyhow!(
-        "Advanced mode not yet implemented. Coming in Phase 3."
-    ))
+    use crate::init::prompts::{
+        prompt_auto_install, prompt_shell_with_detection, prompt_version_manager_with_detection,
+    };
+    use crate::init::summary::format_config_preview;
+    use owo_colors::OwoColorize;
+
+    // Print header
+    println!();
+    output::brand("⚡ Automatic Node Version Switcher");
+    println!();
+    output::info("Advanced Setup - Customize your configuration");
+    println!();
+
+    // Run detection for defaults
+    log::debug!("Running detection for advanced mode defaults...");
+    let results = detect_all()?;
+
+    // Step 1: Shell selection
+    println!();
+    println!(
+        "{} {}",
+        chars::STEP_ACTIVE,
+        "Step 1 of 3: Shell Configuration".bold()
+    );
+    let shell = prompt_shell_with_detection(results.shell.as_ref())?;
+    log::debug!("Selected shell: {shell:?}");
+
+    // Step 2: Version manager selection
+    println!();
+    println!(
+        "{} {}",
+        chars::STEP_ACTIVE,
+        "Step 2 of 3: Version Manager".bold()
+    );
+    let version_managers = prompt_version_manager_with_detection(results.version_managers.clone())?;
+    log::debug!("Selected version managers: {version_managers:?}");
+
+    // Step 3: Auto-install behavior
+    println!();
+    println!(
+        "{} {}",
+        chars::STEP_ACTIVE,
+        "Step 3 of 3: Auto-Install Behavior".bold()
+    );
+    let auto_install = prompt_auto_install()?;
+    log::debug!("Selected auto-install mode: {auto_install:?}");
+
+    // Create config from selections
+    let config = Config {
+        plugins: version_managers,
+        auto_install,
+        version_files: vec![
+            ".nvmrc".to_string(),
+            ".node-version".to_string(),
+            "package.json".to_string(),
+        ],
+        use_default: true,
+    };
+
+    // Show configuration preview and confirm
+    println!();
+    println!("{}", format_config_preview(&config, &shell));
+    println!();
+
+    let confirmed = inquire::Confirm::new("Apply this configuration?")
+        .with_default(true)
+        .with_help_message("Select 'No' to cancel setup")
+        .prompt()?;
+
+    if !confirmed {
+        return Err(anyhow!("Setup cancelled by user"));
+    }
+
+    Ok((config, shell))
 }
 
 /// Display completion message with next steps
