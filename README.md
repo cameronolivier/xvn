@@ -82,9 +82,18 @@ brew upgrade anvs
 cargo install --git https://github.com/olvrcc/anvs --force
 ```
 
-### Migrating from xvn
+## Migration from XVN
 
-If you previously used `xvn` (the old name for this project), see our comprehensive **[Migration Guide](./docs/MIGRATION.md)** for step-by-step instructions on migrating to `anvs`.
+If you're upgrading from `xvn` to `anvs`, see the [Migration Guide](docs/XVN_TO_ANVS_MIGRATION.md).
+
+**Quick migration**:
+```bash
+xvn uninstall
+npm install -g anvs
+anvs setup
+```
+
+For detailed instructions, troubleshooting, and configuration migration, see [docs/XVN_TO_ANVS_MIGRATION.md](docs/XVN_TO_ANVS_MIGRATION.md).
 
 ## Usage
 
