@@ -6,176 +6,134 @@ args:
     required: true
 ---
 
-You are tasked with creating a comprehensive, step-by-step implementation plan for **Phase {{P}}** of **Milestone {{M}}** (the xvn → anvs rename).
+Create a comprehensive, actionable implementation plan for **Phase {{P}}** of **Milestone {{M}}**.
 
-## Instructions
+## Process
 
-1. **Parse the milestone and phase:**
-   - Extract milestone number (M) and phase number (P) from "{{M:P}}"
-   - For milestone 12, the milestone directory is `spec/milestone-12-renaming-to-anvs/`
+1. **Find milestone**: `ls -d spec/milestone-{{M}}*/` to locate directory
+2. **Read context**: Main plan file, task checklist, existing phase files for formatting consistency
+3. **Extract scope**: Identify all tasks belonging to Phase {{P}}
+4. **Create plan**: `spec/milestone-{{M}}*/phase-{{P}}.md` with complete implementation details
 
-2. **Read the context:**
-   - Read `spec/milestone-12-renaming-to-anvs/RENAME_PLAN.md` to understand the overall rename plan
-   - Read `spec/milestone-12-renaming-to-anvs/RENAME_PLAN_TASKS.md` to see the task checklist
-   - Look at `spec/milestone-12-renaming-to-anvs/phase-0.md` as a reference for the format and level of detail
-   - Identify which section of RENAME_PLAN.md corresponds to Phase {{P}}
+## Document Structure
 
-3. **Create the phase implementation plan:**
-   - Create a new file: `spec/milestone-12-renaming-to-anvs/phase-{{P}}.md`
-   - Structure the plan following the phase-0.md format
-   - Include:
-     - Phase status and metadata (version, duration estimate)
-     - Overview explaining the phase goals
-     - Detailed implementation tasks with specific file changes
-     - Exact commands to run
-     - Action checklists for each task
-     - Verification checklist
-     - Success criteria
-     - Next steps
+```markdown
+# Phase {{P}}: [Descriptive Title]
 
-4. **Plan structure:**
-   ```markdown
-   # Phase {{P}}: [Phase Title from RENAME_PLAN.md]
+**Status**: Not Started | **Version**: vX.Y.Z | **Duration**: 30-45 min + CI time
 
-   **Status**: Not Started
-   **Version**: [Target version, e.g., v2.0.0]
-   **Duration Estimate**: [Time estimate]
+## Overview
+[2-3 sentences: what this phase accomplishes and its role in the milestone]
 
-   ## Overview
+**Why Phase {{P}} is Critical:**
+- [Impact/dependency reason]
+- [Technical/user-facing reason]
+- [Risk mitigation reason]
 
-   [Detailed explanation of what this phase accomplishes and why it's important]
+**⚠️ CHECKPOINT**: [Pre-requisites or blocking warnings]
 
-   **Why Phase {{P}} is [Important/Essential/Critical]:**
-   - [Reason 1]
-   - [Reason 2]
-   - [Reason 3]
+---
 
-   **⚠️ CHECKPOINT** (if applicable): [Any important notes before starting]
+## Implementation Tasks
 
-   ---
+### Task {{P}}.1: [Action-Oriented Title]
 
-   ## Implementation Tasks
+**File**: `exact/path/to/file.ext` (new file | existing file)
 
-   ### Task {{P}}.1: [Task Title]
+**Content Requirements** (for NEW files only):
+```lang
+[Complete, copy-pasteable file content with actual values]
+```
 
-   **File**: `path/to/file` (new/existing file)
+**Changes Required** (for EXISTING files only):
+- Line/Section X: Change `old_value` to `new_value`
+- [Specific before/after examples]
 
-   **Content Requirements** (for new files):
-   ```markdown
-   [Example content or structure]
-   ```
+**Commands**:
+```bash
+# Descriptive comment explaining purpose
+exact-command --with-real-flags value
 
-   **Changes Required** (for existing files):
-   - Line X: Change `old value` to `new value`
-   - Section Y: Update Z
+# Expected output:
+[Actual expected output, not placeholder]
+```
 
-   **Commands** (if applicable):
-   ```bash
-   # Command 1
-   command to run
+**Actions**:
+- [ ] Granular, testable step
+- [ ] Verification step with command
+- [ ] Commit with message: `type: description`
 
-   # Command 2
-   another command
-   ```
+---
 
-   **Expected Output** (if applicable):
-   ```
-   Expected command output
-   ```
+[Repeat Task {{P}}.N for each task in phase]
 
-   **Actions**:
-   - [ ] Specific action 1
-   - [ ] Specific action 2
-   - [ ] Specific action 3
+---
 
-   ---
+## Verification Checklist
 
-   ### Task {{P}}.2: [Next Task Title]
+Before Phase {{P+1}}, verify:
+- [ ] Specific check with command: `verification-cmd`
+- [ ] Expected result: [concrete outcome]
+- [ ] All builds/tests pass
+- [ ] No breaking changes (or documented)
 
-   [Repeat structure for each task in this phase]
+---
 
-   ---
+## Success Criteria
 
-   ## Verification Checklist
+1. ✅ Measurable deliverable 1
+2. ✅ Testable outcome 2
+3. ✅ State change verified
 
-   Before proceeding to Phase {{P+1}}, verify ALL of the following:
+---
 
-   - [ ] Verification item 1
-   - [ ] Verification item 2
-   - [ ] Verification item 3
-   - [ ] No breaking changes introduced (or documented if intentional)
+## Next Steps
 
-   ---
+1. Update milestone tracker
+2. [Any cleanup or documentation]
+3. **Proceed to Phase {{P+1}}**: [One-line preview]
 
-   ## Success Criteria
+---
 
-   Phase {{P}} is complete when:
+## Rollback Plan
 
-   1. ✅ Criterion 1
-   2. ✅ Criterion 2
-   3. ✅ Criterion 3
+1. Specific rollback command/steps
+2. Verification of rollback success
 
-   ---
+---
 
-   ## Next Steps
+## Notes
 
-   After completing Phase {{P}}:
+- Edge cases and gotchas
+- Platform-specific considerations
+```
 
-   1. [Next action]
-   2. [Next action]
-   3. **Proceed to Phase {{P+1}}**: [Brief description of next phase]
+## Quality Requirements
 
-   ---
+**CRITICAL - Each task must include:**
+- Real file paths (never use `path/to/file` placeholders)
+- Complete code examples (fully functional, not snippets)
+- Runnable commands with actual flags and values
+- Expected output examples (not just "output will show...")
+- Granular action checkboxes (aim for 3-7 per task)
+- Conventional commit message templates
 
-   ## Rollback Plan
+**For file modifications:**
+- Show before/after examples with context
+- Reference specific line numbers or section headers
+- Include full code blocks, not partial snippets
 
-   If issues are discovered:
+**For commands:**
+- Always include explanatory comment above command
+- Show complete expected output
+- Include failure modes if relevant
 
-   1. [Rollback step 1]
-   2. [Rollback step 2]
+**Duration estimates:**
+- Per-task time estimates for complex tasks
+- Include CI/build wait times separately
+- Be realistic based on similar past work
 
-   ---
-
-   ## Notes
-
-   - [Important note 1]
-   - [Important note 2]
-   ```
-
-5. **Be extremely detailed:**
-   - For each file that needs to be modified, specify:
-     - The exact file path
-     - What needs to change (with before/after examples)
-     - Line numbers or sections to modify
-   - For each command to run:
-     - Provide the exact command
-     - Explain what it does
-     - Show expected output
-   - For verification:
-     - Provide specific commands to verify changes
-     - Include expected results
-
-6. **Follow the phase-0.md style:**
-   - Use the same level of detail and structure
-   - Include action checklists with `[ ]` checkboxes
-   - Provide context and explanations
-   - Add warnings and important notes
-   - Include time estimates
-
-7. **Quality assurance:**
-   - After creating the phase plan, review it to ensure:
-     - All tasks from RENAME_PLAN.md for this phase are covered
-     - Task numbers match the phase (e.g., Phase 2 tasks are 2.1, 2.2, etc.)
-     - Commands are accurate and tested
-     - File paths are correct
-     - The plan is actionable and complete
-
-## Important Notes
-
-- Phase plans should be as detailed as phase-0.md - developers should be able to execute the phase using ONLY this document
-- Include actual commands, file paths, and code examples
-- Make checklists granular enough to track progress
-- Consider edge cases and potential issues
-- Provide clear success criteria so developers know when they're done
-- Link to related documentation where helpful
-- For milestone 12 specifically, focus on the xvn → anvs rename changes
+**Self-contained execution:**
+- Developer should execute phase using ONLY this document
+- No external references required during execution
+- All context and rationale included inline

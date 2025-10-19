@@ -78,6 +78,8 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
 - **Ask when uncertain** - Don't guess or deviate from the plan
 - **All tests must pass** - This is the definition of "done"
 - **Exception for early milestones** - Skip test-first approach if testing framework doesn't exist yet
+- **Run linting before commits** - Always run `make check` before committing changes
+- **Handle errors gracefully** - If a task fails, document the issue and seek guidance before proceeding
 
 ## Success Criteria
 
@@ -91,3 +93,23 @@ You are tasked with implementing Milestone {{N}} by strictly following the imple
   - Milestone completion: minor version bump (e.g., 0.6.0 -> 0.7.0)
   - Bug fixes: patch version bump (e.g., 0.6.0 -> 0.6.1)
   - Major release: major version bump (e.g., 0.9.0 -> 1.0.0)
+
+## Error Handling and Rollback
+
+If a task fails or unexpected issues arise:
+
+1. **Stop immediately** - Do not continue with other tasks
+2. **Document the issue** - Note what went wrong and why
+3. **Seek guidance** - Ask the user for direction on how to proceed
+4. **Consider rollback options**:
+   - If code changes caused the failure, revert the changes
+   - If tests are failing, investigate the root cause
+   - If the plan itself is flawed, request clarification
+5. **Resume only after resolution** - Do not proceed until the issue is resolved
+
+## Opencode Integration
+
+- Use `make check` before any commits to ensure code quality
+- Leverage opencode's search tools (grep, glob) for code exploration
+- Use the task tool for complex multi-step operations
+- Follow conventional commits as specified in CLAUDE.md

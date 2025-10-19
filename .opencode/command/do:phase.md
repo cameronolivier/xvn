@@ -27,7 +27,7 @@ You are tasked with implementing **Phase {{P}}** of **Milestone {{M}}** by stric
      - Expected outputs
 
 3. **Create a todo list:**
-   - Use todowrite to create a todo list from the phase document's action checklists
+    - Use todowrite to create a todo list from the phase document's action checklists
    - Track your progress through each task's action items
    - The phase document provides granular checkboxes for tracking
 
@@ -65,7 +65,7 @@ You are tasked with implementing **Phase {{P}}** of **Milestone {{M}}** by stric
    - Test syntax/compilation if applicable
 
    **e. Review the implementation:**
-   - Use task with subagent_type "general" to spawn a review agent for significant code changes
+    - Use the task tool with subagent_type "general" to spawn a review agent for significant code changes
    - The review agent should:
      - Compare implementation against phase plan requirements
      - Verify tests are comprehensive (if applicable)
@@ -75,7 +75,7 @@ You are tasked with implementing **Phase {{P}}** of **Milestone {{M}}** by stric
    - For minor changes (documentation, simple renames), you may skip the review agent
 
    **f. Mark task complete:**
-   - Check off the action items in your todowrite list
+    - Check off the action items in your todowrite list
    - Commit the work with a conventional commit message
    - List all files changed in the commit message (as per CLAUDE.md conventions)
    - Move on to the next task
@@ -113,6 +113,8 @@ You are tasked with implementing **Phase {{P}}** of **Milestone {{M}}** by stric
 - **All tests must pass** - This is the definition of "done"
 - **Use exact commands** - The phase plan provides exact commands; use them
 - **Check expected outputs** - Verify your results match expected outputs in the plan
+- **Run linting checks** - Use `make check` before committing changes
+- **Handle errors gracefully** - Document issues and seek guidance when blocked
 
 ## Success Criteria
 
@@ -137,6 +139,25 @@ Phase {{P}} is complete when:
 - Phase plans include rollback procedures if issues arise
 - Time estimates help you pace the work
 - Next steps guide you to the following phase
+
+## Error Handling and Rollback
+
+If a phase task fails:
+
+1. **Stop the current task** - Complete any partial work safely
+2. **Run verification checks** - Ensure the system is in a stable state
+3. **Document the failure** - Note what failed and the error details
+4. **Attempt rollback if specified** - Use rollback procedures from the phase plan
+5. **Seek user guidance** - Ask for direction on how to proceed
+6. **Resume only after resolution** - Do not continue until issues are resolved
+
+## Opencode Integration
+
+- Use opencode's file tools (read, edit, write) for code changes
+- Leverage search tools (grep, glob) for code exploration
+- Use the task tool for complex operations requiring multiple steps
+- Follow the project's commit conventions from CLAUDE.md
+- Run `make check` before commits to ensure code quality
 
 ## Example Workflow
 
