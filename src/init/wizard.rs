@@ -9,6 +9,15 @@ use anyhow::{anyhow, Context, Result};
 use dirs::home_dir;
 use inquire;
 
+/// Wizard mode selection
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum WizardMode {
+    /// Quick mode with auto-detection and single confirmation
+    Quick,
+    /// Advanced mode with full customization (3-step flow)
+    Advanced,
+}
+
 /// Wizard state - collects configuration through steps
 #[derive(Debug, Clone)]
 pub struct WizardState {
@@ -770,15 +779,30 @@ fn show_completion_message(shell: &Shell, duration: std::time::Duration) -> Resu
 }
 
 /// Handle the complete init flow (detection -> wizard -> install -> completion)
-pub fn handle_init(_quick: bool, advanced: bool, force: bool) -> Result<()> {
+pub fn handle_init(quick: bool, advanced: bool, force: bool) -> Result<()> {
     use std::time::Instant;
     let start = Instant::now();
 
-    // Determine mode (for now, always use quick mode)
-    let (config, shell) = if advanced {
-        run_advanced_wizard()?
+    // Determine wizard mode
+    let mode = if advanced {
+        log::debug!("Running advanced mode (--advanced flag)");
+        WizardMode::Advanced
+    } else if quick {
+        log::debug!("Running quick mode (--quick flag)");
+        WizardMode::Quick
     } else {
-        run_quick_wizard()?
+        // Default to quick mode when no flags provided
+        log::debug!("Running quick mode (default behavior)");
+        WizardMode::Quick
+    };
+
+    // Check for installation conflicts before proceeding
+    check_installation_conflicts()?;
+
+    // Run appropriate wizard
+    let (config, shell) = match mode {
+        WizardMode::Quick => run_quick_wizard()?,
+        WizardMode::Advanced => run_advanced_wizard()?,
     };
 
     log::debug!("Wizard completed, proceeding with installation");

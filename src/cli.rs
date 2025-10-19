@@ -13,12 +13,13 @@ anvs automatically switches your Node.js version when you cd into a directory
 with a .nvmrc or .node-version file. When you leave a project directory, anvs
 automatically returns to your default Node.js version.
 
-After installation, run 'anvs init' to configure your shell with an interactive
-wizard, or 'anvs init --quick' for automatic setup with sensible defaults.
+After installation, run 'anvs init' to set up your shell with a fast, guided
+wizard. The wizard auto-detects your shell and version managers, then completes
+setup in under 30 seconds.
 
 Examples:
-  anvs init               Interactive setup wizard (recommended)
-  anvs init --quick       Quick setup with defaults
+  anvs init               Quick setup with auto-detection (default)
+  anvs init --advanced    Advanced setup with full customization
   anvs activate           Manually activate for current directory
   anvs status             Show configuration and test activation
   anvs set                Change configuration settings
@@ -39,19 +40,25 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Initialize anvs with interactive configuration wizard
+    /// Initialize anvs with guided configuration wizard
     ///
-    /// This command guides you through initial setup with auto-detection
-    /// and configuration of shell integration, version managers, and preferences.
+    /// By default, anvs init runs a quick setup that auto-detects your shell
+    /// and version managers, then confirms before applying. Setup completes in
+    /// under 30 seconds.
     ///
-    /// For quick setup with defaults: anvs init --quick
-    /// For automation/CI: anvs init --non-interactive
+    /// Use --advanced for full customization with a 3-step wizard that lets you
+    /// override detected values and configure all settings.
+    ///
+    /// Examples:
+    ///   anvs init              Quick setup (default)
+    ///   anvs init --advanced   Full customization
+    ///   anvs init --quick      Explicit quick mode
     Init {
-        /// Skip wizard and use sensible defaults
+        /// Use quick mode with auto-detection (default behavior)
         #[arg(short, long)]
         quick: bool,
 
-        /// Advanced setup with full customization
+        /// Use advanced mode with 3-step customization wizard
         #[arg(long)]
         advanced: bool,
 
@@ -63,7 +70,7 @@ pub enum Commands {
         #[arg(short, long)]
         shell: Option<String>,
 
-        /// Non-interactive mode for automation
+        /// Non-interactive mode for scripts/CI (uses all defaults)
         #[arg(long)]
         non_interactive: bool,
     },
