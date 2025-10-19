@@ -13,7 +13,7 @@ fi
 # Remove 'v' prefix if present
 VERSION_NUMBER="${VERSION#v}"
 
-TEMP_DIR="/tmp/xvn-${VERSION}-artifacts"
+TEMP_DIR="/tmp/anvs-${VERSION}-artifacts"
 
 if [ ! -d "$TEMP_DIR" ]; then
     echo "❌ Artifacts directory not found: $TEMP_DIR"
@@ -32,8 +32,8 @@ PLATFORMS=(
 )
 
 for platform in "${PLATFORMS[@]}"; do
-    artifact_dir="$TEMP_DIR/xvn-$platform"
-    tarball="$artifact_dir/xvn-$platform.tar.gz"
+    artifact_dir="$TEMP_DIR/anvs-$platform"
+    tarball="$artifact_dir/anvs-$platform.tar.gz"
 
     if [ ! -f "$tarball" ]; then
         echo "⚠️  Warning: $tarball not found, skipping..."
@@ -49,15 +49,15 @@ for platform in "${PLATFORMS[@]}"; do
     tar -xzf "$tarball" -C "$artifact_dir"
 
     # Copy binary
-    cp "$artifact_dir/xvn" "native/$platform/xvn"
+    cp "$artifact_dir/anvs" "native/$platform/anvs"
 
     # Verify binary
-    if [ -f "native/$platform/xvn" ]; then
-        echo "  ✅ Copied to native/$platform/xvn"
+    if [ -f "native/$platform/anvs" ]; then
+        echo "  ✅ Copied to native/$platform/anvs"
 
         # Show version (macOS only since we can't run Linux binaries)
         if [[ "$platform" == *"apple-darwin"* ]]; then
-            binary_version=$(./native/$platform/xvn --version 2>/dev/null || echo "unknown")
+            binary_version=$(./native/$platform/anvs --version 2>/dev/null || echo "unknown")
             echo "     Version: $binary_version"
         fi
     else

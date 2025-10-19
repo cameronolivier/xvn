@@ -22,15 +22,15 @@ RUN_ID=$(gh run list --workflow=build.yml --json databaseId,headBranch \
 
 if [ -z "$RUN_ID" ]; then
     echo "❌ No build found for $VERSION"
-    echo "Check: https://github.com/cameronolivier/xvn/actions"
+    echo "Check: https://github.com/olvrcc/anvs/actions"
     exit 1
 fi
 
 echo "✅ Found run ID: $RUN_ID"
-echo "🔗 View at: https://github.com/cameronolivier/xvn/actions/runs/$RUN_ID"
+echo "🔗 View at: https://github.com/olvrcc/anvs/actions/runs/$RUN_ID"
 
 # Create temp directory
-TEMP_DIR="/tmp/xvn-${VERSION}-artifacts"
+TEMP_DIR="/tmp/anvs-${VERSION}-artifacts"
 rm -rf "$TEMP_DIR"
 mkdir -p "$TEMP_DIR"
 

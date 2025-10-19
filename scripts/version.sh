@@ -22,8 +22,7 @@ fi
 BUMP_TYPE=$1
 
 # Get current version from Cargo.toml
-CURRENT_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/
-/)
+CURRENT_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
 echo "Current version: ${CURRENT_VERSION}"
 
 # Parse current version
@@ -80,9 +79,9 @@ fi
 # Update CLI test
 echo "Updating test..."
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/xvn [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/xvn ${NEW_VERSION}/" tests/cli_test.rs
+    sed -i '' "s/anvs [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/anvs ${NEW_VERSION}/" tests/cli_test.rs
 else
-    sed -i "s/xvn [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/xvn ${NEW_VERSION}/" tests/cli_test.rs
+    sed -i "s/anvs [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/anvs ${NEW_VERSION}/" tests/cli_test.rs
 fi
 
 # Update Cargo.lock
@@ -100,7 +99,7 @@ fi
 echo "Creating git commit and tag..."
 git add Cargo.toml Cargo.lock package.json tests/cli_test.rs
 
-git commit -m "chore: bump version to v${NEW_VERSION}"
+git commit -m "chore: bump version to v${NEW_VERSION}
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 

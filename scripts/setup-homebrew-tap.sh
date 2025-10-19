@@ -46,45 +46,45 @@ else
 fi
 
 echo ""
-echo "📦 Creating homebrew-xvn repository under $REPO_OWNER..."
+echo "📦 Creating homebrew-anvs repository under $REPO_OWNER..."
 
 # Create the repository
-if gh repo view "$REPO_OWNER/homebrew-xvn" &> /dev/null; then
-    echo "⚠️  Repository $REPO_OWNER/homebrew-xvn already exists"
+if gh repo view "$REPO_OWNER/homebrew-anvs" &> /dev/null; then
+    echo "⚠️  Repository $REPO_OWNER/homebrew-anvs already exists"
     read -p "Continue anyway? (y/n): " continue
     if [[ ! "$continue" =~ ^[Yy]$ ]]; then
         exit 0
     fi
 else
-    gh repo create "$REPO_OWNER/homebrew-xvn" \
+    gh repo create "$REPO_OWNER/homebrew-anvs" \
         --public \
-        --description "Homebrew tap for xvn (Extreme Version Switcher for Node.js)" \
+        --description "Homebrew tap for anvs (Automatic Node Version Switcher)" \
         --clone
 
-    echo "✅ Repository created: $REPO_OWNER/homebrew-xvn"
+    echo "✅ Repository created: $REPO_OWNER/homebrew-anvs"
 fi
 
 # Clone or navigate to the repository
-if [ -d "homebrew-xvn" ]; then
-    cd homebrew-xvn
+if [ -d "homebrew-anvs" ]; then
+    cd homebrew-anvs
 else
-    gh repo clone "$REPO_OWNER/homebrew-xvn"
-    cd homebrew-xvn
+    gh repo clone "$REPO_OWNER/homebrew-anvs"
+    cd homebrew-anvs
 fi
 
 # Create initial README if it doesn't exist
 if [ ! -f "README.md" ]; then
     echo "📝 Creating README.md..."
     cat > README.md << EOF
-# Homebrew Tap for xvn
+# Homebrew Tap for anvs
 
-Official Homebrew tap for [xvn](https://github.com/cameronolivier/xvn) - Extreme Version Switcher for Node.js.
+Official Homebrew tap for [anvs](https://github.com/olvrcc/anvs) - Automatic Node Version Switcher.
 
 ## Installation
 
 \`\`\`bash
-brew tap $REPO_OWNER/xvn
-brew install xvn
+brew tap $REPO_OWNER/anvs
+brew install anvs
 \`\`\`
 
 ## Setup
@@ -92,7 +92,7 @@ brew install xvn
 After installation, run:
 
 \`\`\`bash
-xvn setup
+anvs setup
 \`\`\`
 
 Then restart your shell.
@@ -104,7 +104,7 @@ Then restart your shell.
 
 ## Documentation
 
-See the main [xvn repository](https://github.com/cameronolivier/xvn) for full documentation.
+See the main [anvs repository](https://github.com/olvrcc/anvs) for full documentation.
 EOF
 
     git add README.md
@@ -133,7 +133,7 @@ if [ "$token_type" = "1" ]; then
     echo "   4. Expiration: 90 days (or custom)"
     echo "   5. Resource owner: $REPO_OWNER"
     echo "   6. Repository access: Only select repositories"
-    echo "   7. Select: $REPO_OWNER/homebrew-xvn"
+    echo "   7. Select: $REPO_OWNER/homebrew-anvs"
     echo "   8. Permissions:"
     echo "      - Contents: Read and write"
     echo "   9. Click 'Generate token'"
@@ -152,22 +152,22 @@ fi
 echo ""
 read -p "Press Enter after creating the token, then paste it when prompted..."
 
-# Determine xvn repository location
-if gh repo view "olvrcc/xvn" &> /dev/null; then
-    XVN_REPO="olvrcc/xvn"
-elif gh repo view "cameronolivier/xvn" &> /dev/null; then
-    XVN_REPO="cameronolivier/xvn"
+# Determine anvs repository location
+if gh repo view "olvrcc/anvs" &> /dev/null; then
+    ANVS_REPO="olvrcc/anvs"
+elif gh repo view "cameronolivier/anvs" &> /dev/null; then
+    ANVS_REPO="cameronolivier/anvs"
 else
-    read -p "Enter xvn repository (owner/repo): " XVN_REPO
+    read -p "Enter anvs repository (owner/repo): " ANVS_REPO
 fi
 
 echo ""
-echo "📝 Adding secret to $XVN_REPO..."
-gh secret set HOMEBREW_TAP_TOKEN -R "$XVN_REPO"
+echo "📝 Adding secret to $ANVS_REPO..."
+gh secret set HOMEBREW_TAP_TOKEN -R "$ANVS_REPO"
 
 echo ""
 echo "✅ Verifying secret was added..."
-if gh secret list -R "$XVN_REPO" | grep -q "HOMEBREW_TAP_TOKEN"; then
+if gh secret list -R "$ANVS_REPO" | grep -q "HOMEBREW_TAP_TOKEN"; then
     echo "✅ Secret HOMEBREW_TAP_TOKEN added successfully"
 else
     echo "❌ Failed to add secret"
@@ -178,13 +178,13 @@ echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "Summary:"
-echo "  - Tap repository: https://github.com/$REPO_OWNER/homebrew-xvn"
-echo "  - Secret added to: https://github.com/$XVN_REPO"
+echo "  - Tap repository: https://github.com/$REPO_OWNER/homebrew-anvs"
+echo "  - Secret added to: https://github.com/$ANVS_REPO"
 echo ""
 echo "Next steps:"
-echo "  1. Create formula: homebrew/xvn.rb"
-echo "  2. Test locally: brew install --build-from-source ./homebrew/xvn.rb"
-echo "  3. Copy to tap: cp homebrew/xvn.rb ../homebrew-xvn/Formula/xvn.rb"
+echo "  1. Create formula: homebrew/anvs.rb"
+echo "  2. Test locally: brew install --build-from-source ./homebrew/anvs.rb"
+echo "  3. Copy to tap: cp homebrew/anvs.rb ../homebrew-anvs/Formula/anvs.rb"
 echo "  4. Set up automation: .github/workflows/update-homebrew.yml"
 echo ""
 echo "See docs/HOMEBREW_SETUP.md for detailed instructions."
