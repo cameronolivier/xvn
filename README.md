@@ -18,6 +18,40 @@
 - 🔒 **Safe**: Written in Rust with checksum verification
 - 📦 **Easy**: Install via npm, no manual binary downloads
 
+## Quick Start
+
+Initialize anvs with auto-detection (recommended):
+
+```bash
+# Install
+npm install -g anvs
+
+# Quick setup with auto-detection (default, < 30 seconds)
+anvs init
+```
+
+Or use advanced mode for full customization:
+
+```bash
+anvs init --advanced
+```
+
+The wizard detects your shell and Node.js version manager, then guides you through setup.
+
+### Setup Modes
+
+**Quick Mode** (default):
+- Auto-detects shell and version managers
+- Shows summary and asks for confirmation
+- Completes in < 30 seconds
+- Recommended for most users
+
+**Advanced Mode** (`--advanced`):
+- Step-by-step customization
+- Full control over all settings
+- Takes 1-2 minutes
+- For users with specific requirements
+
 ## Installation
 
 `anvs` is installed to a central directory (`~/.anvs`) to ensure it's always available, regardless of the active Node.js version.
@@ -274,6 +308,21 @@ Check that anvs detects your version file:
 ```bash
 anvs status
 ```
+
+### Setup Issues
+
+**Shell not detected:**
+```bash
+anvs init --shell zsh  # or bash
+```
+
+**Version manager not detected:**
+- Ensure nvm or fnm is installed and in PATH
+- Use advanced mode to specify manually
+
+**Permission denied:**
+- Check write permissions for ~/.anvsrc and shell config files
+- Run with sudo if necessary (not recommended)
 
 ### Debug mode
 

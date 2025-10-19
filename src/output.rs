@@ -3,6 +3,14 @@ use owo_colors::OwoColorize;
 
 /// Brand color (lime green)
 pub const BRAND_COLOR: owo_colors::Rgb = owo_colors::Rgb(50, 205, 50);
+/// Success color (green)
+pub const SUCCESS_COLOR: owo_colors::Rgb = owo_colors::Rgb(34, 197, 94);
+/// Warning color (yellow)
+pub const WARNING_COLOR: owo_colors::Rgb = owo_colors::Rgb(251, 191, 36);
+/// Error color (red)
+pub const ERROR_COLOR: owo_colors::Rgb = owo_colors::Rgb(239, 68, 68);
+/// Info color (blue)
+pub const INFO_COLOR: owo_colors::Rgb = owo_colors::Rgb(59, 130, 246);
 
 /// Branding prefix for all anvs output
 const BRAND: &str = "⚡ Automatic Node Version Switcher";

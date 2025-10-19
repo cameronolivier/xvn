@@ -23,6 +23,52 @@ See [XVN_TO_ANVS_MIGRATION.md](./XVN_TO_ANVS_MIGRATION.md) for:
 
 ---
 
+## Upgrading to anvs v2.1.0 (Wizard Redesign)
+
+Version 2.1.0 introduces a redesigned `anvs init` wizard with improved user experience and faster setup. This is a **non-breaking upgrade** - existing configurations continue to work.
+
+### What's New in v2.1.0
+
+- **Quick Mode** (default): Auto-detection with single confirmation, completes in < 30 seconds
+- **Advanced Mode** (`--advanced`): Step-by-step customization for full control
+- **Visual Improvements**: Timeline-style progress indicators and modern UI
+- **Better Error Handling**: Clearer messages when detection fails
+
+### Upgrade Instructions
+
+```bash
+# Update to v2.1.0
+npm update -g anvs
+
+# Or reinstall
+npm install -g anvs
+
+# Run the new wizard (optional - existing config still works)
+anvs init
+```
+
+### New Wizard Behavior
+
+**Default behavior changed**: `anvs init` now runs quick mode by default. For the old full customization experience, use:
+
+```bash
+anvs init --advanced
+```
+
+### Rollback (If Needed)
+
+If you prefer the old wizard experience:
+
+```bash
+# Downgrade to v2.0.0
+npm install -g anvs@2.0.0
+
+# Re-run setup
+anvs init
+```
+
+---
+
 ## Migrating from xvn to anvs (v1.x → v2.0) - Detailed Instructions
 
 **IMPORTANT**: This is a breaking change. The project has been renamed from `xvn` to `anvs`.

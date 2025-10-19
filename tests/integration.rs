@@ -279,6 +279,49 @@ auto_install: always
     // configuration and plugin system components work together correctly.
 }
 
+// Wizard integration tests
+mod wizard_integration {
+    use anvs::init::detection::detect_all;
+    use anvs::init::summary::{format_detection_summary, DetectionResults};
+    use anvs::setup::shell_detection::Shell;
+
+    #[test]
+    fn test_detection_integration() {
+        // Test that detection works end-to-end
+        let results = detect_all().unwrap();
+
+        // Should have a config path
+        assert!(results.config_path.contains(".anvsrc"));
+
+        // Should be able to format summary without panicking
+        let summary = format_detection_summary(&results);
+        assert!(summary.contains("Initializing anvs"));
+    }
+
+    #[test]
+    fn test_detection_results_formatting() {
+        // Test formatting with various detection states
+        let mut results = DetectionResults::new();
+        results.shell = Some(Shell::Zsh);
+        results.version_managers = vec!["nvm".to_string()];
+
+        let summary = format_detection_summary(&results);
+        assert!(summary.contains("zsh"));
+        assert!(summary.contains("nvm"));
+        assert!(summary.contains("Initializing anvs"));
+    }
+
+    #[test]
+    fn test_detection_results_formatting_no_detection() {
+        // Test formatting when nothing is detected
+        let results = DetectionResults::new();
+
+        let summary = format_detection_summary(&results);
+        assert!(summary.contains("Not detected"));
+        assert!(summary.contains("Initializing anvs"));
+    }
+}
+
 // Config file parsing tests
 mod config_file_parsing {
     use anvs::config::{AutoInstallMode, Config};
