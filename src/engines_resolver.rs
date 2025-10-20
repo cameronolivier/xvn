@@ -215,7 +215,7 @@ mod tests {
     #[test]
     fn test_engines_prefers_default_when_satisfies() {
         let mock_plugin = MockPlugin {
-            available_versions: vec!["18.20.0", "20.11.0", "22.0.0"]
+            available_versions: ["18.20.0", "20.11.0", "22.0.0"]
                 .iter()
                 .map(|s| s.to_string())
                 .collect(),
@@ -234,7 +234,7 @@ mod tests {
     #[test]
     fn test_engines_uses_lts_when_default_insufficient() {
         let mock_plugin = MockPlugin {
-            available_versions: vec!["18.20.0", "20.11.0", "22.0.0"]
+            available_versions: ["18.20.0", "20.11.0", "22.0.0"]
                 .iter()
                 .map(|s| s.to_string())
                 .collect(),
@@ -253,7 +253,7 @@ mod tests {
     #[test]
     fn test_engines_fallback_to_highest_when_no_lts() {
         let mock_plugin = MockPlugin {
-            available_versions: vec!["19.0.0", "21.0.0", "23.0.0"]
+            available_versions: ["19.0.0", "21.0.0", "23.0.0"]
                 .iter()
                 .map(|s| s.to_string())
                 .collect(),
@@ -272,7 +272,7 @@ mod tests {
     #[test]
     fn test_engines_no_default_version() {
         let mock_plugin = MockPlugin {
-            available_versions: vec!["18.20.0", "20.11.0", "22.0.0"]
+            available_versions: ["18.20.0", "20.11.0", "22.0.0"]
                 .iter()
                 .map(|s| s.to_string())
                 .collect(),
@@ -291,7 +291,7 @@ mod tests {
     #[test]
     fn test_engines_no_matching_versions() {
         let mock_plugin = MockPlugin {
-            available_versions: vec!["16.20.0", "18.20.0"]
+            available_versions: ["16.20.0", "18.20.0"]
                 .iter()
                 .map(|s| s.to_string())
                 .collect(),
