@@ -4,9 +4,9 @@
 [![npm version](https://badge.fury.io/js/anvs.svg)](https://www.npmjs.com/package/anvs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> Automatic Node.js version switching written in Rust, with a loving tip-of-the-hat to [avn](https://github.com/wbyoung/avn)
+> Automatic Node Version Switcher is written in Rust, with a loving tip-of-the-hat to [avn](https://github.com/wbyoung/avn)
 
-**anvs** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file. It automatically returns to your default version when you leave.
+**ANVS** is a Rust-based tool that automatically switches your Node.js version when you `cd` into a directory with a `.nvmrc`, `.node-version`, or `package.json` file. It automatically returns to your default version when you leave.
 
 ## Features
 
