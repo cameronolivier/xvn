@@ -1,5 +1,6 @@
 use super::{ActivationError, ActivationResult, StdinUserPrompt, UserPrompt};
 use crate::config::{AutoInstallMode, Config};
+use crate::engines_resolver::EnginesResolver;
 use crate::output;
 use crate::plugins::{PluginRegistry, VersionManagerPlugin};
 use crate::shell::CommandWriter;
@@ -74,26 +75,42 @@ impl<'a> Orchestrator<'a> {
 
         // Resolve semver range if from package.json
         let version_to_use = if version_file.source == VersionFileSource::PackageJson {
-            // Try to resolve semver range using first available plugin
-            if let Some(plugin) = self.registry.plugins().first() {
-                let resolver = SemverResolver::new(plugin.as_ref());
-                match resolver.resolve(&version_file.version) {
-                    Ok(resolved) => {
-                        if resolved != version_file.version {
-                            info!(
-                                "Resolved semver range '{}' → '{}'",
-                                version_file.version, resolved
-                            );
-                        }
-                        resolved
+            // Use smart engines resolver for package.json engines.node
+            let engines_resolver = EnginesResolver::new(self.registry, self.config);
+            match engines_resolver.resolve_smart(&version_file.version) {
+                Ok(smart_version) => {
+                    if smart_version != version_file.version {
+                        info!(
+                            "Smart engines resolution: '{}' → '{}'",
+                            version_file.version, smart_version
+                        );
                     }
-                    Err(e) => {
-                        warn!("Failed to resolve semver range: {e}");
+                    smart_version
+                }
+                Err(e) => {
+                    warn!("Failed smart engines resolution: {e}, falling back to semver resolver");
+                    // Fallback to original semver resolution
+                    if let Some(plugin) = self.registry.plugins().first() {
+                        let resolver = SemverResolver::new(plugin.as_ref());
+                        match resolver.resolve(&version_file.version) {
+                            Ok(resolved) => {
+                                if resolved != version_file.version {
+                                    info!(
+                                        "Fallback semver resolution: '{}' → '{}'",
+                                        version_file.version, resolved
+                                    );
+                                }
+                                resolved
+                            }
+                            Err(e) => {
+                                warn!("Failed fallback semver resolution: {e}");
+                                version_file.version.clone()
+                            }
+                        }
+                    } else {
                         version_file.version.clone()
                     }
                 }
-            } else {
-                version_file.version.clone()
             }
         } else {
             version_file.version.clone()
@@ -339,6 +356,7 @@ mod tests {
             auto_install,
             version_files: vec![".nvmrc".to_string()],
             use_default: true,
+            default_version: None,
         }
     }
 
@@ -714,6 +732,15 @@ mod tests {
             fn install_command(&self, _version: &str) -> anyhow::Result<String> {
                 Err(anyhow!("cannot generate install command"))
             }
+            fn list_versions(&self) -> anyhow::Result<Vec<String>> {
+                Ok(vec![])
+            }
+            fn default_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
+            }
+            fn current_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
+            }
         }
 
         let config = create_test_config(AutoInstallMode::Always);
@@ -763,6 +790,15 @@ mod tests {
             }
             fn install_command(&self, _version: &str) -> anyhow::Result<String> {
                 Ok("install".to_string())
+            }
+            fn list_versions(&self) -> anyhow::Result<Vec<String>> {
+                Ok(vec![])
+            }
+            fn default_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
+            }
+            fn current_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
             }
         }
 
@@ -967,6 +1003,15 @@ mod tests {
             }
             fn install_command(&self, _version: &str) -> anyhow::Result<String> {
                 Ok("install".to_string())
+            }
+            fn list_versions(&self) -> anyhow::Result<Vec<String>> {
+                Ok(vec![])
+            }
+            fn default_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
+            }
+            fn current_version(&self) -> anyhow::Result<Option<String>> {
+                Ok(None)
             }
         }
 

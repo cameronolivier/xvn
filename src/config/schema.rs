@@ -16,6 +16,9 @@ pub struct Config {
     /// Whether to switch to default version when leaving a project directory
     /// Default: true (automatically switch to default version)
     pub use_default: bool,
+
+    /// Default Node.js version to use when no version file is present
+    pub default_version: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -33,6 +36,7 @@ impl Default for Config {
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string(), ".node-version".to_string()],
             use_default: true,
+            default_version: None,
         }
     }
 }

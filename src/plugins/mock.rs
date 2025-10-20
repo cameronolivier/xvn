@@ -86,4 +86,8 @@ impl VersionManagerPlugin for MockPlugin {
     fn default_version(&self) -> Result<Option<String>> {
         Ok(self.default_version.clone())
     }
+
+    fn current_version(&self) -> Result<Option<String>> {
+        Ok(self.default_version.clone())
+    }
 }

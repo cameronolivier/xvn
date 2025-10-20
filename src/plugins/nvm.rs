@@ -133,6 +133,21 @@ impl VersionManagerPlugin for NvmPlugin {
         }
     }
 
+    fn current_version(&self) -> Result<Option<String>> {
+        // Use `nvm current` to get the currently active version
+        match self.run_nvm_command(&["current"]) {
+            Ok(output) => {
+                let trimmed = output.trim();
+                if trimmed.is_empty() || trimmed == "none" || trimmed == "N/A" {
+                    Ok(None)
+                } else {
+                    Ok(Some(trimmed.to_string()))
+                }
+            }
+            Err(_) => Ok(None),
+        }
+    }
+
     fn activate_command(&self, version: &str) -> Result<String> {
         let escaped = self.escape_version(version);
         Ok(format!("nvm use {escaped}"))

@@ -36,6 +36,7 @@ fn test_detection_results_to_config() {
         auto_install: AutoInstallMode::Prompt,
         version_files: vec![".nvmrc".to_string(), ".node-version".to_string()],
         use_default: true,
+        default_version: None,
     };
 
     assert_eq!(config.plugins, vec!["nvm".to_string()]);
@@ -50,6 +51,7 @@ fn test_config_validation() {
         auto_install: AutoInstallMode::Prompt,
         version_files: vec![".nvmrc".to_string()],
         use_default: true,
+        default_version: None,
     };
 
     // Should not panic when used

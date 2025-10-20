@@ -97,6 +97,7 @@ mod tests {
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string()],
             use_default: true,
+            default_version: None,
         };
         assert!(validate_config(&config).is_ok());
     }

@@ -164,6 +164,7 @@ mod tests {
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string()],
             use_default: true,
+            default_version: None,
         };
         let shell = Shell::Zsh;
 

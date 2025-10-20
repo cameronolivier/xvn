@@ -44,7 +44,8 @@ impl WizardState {
             plugins: self.plugins.clone(),
             auto_install: self.auto_install.clone(),
             version_files: self.version_files.clone(),
-            use_default: true, // Default to enabled
+            use_default: true,     // Default to enabled
+            default_version: None, // No default version from wizard
         })
     }
 
@@ -600,6 +601,7 @@ fn results_to_config(results: &DetectionResults) -> Result<Config> {
             "package.json".to_string(),
         ],
         use_default: true,
+        default_version: None, // No default version from detection
     })
 }
 
@@ -735,6 +737,7 @@ pub fn run_advanced_wizard() -> Result<(Config, Shell)> {
             "package.json".to_string(),
         ],
         use_default: true,
+        default_version: None,
     };
 
     // Show configuration preview and confirm
@@ -845,6 +848,7 @@ mod tests {
             auto_install: AutoInstallMode::Prompt,
             version_files: vec![".nvmrc".to_string()],
             use_default: true,
+            default_version: None,
         };
         let yaml = generate_config(&config);
 

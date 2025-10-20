@@ -55,7 +55,7 @@ pub fn error(msg: &str) {
 }
 
 /// Print version switch success
-pub fn switched(version: &str, plugin: &str) {
+pub fn switched(version: &str, _plugin: &str) {
     println!("{}", format!("{BRAND}:").truecolor(50, 205, 50));
     println!(
         "{} {}",

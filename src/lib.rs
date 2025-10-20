@@ -9,6 +9,7 @@ pub mod activation;
 pub mod cli;
 pub mod commands;
 pub mod config;
+pub mod engines_resolver;
 pub mod error;
 pub mod init;
 pub mod installation_detector;

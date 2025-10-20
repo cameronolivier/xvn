@@ -44,6 +44,14 @@ pub trait VersionManagerPlugin: Debug + Send + Sync {
     /// - `Err(_)` if unable to determine (e.g., version manager not available)
     fn has_version(&self, version: &str) -> Result<bool>;
 
+    /// Gets the currently active Node.js version
+    ///
+    /// # Returns
+    /// - `Ok(Some(version))` if a version is currently active
+    /// - `Ok(None)` if no version is active
+    /// - `Err(_)` if unable to determine (e.g., version manager not available)
+    fn current_version(&self) -> Result<Option<String>>;
+
     /// Generates the shell command to activate a specific version
     ///
     /// The returned command will be executed in the user's shell to switch

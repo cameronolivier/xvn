@@ -191,6 +191,7 @@ mod auto_install_flows {
             auto_install: AutoInstallMode::Always,
             use_default: true,
             version_files: vec![".nvmrc".to_string()],
+            default_version: None,
         };
         assert_eq!(always.auto_install, AutoInstallMode::Always);
 
@@ -199,6 +200,7 @@ mod auto_install_flows {
             auto_install: AutoInstallMode::Never,
             use_default: true,
             version_files: vec![".nvmrc".to_string()],
+            default_version: None,
         };
         assert_eq!(never.auto_install, AutoInstallMode::Never);
 
@@ -207,6 +209,7 @@ mod auto_install_flows {
             auto_install: AutoInstallMode::Prompt,
             use_default: true,
             version_files: vec![".nvmrc".to_string()],
+            default_version: None,
         };
         assert_eq!(prompt.auto_install, AutoInstallMode::Prompt);
     }
