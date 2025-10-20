@@ -1,16 +1,16 @@
 class Anvs < Formula
   desc "Automatic Node.js version switching - fast, modern CLI"
   homepage "https://github.com/olvrcc/anvs"
-  version "2.1.1"
+  version "2.1.2"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/olvrcc/anvs/releases/download/v2.1.1/anvs-aarch64-apple-darwin.tar.gz"
-      sha256 "c6eb370de80ac6437ac6a275400b9670fe710f8ef55a0dd733dda5a1393b7ca7"
+      url "https://github.com/olvrcc/anvs/releases/download/v2.1.2/anvs-aarch64-apple-darwin.tar.gz"
+      sha256 "b3f707780aa757e4bae89b36fc742264d3ab8e8bc3b72e89326133a33584b3bf"
     else
-      url "https://github.com/olvrcc/anvs/releases/download/v2.1.1/anvs-x86_64-apple-darwin.tar.gz"
-      sha256 "32afcdc2092ace2b288b335324a48d209a7e72c850123eeacbc7dcc2db7119ea"
+      url "https://github.com/olvrcc/anvs/releases/download/v2.1.2/anvs-x86_64-apple-darwin.tar.gz"
+      sha256 "b3ef8fbc8042549016c0f174d2110ed45734b8f22b9517a61eeed2fde23da9e4"
     end
   end
 
